@@ -22,8 +22,8 @@ public class CommandLineExecutor {
 
     public static void main(String[] args) {
         CommandLineExecutor commandLineExecutor = new CommandLineExecutor();
-        CommandStatus dir = commandLineExecutor.execute("cmd /c \"dir /s\"");
-        //commandLineExecutor.waitAllCommands(20);
+        CommandStatus dir = commandLineExecutor.execute("cmd /c \"dir %userprofile% /s\"");
+        commandLineExecutor.waitAllCommands(20);
         System.out.println(dir.getLogs().toString());
         System.out.println("> End of the program");
         System.exit(0);
