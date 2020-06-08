@@ -1,4 +1,4 @@
-package commons.lib.console;
+package commons.lib.console.interaction;
 
 // TODO i18n
 public class Option {

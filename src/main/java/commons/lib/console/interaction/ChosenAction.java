@@ -1,4 +1,4 @@
-package commons.lib.console;
+package commons.lib.console.interaction;
 
 import java.util.ArrayList;
 import java.util.List;
