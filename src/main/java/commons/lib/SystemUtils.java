@@ -2,6 +2,7 @@ package commons.lib;
 
 public final class SystemUtils {
 
+    public static final int EXIT_SUCCESSFUL = 0;
     public static final int EXIT_USER_MISTAKE = -4;
     public static final int EXIT_PROGRAMMER_ERROR = -5;
     public static final int EXIT_SYSTEM_ERROR = -6;
@@ -22,4 +23,7 @@ public final class SystemUtils {
         System.exit(EXIT_SYSTEM_ERROR);
     }
 
+    public static void endOfApp() {
+        System.exit(EXIT_SUCCESSFUL);
+    }
 }

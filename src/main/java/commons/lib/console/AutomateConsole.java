@@ -1,6 +1,9 @@
 package commons.lib.console;
 
+import commons.lib.SystemUtils;
+
 import java.io.Console;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,6 +22,8 @@ public class AutomateConsole implements CustomConsole {
             answers = new ArrayList<>();
         } else {
             try {
+                File file = propertyPath.toFile();
+                System.out.println(file.getAbsoluteFile());
                 answers = Files.readAllLines(propertyPath);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -45,7 +50,7 @@ public class AutomateConsole implements CustomConsole {
                 final Console console = System.console();
                 if (console == null) {
                     System.out.println("No console object available. Exiting");
-                    System.exit(-1);
+                    SystemUtils.failProgrammer();
                 }
                 this.console = console;
             }
