@@ -8,18 +8,63 @@ import commons.lib.console.v2.ConsoleCache;
 import commons.lib.console.v2.action.ActionConsole;
 import commons.lib.console.v2.action.ActionSummary;
 import commons.lib.console.v2.question.Question;
+import commons.lib.console.v2.yaml.PostProcessorType;
+import commons.lib.console.v2.yaml.YamlAction;
+import commons.lib.console.v2.yaml.YamlPostProcessor;
+import commons.lib.console.v2.yaml.YamlQuestion;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class Launcher extends AbstractLauncher {
 
+    private static List<YamlAction> readYaml() {
+        List<YamlAction> result = new ArrayList<>();
+        result.add(
+                new YamlAction(
+                        "askPren",
+                        "Set first name",
+                        Arrays.asList(new YamlQuestion("Give your first name.")),
+                        Arrays.asList("askPPhra", "showPhra"),
+                        new YamlPostProcessor("prenom", PostProcessorType.SAVE_CACHE)
+                ));
+
+        result.add(
+                new YamlAction(
+                        "askPPhra",
+                        "Set first name",
+                        Collections.singletonList(new YamlQuestion("kel est la phrase pattern ?")),
+                        Collections.emptyList(),
+                        new YamlPostProcessor("phrase", PostProcessorType.SAVE_CACHE)
+                ));
+
+        result.add(
+                new YamlAction(
+                        "showPhra",
+                        "Set first name",
+                        Collections.emptyList(),
+                        Collections.emptyList(),
+                        new YamlPostProcessor("firstName", PostProcessorType.SAVE_CACHE)
+                ));
+        return result;
+    }
+
+    public static String getRootChoiceId() {
+        return "askPren";
+    }
+
     public static void main(String[] args) {
         Launcher app = new Launcher();
+        // TODO define Choice in a yaml file
         Choice askPrenom = new Choice("askPren", "Ask first name");
         Choice askPhrasePattern = new Choice("askPPhra", "Ask phrase pattern");
         Choice showPhrase = new Choice("showPhra", "show phrase");
-        ActionSummary ASK_FIRSTNAME = new ActionSummary(askPrenom,
+        // TODO define the rest in the same yaml file, linked to these choices.
+        // TODO define custom processor that requires extra java code and predefined processor like save in cache
+        ActionSummary ASK_FIRSTNAME = new ActionSummary(
+                askPrenom,
                 s -> new ActionConsole(
                         askPrenom,
                         Collections.singletonList(new Question("kel est ton prenom ?")),
@@ -54,9 +99,11 @@ public class Launcher extends AbstractLauncher {
                                     .replaceAll("\\(\\)", ConsoleCache.get("prenom")
                                     ));
                 });
-        app.register(ASK_FIRSTNAME, ASK_SENTENCE_PATTERN, SHOW_SENTENCE);
+        List<YamlAction> yamlActions = readYaml();
+        app.register(yamlActions);
+        // app.register(ASK_FIRSTNAME, ASK_SENTENCE_PATTERN, SHOW_SENTENCE);
         app.manageArguments(new String[]{"-c", "console.txt"});
-        app.run(askPrenom);
+        app.run(ChoiceRepo.get(getRootChoiceId()));
     }
 
 }

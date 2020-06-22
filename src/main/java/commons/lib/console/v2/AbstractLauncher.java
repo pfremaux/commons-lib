@@ -8,14 +8,13 @@ import commons.lib.console.v2.action.ActionSummary;
 import commons.lib.console.v2.parameter.InputParametersContract;
 import commons.lib.console.v2.parameter.InputParametersRepo;
 import commons.lib.console.v2.test.ChoiceRepo;
+import commons.lib.console.v2.yaml.YamlAction;
 
 import java.nio.file.Path;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public abstract class AbstractLauncher {
     private boolean debugMode;
@@ -122,9 +121,9 @@ public abstract class AbstractLauncher {
         ActionConsoleProcessor.lock();
         for (Map.Entry<Choice, Function<String, ActionConsole>> functionEntry : ActionConsoleRepo.getAll().entrySet()) {
             ActionConsole apply = functionEntry.getValue().apply("");
-            registerChoice(apply.getContext());
+            //registerChoice(apply.getContext());
         }
-        ChoiceRepo.lock();
+        //ChoiceRepo.lock();
     }
 
     protected void run(Choice starting) {
@@ -133,9 +132,38 @@ public abstract class AbstractLauncher {
         root.go();
     }
 
+
+
+    protected void register(List<YamlAction> yamlActions) {
+        for (YamlAction yamlAction : yamlActions) {
+            Choice choice = new Choice(yamlAction.getChoiceId(), yamlAction.getChoiceName());
+            try {
+                ChoiceRepo.register(choice);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        ChoiceRepo.lock();
+        final List<ActionSummary> result = new ArrayList<>();
+        for (YamlAction yamlAction : yamlActions) {
+            final Choice choice = ChoiceRepo.get(yamlAction.getChoiceId());
+            final List<Choice> choices = yamlAction.getSubChoiceList().stream().map(ChoiceRepo::get).collect(Collectors.toList());
+            final ActionSummary actionSummary = new ActionSummary(
+                    choice,
+                    s-> new ActionConsole(
+                            choice,
+                            yamlAction.toQuestions(),
+                            choices
+                            ),
+                    a -> {}
+            );
+            result.add(actionSummary);
+        }
+        register(result.toArray(new ActionSummary[0]));
+    }
     protected void register(ActionSummary... settings) {
         for (ActionSummary setting : settings) {
-            registerChoice(setting.getChoice());
+            // registerChoice(setting.getChoice());
             registerAction(setting.getAction());
             registerActionProcessor(setting.getChoice(), setting.getPostOperation());
         }
