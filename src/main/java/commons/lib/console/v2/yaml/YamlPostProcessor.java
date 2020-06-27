@@ -2,8 +2,11 @@ package commons.lib.console.v2.yaml;
 
 public class YamlPostProcessor {
 
-    private final String info;
-    private final PostProcessorType yamlPostProcessor;
+    private String info;
+    private PostProcessorType yamlPostProcessor;
+
+    public YamlPostProcessor() {
+    }
 
     public YamlPostProcessor(String info, PostProcessorType yamlPostProcessor) {
         this.info = info;
@@ -16,5 +19,13 @@ public class YamlPostProcessor {
 
     public PostProcessorType getYamlPostProcessor() {
         return yamlPostProcessor;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public void setYamlPostProcessor(PostProcessorType yamlPostProcessor) {
+        this.yamlPostProcessor = yamlPostProcessor;
     }
 }

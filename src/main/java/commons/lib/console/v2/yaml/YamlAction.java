@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class YamlAction {
-    private final String choiceId;
-    private final String choiceName;
-    private final List<YamlQuestion> questionList;
-    private final List<String> subChoiceList;
-    private final YamlPostProcessor postProcessorType;
+    private String choiceId;
+    private String choiceName;
+    private List<YamlQuestion> questionList;
+    private List<String> subChoiceList;
+    private YamlPostProcessor postProcessorType;
+
+    public YamlAction() {
+    }
 
     public YamlAction(String choiceId, String choiceName, List<YamlQuestion> questionList, List<String> subChoiceList, YamlPostProcessor postProcessorType) {
         this.choiceId = choiceId;
@@ -42,5 +45,25 @@ public class YamlAction {
 
     public YamlPostProcessor getPostProcessorType() {
         return postProcessorType;
+    }
+
+    public void setChoiceId(String choiceId) {
+        this.choiceId = choiceId;
+    }
+
+    public void setChoiceName(String choiceName) {
+        this.choiceName = choiceName;
+    }
+
+    public void setQuestionList(List<YamlQuestion> questionList) {
+        this.questionList = questionList;
+    }
+
+    public void setSubChoiceList(List<String> subChoiceList) {
+        this.subChoiceList = subChoiceList;
+    }
+
+    public void setPostProcessorType(YamlPostProcessor postProcessorType) {
+        this.postProcessorType = postProcessorType;
     }
 }
