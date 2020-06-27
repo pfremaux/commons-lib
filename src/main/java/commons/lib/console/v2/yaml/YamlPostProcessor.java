@@ -1,5 +1,7 @@
 package commons.lib.console.v2.yaml;
 
+import commons.lib.console.v2.action.PostProcessorType;
+
 public class YamlPostProcessor {
 
     private String info;

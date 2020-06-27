@@ -8,7 +8,7 @@ import commons.lib.console.v2.ConsoleCache;
 import commons.lib.console.v2.action.ActionConsole;
 import commons.lib.console.v2.action.ActionSummary;
 import commons.lib.console.v2.question.Question;
-import commons.lib.console.v2.yaml.PostProcessorType;
+import commons.lib.console.v2.action.PostProcessorType;
 import commons.lib.console.v2.yaml.YamlAction;
 import commons.lib.console.v2.yaml.YamlPostProcessor;
 import commons.lib.console.v2.yaml.YamlQuestion;

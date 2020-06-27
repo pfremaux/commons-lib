@@ -2,6 +2,33 @@ package commons.lib;
 
 public final class StringUtils {
 
+    private static class HtmlEscape {
+        private final String html;
+        private final String text;
+
+        private HtmlEscape(String html, String text) {
+            this.html = html;
+            this.text = text;
+        }
+
+        private static HtmlEscape def(String html, String text) {
+            return new HtmlEscape(html, text);
+        }
+    }
+
+    private final static HtmlEscape[] HTML_ESCAPES = {
+            HtmlEscape.def("&eacute;", "\u00E9")
+    };
+
+    public static String escapeToHtml(String s) {
+        String result = s;
+        // TODO seems to be not enough optimized
+        for (HtmlEscape htmlEscape : HTML_ESCAPES) {
+            result = result.replaceAll(htmlEscape.text, htmlEscape.html);
+        }
+        return result;
+    }
+
     public static String removeQuotes(String s) {
         return s.replaceAll("\"", "");
     }
