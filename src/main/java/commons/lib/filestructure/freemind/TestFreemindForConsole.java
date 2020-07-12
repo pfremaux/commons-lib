@@ -22,7 +22,7 @@ public class TestFreemindForConsole {
 
     // run with -Dconsole.encoding=UTF-8 -Dfile.encoding=UTF-8
     public static void main(String[] args) throws TransformerException, ParserConfigurationException, IOException, SAXException {
-        FreemindRoot freemindRoot = Freemind.loadFreemindFile("c:/dev/app.mm");
+        FreemindRoot freemindRoot = Freemind.loadFreemindFile("./commons-lib/freemindExample.mm");
         for (FreemindNode child : freemindRoot.getChildren()) {
             if (child.getText().equals("app")) {
                 // root node !
@@ -34,7 +34,7 @@ public class TestFreemindForConsole {
         }
 
         Yaml yaml = new Yaml();
-        FileWriter writer = new FileWriter("./youpi.yaml");
+        FileWriter writer = new FileWriter("./output.yaml");
         yaml.dump(actions, writer);
         //FreemindRoot freemindRoot = FreemindRoot.getDefaultInstance();
         //freemindRoot.getChildren().add(root.getFreemindInstance());
@@ -52,13 +52,18 @@ public class TestFreemindForConsole {
 
         for (FreemindNode question : node.getFreemindNodes()) {
             String text = question.getText();
+            // this is a post process action
+            if (text.startsWith("c:")) {
+                info = text.substring(2);
+                postProcessType = PostProcessorType.CUSTOM;
+            }
             questions.add(new YamlQuestion(text));
             for (FreemindNode annexe : question.getFreemindNodes()) {
                 String value = annexe.getText();
                 if (value.startsWith("s:")) {
                     info = value.substring(2);
                     postProcessType = PostProcessorType.SAVE_CACHE;
-                } else if (value.startsWith("c:")) {// TODO fixme
+                } else if (value.startsWith("c:")) {// TODO fixme ?
                     // implementationClassName
                     info = value.substring(2);
                     postProcessType = PostProcessorType.CUSTOM;
