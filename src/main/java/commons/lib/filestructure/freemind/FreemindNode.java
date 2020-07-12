@@ -1,6 +1,6 @@
 package commons.lib.filestructure.freemind;
 
-import home.tools.lib.StringUtils;
+import commons.lib.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
