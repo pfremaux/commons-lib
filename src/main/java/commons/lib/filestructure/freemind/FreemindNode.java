@@ -1,6 +1,6 @@
 package commons.lib.filestructure.freemind;
 
-import commons.lib.StringUtils;
+import home.tools.lib.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -58,7 +58,7 @@ public class FreemindNode {
         node.setAttribute("MODIFIED", Long.toString(getModified()));
         node.setAttribute("ID", getId());
         node.setAttribute("TEXT", StringUtils.escapeToHtml(getText()));
-        node.setAttribute("POSITION", position ? "right" : "left");
+        node.setAttribute("POSITION", position ? "right": "left");
         boolean childrenPosition = false;
         for (FreemindNode freemindNode : getFreemindNodes()) {
             Element element = freemindNode.buildXmlEment(doc, childrenPosition);
