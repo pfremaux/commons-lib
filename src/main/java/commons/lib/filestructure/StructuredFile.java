@@ -119,7 +119,7 @@ public final class StructuredFile {
 
     public byte[] toByteArray() {
         final String wholeFile = stringifyAll();
-        logger.info("Whole file : {}", wholeFile);
+        logger.info("Whole file : \n{}", wholeFile);
         return wholeFile.getBytes(StandardCharsets.UTF_8);
     }
 
