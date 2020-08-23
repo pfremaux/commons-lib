@@ -85,7 +85,8 @@ public class Server {
                 logger.info("Responding {}", new String(response, StandardCharsets.UTF_8));
                 final String responseHostname = message.getResponseHostname();
                 final int responsePort = message.getResponsePort();
-                SocketChannel outputClient = Client.connect(responseHostname, responsePort);// TODO should be in the client call
+                // TODO should be in the client call ? Think about it. A server is a client if he decides to call by himself
+                SocketChannel outputClient = Client.connect(responseHostname, responsePort);
                 Client.send(outputClient, response);
                 Client.disconnect(outputClient);
             } else {

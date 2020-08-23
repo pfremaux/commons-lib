@@ -21,7 +21,7 @@ public class TestFreemindForConsole {
     public static List<YamlAction> actions = new ArrayList<>();
 
     // run with -Dconsole.encoding=UTF-8 -Dfile.encoding=UTF-8
-    public static void main(String[] args) throws TransformerException, ParserConfigurationException, IOException, SAXException {
+    public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
         FreemindRoot freemindRoot = Freemind.loadFreemindFile("./commons-lib/freemindExample.mm");
         for (FreemindNode child : freemindRoot.getChildren()) {
             if (child.getText().equals("app")) {

@@ -1,7 +1,5 @@
 package commons.lib.console;
 
-import commons.lib.console.CustomConsole;
-
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;

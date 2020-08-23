@@ -10,6 +10,7 @@ import java.util.Random;
 
 import static commons.lib.filestructure.freemind.SimplifiedNode.node;
 
+@Deprecated
 public class TestFreemind {
 
     public static final Random RANDOM = new Random(System.currentTimeMillis());

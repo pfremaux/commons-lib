@@ -52,6 +52,7 @@ public final class JavaGeneratorFromSql {
             final String nameAndExtension = sqlScript.toFile().getName();
             String inputType = InputParameter.DB_TYPE.getPropertyString();
             if (inputType.equalsIgnoreCase("sqlite")) {
+                // TODO is nameAndExtension really valid ? we're parsing a sql script. But here we're preparing a JDBC URI
                 final String destinationScriptForJdbcUri = getSqliteFileUri(dbDirectory, nameAndExtension);
                 DaoGenerator.manage(javaProjectFullPath.toFile().getAbsolutePath(), parentPackages, sqlScript, destinationScriptForJdbcUri);
             } else {
