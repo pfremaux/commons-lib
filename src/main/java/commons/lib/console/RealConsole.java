@@ -13,8 +13,12 @@ public class RealConsole implements CustomConsole {
         this.console = System.console();
     }
 
+    public RealConsole(Console console) {
+        this.console = console;
+    }
+
     @Override
-    public void show(String s) {
+    public void printf(String s) {
         console.printf(s + "\n");
     }
 
@@ -28,5 +32,15 @@ public class RealConsole implements CustomConsole {
     @Override
     public List<String> history() {
         return history;
+    }
+
+    @Override
+    public char[] readPassword() {
+        return console.readPassword();
+    }
+
+    @Override
+    public void printf(String s, Object... objs) {
+        console.printf(s + "\n", objs);
     }
 }

@@ -37,7 +37,7 @@ public class AutomateConsole implements CustomConsole {
     }
 
     @Override
-    public void show(String s) {
+    public void printf(String s) {
         System.out.println(s);
     }
 
@@ -58,7 +58,7 @@ public class AutomateConsole implements CustomConsole {
             answers.add(answer);
         } else {
             answer = answers.get(counter);
-            show(answer);
+            printf(answer);
         }
         return answer;
     }
@@ -66,5 +66,15 @@ public class AutomateConsole implements CustomConsole {
     @Override
     public List<String> history() {
         return answers;
+    }
+
+    @Override
+    public char[] readPassword() {
+        return readLine().toCharArray();
+    }
+
+    @Override
+    public void printf(String s, Object... objs) {
+        System.out.printf(s + "\n", objs);
     }
 }

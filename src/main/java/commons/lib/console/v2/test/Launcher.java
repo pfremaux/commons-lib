@@ -93,7 +93,7 @@ public class Launcher extends AbstractLauncher {
                         Collections.emptyList()
                 ),
                 c -> {
-                    Console.get().show(
+                    Console.get().printf(
                             As.string(
                                     ConsoleCache.get("phrase"))
                                     .replaceAll("\\(\\)", ConsoleCache.get("prenom")

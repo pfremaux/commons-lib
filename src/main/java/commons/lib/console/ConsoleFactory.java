@@ -12,7 +12,7 @@ public class ConsoleFactory {
 
     public static CustomConsole getInstance(boolean fake, Path inputFile) {
         if (instance == null) {
-            if (inputFile != null) {
+            if (inputFile != null && inputFile.toFile().exists()) {
                 instance = new AutomateConsole(inputFile);
             } else {
                 instance = new RealConsole();

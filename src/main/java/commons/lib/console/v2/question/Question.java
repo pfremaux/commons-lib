@@ -10,7 +10,7 @@ public class Question {
     }
 
     public String ask() {
-        Console.get().show(msg);
+        Console.get().printf(msg);
         return Console.get().readLine();
     }
 

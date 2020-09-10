@@ -28,8 +28,8 @@ public class Crud<T extends DescriptibleConsoleItem> {
         T result = null;
         int i = 1;
         if (!notExistingElement) {
-            console.show(String.format("1. New %s", newInstance.getClass().getSimpleName()));
-            console.show("2. Existing one");
+            console.printf(String.format("1. New %s", newInstance.getClass().getSimpleName()));
+            console.printf("2. Existing one");
             i = Integer.parseInt(console.readLine());
         }
         if (i == 1) {
@@ -42,11 +42,11 @@ public class Crud<T extends DescriptibleConsoleItem> {
                 final List<String> page = list(pageNum);
                 int counter = 0;
                 for (String s : page) {
-                    console.show(counter + ". " + s);
+                    console.printf(counter + ". " + s);
                     counter++;
                 }
-                console.show("n : next");
-                console.show("p : previous");
+                console.printf("n : next");
+                console.printf("p : previous");
                 final String s = console.readLine();
                 if (Character.isDigit(s.charAt(0))) {
                     ended = true;
@@ -67,7 +67,7 @@ public class Crud<T extends DescriptibleConsoleItem> {
         final List<String> result = new ArrayList<>();
         for (int i = 0; i < PAGE_SIZE && i < list.size(); i++) {
             final String name = list.get(i + page * PAGE_SIZE).name();
-            result.add(i + ". " + name);
+            result.add(/*i + ". " + */name);
         }
         return result;
     }

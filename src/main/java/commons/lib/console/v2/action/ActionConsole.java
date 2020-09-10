@@ -39,7 +39,7 @@ public class ActionConsole {
         if (!questions.isEmpty()) {
             askQuestions();
             if (Choice.Predefined.MAIN != choice) {
-                Console.get().show("Manage fallback ?");
+                Console.get().printf("Manage fallback ?");
                 String ask = yesNo.ask();
                 if (ask.startsWith("o")) {
                     onFail = ActionConsoleRepo.get(Choice.Predefined.ON_FAIL);// todo if not null always enable it
@@ -61,8 +61,8 @@ public class ActionConsole {
         Choice c = null;
         while (!existConditions.contains(c)) {
             do {
-                Console.get().show("[" + getContext().getName() + "]");
-                Console.get().show("Now what ?");
+                Console.get().printf("[" + getContext().getName() + "]");
+                Console.get().printf("Now what ?");
                 for (int i = 0; i < choices.size(); i++) {
                     Choice context = choices.get(i);
                     System.out.println(i + ". " + context.getName());
