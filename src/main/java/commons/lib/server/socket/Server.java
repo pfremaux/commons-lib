@@ -5,6 +5,7 @@ import commons.lib.security.asymetric.AsymmetricKeyHandler;
 import commons.lib.security.asymetric.PrivateKeyHandler;
 import commons.lib.security.asymetric.PublicKeyHandler;
 import commons.lib.server.socket.secured.ContactRegistry;
+import commons.lib.server.socket.secured.SecuredSocketInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +41,7 @@ public class Server {
      * @param port                   Port of this server.
      * @param listenLimit            Number of call the server should listen before shutting down. Set 0 or less for infinite listen.
      * @param messageConsumerManager Message consumer for any message the server will receive.
-     * @param wrapperFactory
+     * @param wrapperFactory Factory that contains wrapper builder.
      */
     public Server(String hostname,
                   int port,
@@ -50,7 +51,7 @@ public class Server {
         this.hostname = hostname;
         this.port = port;
         this.messageConsumerManager = messageConsumerManager;
-        this.wrapperFactory = wrapperFactory;
+        this.wrapperFactory = SecuredSocketInitializer.init(wrapperFactory);
         this.listenLimit = listenLimit <= 0 ? Integer.MAX_VALUE : listenLimit;
 
     }
