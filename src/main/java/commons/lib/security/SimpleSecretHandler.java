@@ -13,6 +13,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.util.LinkedList;
@@ -63,7 +64,7 @@ public class SimpleSecretHandler {
     }
 
     private Charset getCharset() {
-        return Charset.forName("UTF-8");
+        return StandardCharsets.UTF_8;
     }
 
     public String decrypt(byte[] data) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, IOException {

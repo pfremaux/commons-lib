@@ -15,12 +15,13 @@ public class SymmetricHandler {
 
     public static String DEFAULT_SYMMETRIC_ALGO = "AES";
 
+
     public static SecretKeySpec getSecretKey(String password, String algorithm) {
         byte[] key = password.getBytes(StandardCharsets.UTF_8);
         return new SecretKeySpec(key, algorithm);
     }
 
-    private static SecretKeySpec getKey(String password, String algorithm) throws Exception {
+    private static SecretKeySpec getKey(String password, String algorithm) {
         return new SecretKeySpec(Arrays.copyOf(password.getBytes(StandardCharsets.UTF_8), 16), algorithm);
     }
 

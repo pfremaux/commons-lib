@@ -1,8 +1,14 @@
 package commons.lib.server.socket;
 
+import commons.lib.SystemUtils;
+import commons.lib.security.asymetric.AsymmetricKeyHandler;
+import commons.lib.security.asymetric.PrivateKeyHandler;
+import commons.lib.security.asymetric.PublicKeyHandler;
+import commons.lib.server.socket.secured.ContactRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.crypto.NoSuchPaddingException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -11,10 +17,11 @@ import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -62,6 +69,8 @@ public class Server {
         do {
             inputClient = serverSocket.accept();
             final SocketAddress remoteAddress = inputClient.getRemoteAddress();
+            InetSocketAddress inetSocketAddress = (InetSocketAddress) remoteAddress;
+            final String callerHostname = inetSocketAddress.getHostName();
             logger.info("Connection Set:  {}", remoteAddress);
             ByteBuffer buffer = ByteBuffer.allocate(1024);
             final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -72,7 +81,7 @@ public class Server {
             }
             logger.info("Size of the bytes received = {}", byteArrayOutputStream.size());
             final byte[] allDatum = byteArrayOutputStream.toByteArray();
-            Wrapper inputWrapper = getWrapper(allDatum);
+            Wrapper inputWrapper = getWrapper(callerHostname, allDatum);
             byteArrayOutputStream.close();
             Message message = inputWrapper.getDatum();
             final int action = inputWrapper.getAction();
@@ -87,7 +96,8 @@ public class Server {
                 final int responsePort = message.getResponsePort();
                 // TODO should be in the client call ? Think about it. A server is a client if he decides to call by himself
                 SocketChannel outputClient = Client.connect(responseHostname, responsePort);
-                Client.send(outputClient, response);
+                byte[] encryptedMaybeData = encryptMaybe(responseHostname, response);
+                Client.send(outputClient, encryptedMaybeData);
                 Client.disconnect(outputClient);
             } else {
                 logger.info("Response not required");
@@ -98,9 +108,39 @@ public class Server {
         } while (listenCount < listenLimit);
     }
 
-    private Wrapper getWrapper(byte[] allDatum) {
-        // TODO deserialization secured
-        final String data = new String(allDatum, StandardCharsets.UTF_8).trim();
+    private byte[] encryptMaybe(String hostname, byte[] response) {
+        final PublicKeyHandler publicKeyHandler = new PublicKeyHandler(); // TODO as attribute
+        if (ContactRegistry.TRUSTED.contains(hostname)) {
+            List<PublicKey> publicKeys = ContactRegistry.PUBLIC_KEYS.get(hostname);
+            try {
+                return publicKeyHandler.recursiveProcessor(new LinkedList<>(publicKeys), AsymmetricKeyHandler.toBufferedInputStream(response)).readAllBytes();
+            } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | IOException e) {
+                e.printStackTrace();
+                SystemUtils.failProgrammer();
+                return new byte[0];
+            }
+        } else {
+            return response;
+        }
+    }
+
+    private Wrapper getWrapper(String callerHostname, byte[] allDatum) {
+        byte[] deciphered = new byte[0];
+
+        if (ContactRegistry.TRUSTED.contains(callerHostname)) {
+            List<PrivateKey> privateKeys = ContactRegistry.PRIVATE_KEYS.get(callerHostname);
+            PrivateKeyHandler privateKeyHandler = new PrivateKeyHandler(); // TODO as attribute
+            try {
+                // TODO validate this really work
+                deciphered = privateKeyHandler.recursiveProcessor(new LinkedList<>(privateKeys), AsymmetricKeyHandler.toBufferedInputStream(allDatum)).readAllBytes();
+            } catch (IOException | NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException e) {
+                e.printStackTrace();
+                SystemUtils.failProgrammer();
+            }
+        } else {
+            deciphered = allDatum;
+        }
+        final String data = new String(deciphered, StandardCharsets.UTF_8).trim();
         logger.info("Data received : {}", data);
         final String[] list = data.split(";");
         final String action = list[0];
