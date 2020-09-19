@@ -1,13 +1,18 @@
-package commons.lib.server.socket.secured.step4;
+package commons.lib.functionaltests.socket;
 
 import commons.lib.server.socket.Message;
 
-public class AcknowledgePublicKeysMessage extends Message {
+public class ChatMessage extends Message {
 
-    public static final int CODE = 410;
+    private final String message;
 
-    public AcknowledgePublicKeysMessage(String responseHostname, int responsePort, boolean requireResponse) {
+    public ChatMessage(String message, String responseHostname, int responsePort, boolean requireResponse) {
         super(responseHostname, responsePort, requireResponse);
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     @Override
@@ -15,16 +20,18 @@ public class AcknowledgePublicKeysMessage extends Message {
         return new String[]{
                 getResponseHostname(),
                 Integer.toString(getResponsePort()),
-                Boolean.toString(isRequireResponse())
+                Boolean.toString(isRequireResponse()),
+                message
         };
     }
 
     @Override
     public byte[][] serializeBytes() {
-        byte[][] result = new byte[3][];
+        byte[][] result = new byte[4][];
         result[0] = Message.stringToBytes(getResponseHostname());
         result[1] = Message.intToBytes(getResponsePort());
         result[2] = Message.boolToBytes(isRequireResponse());
+        result[3] = Message.stringToBytes(message);
         return result;
     }
 }

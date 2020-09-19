@@ -6,11 +6,11 @@ public class ConsoleFactory {
 
     private static CustomConsole instance = null;
 
-    public static CustomConsole getInstance(boolean fake) {
-        return getInstance(fake, null);
+    public static CustomConsole getInstance() {
+        return getInstance(null);
     }
 
-    public static CustomConsole getInstance(boolean fake, Path inputFile) {
+    public static CustomConsole getInstance(Path inputFile) {
         if (instance == null) {
             if (inputFile != null && inputFile.toFile().exists()) {
                 instance = new AutomateConsole(inputFile);

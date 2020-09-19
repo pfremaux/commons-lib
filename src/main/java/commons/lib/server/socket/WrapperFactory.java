@@ -12,21 +12,15 @@ import java.util.function.Function;
  * @see Wrapper
  */
 public class WrapperFactory {
-    private final Map<Integer, Function<List<String>, Wrapper>> functionMap;
 
-    // TODO replace "<String" (action code) by an Integer
+    private final Map<Integer, Function<List<byte[]>, Wrapper>> functionMap;
 
-    /**
-     * @param functionMap A map of functions per action code.
-     *                    These functions expects a list of data.
-     *                    Depending on this data the function will return a wrapper.
-     *                    The wrapper must contain a response.
-     */
-    public WrapperFactory(Map<Integer, Function<List<String>, Wrapper>> functionMap) {
+    public WrapperFactory(Map<Integer, Function<List<byte[]>, Wrapper>> functionMap) {
         this.functionMap = functionMap;
     }
 
-    public Map<Integer, Function<List<String>, Wrapper>> getFunctionMap() {
+    public Map<Integer, Function<List<byte[]>, Wrapper>> getFunctionMap() {
         return functionMap;
     }
+
 }

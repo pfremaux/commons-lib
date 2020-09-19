@@ -7,6 +7,9 @@ import commons.lib.server.socket.Wrapper;
 import commons.lib.server.socket.message.ErrorMessage;
 import commons.lib.server.socket.secured.ContactRegistry;
 import commons.lib.server.socket.secured.step2.EncryptedPublicKeysMessage;
+import commons.lib.server.socket.secured.step2.EncryptedPublicKeysMessageConsumer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -18,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class GetServerPublicKeysMessageConsumer implements MessageConsumer {
+
+    private static final Logger logger = LoggerFactory.getLogger(GetServerPublicKeysMessageConsumer.class);
 
     @Override
     public Optional<Wrapper> process(Wrapper input, String consumerHostname, int consumerPort) {
@@ -39,23 +44,26 @@ public class GetServerPublicKeysMessageConsumer implements MessageConsumer {
             return Optional.of(new Wrapper(ErrorMessage.CODE, new ErrorMessage("", e.getMessage(), consumerHostname, consumerPort, false)));
         }
 
-        final SecretKeySpec secretKey = SymmetricHandler.getSecretKey(SymmetricHandler.fillPassword(symKey), SymmetricHandler.DEFAULT_SYMMETRIC_ALGO);
+        final SecretKeySpec secretKey = SymmetricHandler.getKey(symKey, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO);
         final List<byte[]> encryptedPublicKeys = new ArrayList<>();
+        final List<Integer> sizedEncryptedPublicKeys = new ArrayList<>();
         for (PublicKey publicKey : publicKeys) {
             final byte[] encoded = publicKey.getEncoded();
             try {
                 final byte[] encrypt = SymmetricHandler.encrypt(secretKey, encoded, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO);
                 encryptedPublicKeys.add(encrypt);
+                logger.info("Size of the encrypted key : {}", encrypt.length);
+                sizedEncryptedPublicKeys.add(encrypt.length);
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
                 e.printStackTrace();// TODO ERROr
                 return Optional.of(new Wrapper(ErrorMessage.CODE, new ErrorMessage("", e.getMessage(), consumerHostname, consumerPort, false)));
             }
         }
-
-        ContactRegistry.PUBLIC_KEYS.put(consumerHostname, publicKeys);
+        ContactRegistry.storeSymmetricKey(serverPublicKeysMessage.getResponseHostname(), secretKey);
+        ContactRegistry.storePublicKeys(consumerHostname, publicKeys);
         ContactRegistry.TRUSTED.add(consumerHostname);
-        ContactRegistry.PRIVATE_KEYS.put(consumerHostname, privateKeys);
-        final Wrapper responseWrapper = new Wrapper(EncryptedPublicKeysMessage.CODE, new EncryptedPublicKeysMessage(encryptedPublicKeys, true, false, consumerHostname, consumerPort, true));
+        ContactRegistry.storePrivateKeys(consumerHostname, privateKeys);
+        final Wrapper responseWrapper = new Wrapper(EncryptedPublicKeysMessage.CODE, new EncryptedPublicKeysMessage(sizedEncryptedPublicKeys, encryptedPublicKeys, true, false, consumerHostname, consumerPort, true));
         return Optional.of(responseWrapper);
     }
 }

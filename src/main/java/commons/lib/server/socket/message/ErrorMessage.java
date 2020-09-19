@@ -25,6 +25,17 @@ public class ErrorMessage extends Message {
         };
     }
 
+    @Override
+    public byte[][] serializeBytes() {
+        byte[][] result = new byte[5][];
+        result[0] = Message.stringToBytes(message);
+        result[1] = Message.stringToBytes(technicalMessage);
+        result[2] = Message.stringToBytes(getResponseHostname());
+        result[3] = Message.intToBytes(getResponsePort());
+        result[4] = Message.boolToBytes(isRequireResponse());
+        return result;
+    }
+
     public String getMessage() {
         return message;
     }

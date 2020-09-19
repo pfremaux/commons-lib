@@ -1,6 +1,8 @@
 package commons.lib.server.socket;
 
-import java.nio.charset.StandardCharsets;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 /**
  * This wrapper is used for managing message exchange between 2 apps.
@@ -32,14 +34,44 @@ public class Wrapper {
      * @return Bytes of the current object.
      */
     public byte[] serialize() {
-        String[] strings = datum.serializeStrings();
-        String[] allData = new String[strings.length + 1];
-        String[] datumStrings = getDatum().serializeStrings();
-        for (int i = 0; i < datumStrings.length; i++) {
-            allData[i + 1] = datumStrings[i];
+        // return getByteArrayOutputStreamLegacy();
+        // 4 bytes for the action code : integer => 4 bytes
+        int totalLengthInBytes = 4;
+        byte[][] bytes = getDatum().serializeBytes();
+        for (byte[] aByte : bytes) {
+            // +1 for the semi colon ';'
+            totalLengthInBytes += 1 + aByte.length;
         }
-        allData[0] = Integer.toString(action);
-        String data = String.join(";", allData);
-        return data.getBytes(StandardCharsets.UTF_8);
+        byte[] wholeData = new byte[totalLengthInBytes];
+        int indexData = 0;
+        byte[] bytesAction = Message.intToBytes(action);
+        System.arraycopy(bytesAction, 0, wholeData, indexData, bytesAction.length);
+        indexData += bytesAction.length;
+        for (byte[] aByte : bytes) {
+            wholeData[indexData] = ';';
+            indexData++;
+            System.arraycopy(aByte, 0, wholeData, indexData, aByte.length);
+            indexData += aByte.length;
+        }
+        return wholeData;
+    }
+
+    private ByteArrayOutputStream getByteArrayOutputStreamLegacy() {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[][] bytes = getDatum().serializeBytes();
+        try {
+            outputStream.write(Message.intToBytes(action));
+            for (byte[] aByte : bytes) {
+                outputStream.write(';');
+                outputStream.write(aByte);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return outputStream;
+    }
+
+    private byte[] intToBytes(int value) {
+        return ByteBuffer.allocate(4).putInt(value).array();
     }
 }

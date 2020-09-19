@@ -1,24 +1,30 @@
 package commons.lib.server.socket;
 
+import commons.lib.security.asymetric.AsymmetricKeyHandler;
+import commons.lib.security.asymetric.PublicKeyHandler;
+import commons.lib.security.symetric.SymmetricHandler;
 import commons.lib.server.socket.secured.ContactRegistry;
 import commons.lib.server.socket.secured.SecuredSocketInitializer;
 import commons.lib.server.socket.secured.step1.GetServerPublicKeysMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Basic client for sending bytes.
@@ -29,37 +35,54 @@ public class Client {
     private final String hostnameServer;
     private final int portServer;
     private SocketChannel server;
+    private PublicKeyHandler publicKeyHandler = null;
 
     public Client(String hostnameServer, int portServer) {
         this.hostnameServer = hostnameServer;
         this.portServer = portServer;
     }
 
-    public void secured() {
-        CompletableFuture<String> future = new CompletableFuture<>();
+    public void secured(String clientHostname, int clientPort) {
+        logger.info("Starting handshake from me {}:{} to distant entity {}:{}", clientHostname, clientPort, hostnameServer, portServer);
+        if (ContactRegistry.TRUSTED.contains(hostnameServer)) {
+            logger.info("{} already trusted, not trying to handshake again.", hostnameServer);
+            return;
+        }
+        final CompletableFuture<String> future = new CompletableFuture<>();
         ContactRegistry.AWAITED_EVENT.put(AsyncEvent.ASK_SECURED, future);
-        WrapperFactory wrapperFactory = SecuredSocketInitializer.init();
-        MessageConsumerManager messageConsumer = new MessageConsumerManager(SecuredSocketInitializer.initEventsBinding());
-        Server server = new Server(hostnameServer, portServer, 50, messageConsumer, wrapperFactory);
+        final WrapperFactory wrapperFactory = SecuredSocketInitializer.init();
+        final MessageConsumerManager messageConsumer = new MessageConsumerManager(SecuredSocketInitializer.initEventsBinding());
+        final Server clientAsServerForHandshake = new Server(clientHostname, clientPort, 2, messageConsumer, wrapperFactory);
         final String pwd = "changeme"; // TODO change
-        final String clientHostname = "localhost";
-        final int portHostname = 1234;
-        final GetServerPublicKeysMessage getServerPublicKeysMessage = new GetServerPublicKeysMessage(pwd, 1, clientHostname, portHostname, true);
-        final Function<List<String>, Wrapper> listWrapperFunction = wrapperFactory.getFunctionMap().get(GetServerPublicKeysMessage.CODE);
-        final Wrapper apply = listWrapperFunction.apply(Arrays.asList(getServerPublicKeysMessage.serializeStrings()));
+        logger.info("Building message...");
+        final GetServerPublicKeysMessage getServerPublicKeysMessage = new GetServerPublicKeysMessage(pwd, 1, clientHostname, clientPort, true);
+        // ContactRegistry.storeSymmetricKey(clientHostname, SymmetricHandler.getSecretKey(pwd, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO));
+        ContactRegistry.storeSymmetricKey(hostnameServer, SymmetricHandler.getKey(pwd, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO));
+        final Function<List<byte[]>, Wrapper> listWrapperFunction = wrapperFactory.getFunctionMap().get(GetServerPublicKeysMessage.CODE);
+        logger.info("Serializing data...");
+        final List<byte[]> serializedDataAsStrings = Stream.concat(Stream.of(Message.intToBytes(GetServerPublicKeysMessage.CODE)), Stream.of(getServerPublicKeysMessage.serializeBytes())).collect(Collectors.toList());
+        final Wrapper apply = listWrapperFunction.apply(serializedDataAsStrings);
         byte[] serialize = apply.serialize();
         try {
-            connectSendClose(serialize);
-            server.listen();
+            logger.info("Sending serialized data...");
+            connect();
+            justSend(serialize);
+            // connectSendClose(serialize);
+            disconnect();
+            logger.info("Listening for handshake.");
+            clientAsServerForHandshake.listen();
+            logger.info("Listening ended");
+            publicKeyHandler = new PublicKeyHandler();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void connectSendClose(byte[] data) throws IOException {
-        final SocketChannel server = SocketChannel.open();
+    public void connectSendClose(byte[] data) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
+        // TODO use dedicated methods : connect() send() close()
+        final SocketChannel connectionToServer = SocketChannel.open();
         final SocketAddress socketAddr = new InetSocketAddress(hostnameServer, portServer);
-        server.connect(socketAddr);
+        connectionToServer.connect(socketAddr);
         final CompletableFuture<String> futureSecuredCommunication = ContactRegistry.AWAITED_EVENT.get(AsyncEvent.ASK_SECURED);
         if (futureSecuredCommunication != null) {
             try {
@@ -69,10 +92,17 @@ public class Client {
             }
         }
         // TODO encrypt data is required
-        logger.info("Client : sending {}", new String(data, StandardCharsets.UTF_8));
-        server.write(ByteBuffer.wrap(data));
+        byte[] dataToSend;
+        if (publicKeyHandler != null) {
+            List<PublicKey> publicKeys = ContactRegistry.getPublicKeys(hostnameServer);
+            dataToSend = publicKeyHandler.recursiveProcessor(new LinkedList<>(publicKeys), AsymmetricKeyHandler.toBufferedInputStream(data)).readAllBytes();
+        } else {
+            dataToSend = data;
+        }
+        logger.info("sending {}", new String(dataToSend, StandardCharsets.UTF_8));
+        connectionToServer.write(ByteBuffer.wrap(dataToSend));
         logger.info("Data Sent");
-        server.close();
+        connectionToServer.close();
     }
 
     public void connect() throws IOException {
@@ -81,7 +111,7 @@ public class Client {
         server.connect(socketAddr);
     }
 
-    public void send(byte[] data) throws IOException {
+    public void justSend(byte[] data) throws IOException {
         logger.info("Client : sending {}", new String(data, StandardCharsets.UTF_8));
         server.write(ByteBuffer.wrap(data));
     }

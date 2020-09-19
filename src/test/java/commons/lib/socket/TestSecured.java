@@ -19,9 +19,9 @@ public class TestSecured {
     @Test
     public void test() {
         final String password = "unitTest";
-        final SecretKeySpec symSecretKey = SymmetricHandler.getSecretKey(SymmetricHandler.fillPassword(password), SymmetricHandler.DEFAULT_SYMMETRIC_ALGO);
-        ContactRegistry.SYMMETRIC_KEYS.put("Caller", symSecretKey);
-        ContactRegistry.SYMMETRIC_KEYS.put("Consumer", symSecretKey);
+        final SecretKeySpec symSecretKey = SymmetricHandler.getKey(password, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO);
+        ContactRegistry.storeSymmetricKey("Caller", symSecretKey);
+        ContactRegistry.storeSymmetricKey("Consumer", symSecretKey);
         // Caller ask for consumer's public keys
         final GetServerPublicKeysMessage getServerPublicKeysMessage = new GetServerPublicKeysMessage(password, 1, "Caller", 50, true);
         final GetServerPublicKeysMessageConsumer getServerPublicKeysMessageConsumer = new GetServerPublicKeysMessageConsumer();

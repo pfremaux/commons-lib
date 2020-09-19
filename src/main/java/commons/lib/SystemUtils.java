@@ -11,7 +11,7 @@ public final class SystemUtils {
 
     }
 
-    public static void failUSer() {
+    public static void failUser() {
         System.exit(EXIT_USER_MISTAKE);
     }
 

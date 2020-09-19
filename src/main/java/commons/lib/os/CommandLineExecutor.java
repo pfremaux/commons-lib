@@ -11,19 +11,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 public class CommandLineExecutor {
     private static final Logger logger = LoggerFactory.getLogger(CommandLineExecutor.class);
     private Mutable<Map<String, CommandStatus>> executedCommands = new MutableObject<>(new HashMap<>());
     private ExecutorService executorService = Executors.newCachedThreadPool();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         CommandLineExecutor commandLineExecutor = new CommandLineExecutor();
-        CommandStatus dir = commandLineExecutor.execute("cmd /c \"dir %userprofile% /s\"");
-        commandLineExecutor.waitAllCommands(20);
+        // CommandStatus dir = commandLineExecutor.execute("cmd /c \"dir %userprofile% /s\"");
+        CommandStatus dir = commandLineExecutor.execute("cmd /c \"dir %userprofile%\"");
+        commandLineExecutor.waitAllCommands(2);
         System.out.println(dir.getLogs().toString());
         System.out.println("> End of the program");
         System.exit(0);
@@ -59,13 +58,13 @@ public class CommandLineExecutor {
         }
     }
 
-    public void execute(String... commands) {
+    public void execute(String... commands) throws ExecutionException, InterruptedException {
         for (String command : commands) {
             execute(command);
         }
     }
 
-    public CommandStatus execute(String command) {
+    public CommandStatus execute(String command) throws InterruptedException, ExecutionException {
         final Runtime runtime = Runtime.getRuntime();
         final CommandStatus commandStatus = new CommandStatus();
         executedCommands.getValue().put(commandStatus.getCommandId(), commandStatus);
@@ -94,7 +93,7 @@ public class CommandLineExecutor {
         /*while (!executorService.isTerminated()) {
             System.err.println("not termine");
         }*/
-        //executorService.awaitTermination(5, TimeUnit.SECONDS);
+        executorService.awaitTermination(5, TimeUnit.SECONDS);
         System.out.println("termination passé ");
         return commandStatus;
     }

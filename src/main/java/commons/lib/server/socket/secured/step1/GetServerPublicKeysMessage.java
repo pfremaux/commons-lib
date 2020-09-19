@@ -2,6 +2,7 @@ package commons.lib.server.socket.secured.step1;
 
 import commons.lib.server.socket.Message;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class GetServerPublicKeysMessage extends Message {
@@ -16,11 +17,11 @@ public class GetServerPublicKeysMessage extends Message {
         this.nbrPublicKeyRequested = nbrPublicKeyRequested;
     }
 
-    public GetServerPublicKeysMessage(List<String> serialized) {
-        super(serialized.get(0), Integer.parseInt(serialized.get(1)), Boolean.parseBoolean(serialized.get(2)));
-        this.symKey = serialized.get(3);
-        this.nbrPublicKeyRequested = Integer.parseInt(serialized.get(4));
-    }
+  /*  public GetServerPublicKeysMessage(List<String> serialized) {
+        super(serialized.get(1), Integer.parseInt(serialized.get(2)), Boolean.parseBoolean(serialized.get(3)));
+        this.symKey = serialized.get(4);
+        this.nbrPublicKeyRequested = Integer.parseInt(serialized.get(5));
+    }*/
 
     @Override
     public String[] serializeStrings() {
@@ -31,6 +32,17 @@ public class GetServerPublicKeysMessage extends Message {
                 symKey,
                 Integer.toString(nbrPublicKeyRequested)
         };
+    }
+
+    @Override
+    public byte[][] serializeBytes() {
+        byte[][] result = new byte[5][];
+        result[0] = getResponseHostname().getBytes(StandardCharsets.UTF_8);
+        result[1] = intToBytes(getResponsePort());
+        result[2] = boolToBytes(isRequireResponse());
+        result[3] = symKey.getBytes(StandardCharsets.UTF_8); // TODO migrate to bytes
+        result[4] = intToBytes(nbrPublicKeyRequested);
+        return result;
     }
 
     public String getSymKey() {
