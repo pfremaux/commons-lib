@@ -10,14 +10,27 @@ import commons.lib.server.socket.secured.step4.AcknowledgePublicKeysMessage;
 import org.junit.Test;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
+import java.util.Properties;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class TestSecured {
 
     @Test
     public void test() {
+        try (InputStream input = TestSecured.class.getClassLoader().getResourceAsStream("test.properties")) {
+            assertNotNull("Properties file not found.", input);
+            Properties properties
+                     = new Properties();
+            properties.load(input);
+            System.out.println(properties.get("test.input"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         final String password = "unitTest";
         final SecretKeySpec symSecretKey = SymmetricHandler.getKey(password, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO);
         ContactRegistry.storeSymmetricKey("Caller", symSecretKey);

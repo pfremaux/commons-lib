@@ -42,7 +42,7 @@ public class Server {
      * @param port                   Port of this server.
      * @param listenLimit            Number of call the server should listen before shutting down. Set 0 or less for infinite listen.
      * @param messageConsumerManager Message consumer for any message the server will receive.
-     * @param wrapperFactory Factory that contains wrapper builder.
+     * @param wrapperFactory         Factory that contains wrapper builder.
      */
     public Server(String hostname,
                   int port,
@@ -54,7 +54,6 @@ public class Server {
         this.messageConsumerManager = messageConsumerManager;
         this.wrapperFactory = SecuredSocketInitializer.init(wrapperFactory);
         this.listenLimit = listenLimit <= 0 ? Integer.MAX_VALUE : listenLimit;
-
     }
 
     /**
@@ -99,7 +98,6 @@ public class Server {
                 logger.info("Responding {} with action {}", new String(response, StandardCharsets.UTF_8), outputWrapper.get().getAction());
                 final String responseHostname = message.getResponseHostname();
                 final int responsePort = message.getResponsePort();
-                // TODO should be in the client call ? Think about it. A server is a client if he decides to call by himself
                 SocketChannel outputClient = Client.connect(responseHostname, responsePort);
                 byte[] encryptedMaybeData = encryptMaybe(responseHostname, response);
                 Client.send(outputClient, encryptedMaybeData);
@@ -161,12 +159,9 @@ public class Server {
         }
         result.add(outputStream.toByteArray());
 
-        // final String data = new String(deciphered, StandardCharsets.UTF_8).trim();
         for (byte[] bytes : result) {
             logger.info("once stored : {}", Message.bytesToString(bytes));
         }
-        // final String[] list = data.split(";");
-        // final int action = Message.bytesToInt(result.get(0));
         final int action = Message.bytesToInt(result.get(0));
         final Map<Integer, Function<List<byte[]>, Wrapper>> functionMap = wrapperFactory.getFunctionMap();
         logger.info("Current wrapper factory size = {}, with {}", functionMap.size(), functionMap.keySet());
@@ -176,7 +171,6 @@ public class Server {
         logger.info("Searching action {}", action);
         final Function<List<byte[]>, Wrapper> listWrapperFunction = functionMap.get(action);
         logger.info("Wrapper consumer found ? = {}", listWrapperFunction);
-        // final List<byte[]> collect = Stream.of(list).map(Message::stringToBytes).collect(Collectors.toList());
 
         return listWrapperFunction.apply(result);
     }

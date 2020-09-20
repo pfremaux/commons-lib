@@ -2,6 +2,8 @@ package commons.lib.console.v2.item;
 
 import commons.lib.console.CustomConsole;
 
+import java.util.UUID;
+
 public abstract class DescriptibleConsoleItem {
     private final CustomConsole console;
 
@@ -11,6 +13,7 @@ public abstract class DescriptibleConsoleItem {
 
     public DescriptibleConsoleItem(CustomConsole console) {
         this.console = console;
+        this.id = UUID.randomUUID().toString();
     }
 
     public abstract DescriptibleConsoleItem interactiveInit();

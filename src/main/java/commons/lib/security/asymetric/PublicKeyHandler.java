@@ -14,7 +14,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.LinkedList;
 
 public class PublicKeyHandler extends AsymmetricKeyHandler<PublicKey> {
-    final Logger logger = LoggerFactory.getLogger(PublicKeyHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(PublicKeyHandler.class);
 
     public void save(String path, PublicKey publicKey) throws IOException {
         logger.info("Saving public key in {}", path);

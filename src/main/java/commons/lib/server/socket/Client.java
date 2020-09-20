@@ -56,7 +56,6 @@ public class Client {
         final String pwd = "changeme"; // TODO change
         logger.info("Building message...");
         final GetServerPublicKeysMessage getServerPublicKeysMessage = new GetServerPublicKeysMessage(pwd, 1, clientHostname, clientPort, true);
-        // ContactRegistry.storeSymmetricKey(clientHostname, SymmetricHandler.getSecretKey(pwd, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO));
         ContactRegistry.storeSymmetricKey(hostnameServer, SymmetricHandler.getKey(pwd, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO));
         final Function<List<byte[]>, Wrapper> listWrapperFunction = wrapperFactory.getFunctionMap().get(GetServerPublicKeysMessage.CODE);
         logger.info("Serializing data...");
@@ -67,7 +66,6 @@ public class Client {
             logger.info("Sending serialized data...");
             connect();
             justSend(serialize);
-            // connectSendClose(serialize);
             disconnect();
             logger.info("Listening for handshake.");
             clientAsServerForHandshake.listen();
@@ -79,7 +77,6 @@ public class Client {
     }
 
     public void connectSendClose(byte[] data) throws IOException, NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException {
-        // TODO use dedicated methods : connect() send() close()
         final SocketChannel connectionToServer = SocketChannel.open();
         final SocketAddress socketAddr = new InetSocketAddress(hostnameServer, portServer);
         connectionToServer.connect(socketAddr);
@@ -91,7 +88,6 @@ public class Client {
                 e.printStackTrace();
             }
         }
-        // TODO encrypt data is required
         byte[] dataToSend;
         if (publicKeyHandler != null) {
             List<PublicKey> publicKeys = ContactRegistry.getPublicKeys(hostnameServer);

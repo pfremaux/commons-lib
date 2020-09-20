@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 
 public class Crud<T extends DescriptibleConsoleItem> {
-    private static final int PAGE_SIZE = 10;
+    public static final int PAGE_SIZE = 10;
     private final CustomConsole console;
     private final List<T> list;
 
@@ -42,7 +42,7 @@ public class Crud<T extends DescriptibleConsoleItem> {
                 final List<String> page = list(pageNum);
                 int counter = 0;
                 for (String s : page) {
-                    console.printf(counter + ". " + s);
+                    console.printf("%d. %s", counter, s);
                     counter++;
                 }
                 console.printf("n : next");

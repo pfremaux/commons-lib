@@ -38,7 +38,8 @@ public class AutomateConsole implements CustomConsole {
 
     @Override
     public void printf(String s) {
-        System.out.println(s);
+        System.out.printf(s);
+        System.out.println();
     }
 
     @Override
