@@ -12,12 +12,12 @@ public class FunctionalTestsSettings {
     public static final String UNSECURED_CHAT_EXPECTED_OUTPUT_FILE_CLIENT_1_PROP = "unsecured.chat.expected.output.file.client.1";
     public static final String UNSECURED_CHAT_EXPECTED_OUTPUT_FILE_CLIENT_2_PROP = "unsecured.chat.expected.output.file.client.2";
 
-    public static final String SECURED_CHAT_INPUT_FILE_CLIENT_1_PROP = "unsecured.chat.input.file.client.1";
-    public static final String SECURED_CHAT_INPUT_FILE_CLIENT_2_PROP = "unsecured.chat.input.file.client.2";
-    public static final String SECURED_CHAT_OUTPUT_FILE_CLIENT_1_PROP = "unsecured.chat.output.file.client.1";
-    public static final String SECURED_CHAT_OUTPUT_FILE_CLIENT_2_PROP = "unsecured.chat.output.file.client.2";
-    public static final String SECURED_CHAT_EXPECTED_OUTPUT_FILE_CLIENT_1_PROP = "unsecured.chat.expected.output.file.client.1";
-    public static final String SECURED_CHAT_EXPECTED_OUTPUT_FILE_CLIENT_2_PROP = "unsecured.chat.expected.output.file.client.2";
+    public static final String SECURED_CHAT_INPUT_FILE_CLIENT_1_PROP = "secured.chat.input.file.client.1";
+    public static final String SECURED_CHAT_INPUT_FILE_CLIENT_2_PROP = "secured.chat.input.file.client.2";
+    public static final String SECURED_CHAT_OUTPUT_FILE_CLIENT_1_PROP = "secured.chat.output.file.client.1";
+    public static final String SECURED_CHAT_OUTPUT_FILE_CLIENT_2_PROP = "secured.chat.output.file.client.2";
+    public static final String SECURED_CHAT_EXPECTED_OUTPUT_FILE_CLIENT_1_PROP = "secured.chat.expected.output.file.client.1";
+    public static final String SECURED_CHAT_EXPECTED_OUTPUT_FILE_CLIENT_2_PROP = "secured.chat.expected.output.file.client.2";
 
     public static final String[][] DEFAULT_PROPERTIES = {
             {MAIN_INPUT_DIR_PROP, ".\\commons-lib\\src\\test\\resources"},
@@ -40,8 +40,8 @@ public class FunctionalTestsSettings {
             {SECURED_CHAT_EXPECTED_OUTPUT_FILE_CLIENT_2_PROP, "expected_output_client2.txt"},
     };
 
-    public static final Class<?>[] REGISTERED_TESTS = new Class<?>[] {
-           // FT_UnsecuredChat.class,
+    public static final Class<?>[] REGISTERED_TESTS = new Class<?>[]{
+            // FT_UnsecuredChat.class,
             FT_SecuredChat.class,
     };
 

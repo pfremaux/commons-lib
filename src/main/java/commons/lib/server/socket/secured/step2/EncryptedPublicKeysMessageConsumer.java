@@ -50,7 +50,7 @@ public class EncryptedPublicKeysMessageConsumer implements MessageConsumer {
                             KeyFactory.getInstance(AsymmetricKeyHandler.ASYMMETRIC_ALGORITHM).generatePublic(new X509EncodedKeySpec(decryptedPublicKey));
                     publicKeysOfCaller.add(publicKey);
                 } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException | InvalidKeySpecException e) {
-                    e.printStackTrace(); // TODO log ERROR
+                    logger.error(String.format("Failed to decipher data from %s:%d with a symmetric key.", callerHostName, datum.getResponsePort()), e);
                     return Optional.of(new Wrapper(ErrorMessage.CODE, new ErrorMessage("", e.getMessage(), consumerHostname, consumerPort, false)));
                 }
             }

@@ -38,13 +38,11 @@ public class ContactRegistry {
 
     public static void storePublicKeys(String hostname, List<PublicKey> keys) {
         logger.info("Storing {} for {}.", "PublicKeys", hostname);
-        testPrivateKeyPasConfiance(hostname, getPrivateKeys(hostname), keys);
         PUBLIC_KEYS.put(hostname, keys);
     }
 
     public static void storePrivateKeys(String hostname, List<PrivateKey> keys) {
         logger.info("Storing {} for {}.", "PrivateKeys", hostname);
-        testPrivateKeyPasConfiance(hostname, keys, getPublicKeys(hostname));
         PRIVATE_KEYS.put(hostname, keys);
     }
 
@@ -60,7 +58,6 @@ public class ContactRegistry {
 
     public static List<PrivateKey> getPrivateKeys(String hostname) {
         logger.info("Getting {} for {}.", "PrivateKeys", hostname);
-        testPrivateKeyPasConfiance(hostname, PRIVATE_KEYS.get(hostname), getPublicKeys(hostname));
         return PRIVATE_KEYS.get(hostname);
     }
 
@@ -69,14 +66,14 @@ public class ContactRegistry {
         return PUBLIC_KEYS.getOrDefault(hostname, generateKeyPairsAndGetPublicKeys);
     }
 
-    private static void testPrivateKeyPasConfiance(String host, List<PrivateKey> pvKeys, List<PublicKey> pubKeys) {
+    private static void validateKeys(String host, List<PrivateKey> pvKeys, List<PublicKey> pubKeys) {
         if (pvKeys == null || pubKeys == null) {
-            logger.info("Pas de chance pour {} avec  {}, {}", host, pvKeys, pubKeys);
+            logger.info("Missing keys for testing key pair for {} : {}, {}", host, pvKeys, pubKeys);
             return;
         }
         final PublicKeyHandler publicKeyHandler = new PublicKeyHandler();
         final PrivateKeyHandler privateKeyHandler = new PrivateKeyHandler();
-        final String monText = "Ca marche pas";
+        final String monText = "Message of test !";
         final byte[] bytes = monText.getBytes(StandardCharsets.UTF_8);
         try {
             final BufferedInputStream bufferedInputStream = publicKeyHandler.recursiveProcessor(new LinkedList<>(pubKeys), AsymmetricKeyHandler.toBufferedInputStream(bytes));
@@ -85,7 +82,7 @@ public class ContactRegistry {
             final byte[] deciphered = bufferedInputStream1.readAllBytes();
             final String decipheredString = new String(deciphered, StandardCharsets.UTF_8);
             if (decipheredString.equals(monText)) {
-                logger.info("Une reussite pour {}", host);
+                logger.info("Key pairs are working for {}", host);
             }
             assert decipheredString.equals(monText);
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | IOException e) {
