@@ -1,13 +1,14 @@
 package commons.lib.console.v2.item;
 
 import commons.lib.console.CustomConsole;
+import commons.lib.documentation.MdDoc;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-
+@MdDoc(description = "Allow to do CRUD operations on a List<T> of T elements. It allows you to paginate the list.")
 public class Crud<T extends DescriptibleConsoleItem> {
     public static final int PAGE_SIZE = 10;
     private final CustomConsole console;
