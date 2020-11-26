@@ -17,12 +17,6 @@ public class SymmetricHandler {
 
 
     // The symetric key we're using expects a fixed size. Consequently you'll get InvalidKeyException: Invalid AES key length: <your password size> bytes
-    @Deprecated
-    public static SecretKeySpec getSecretKey(String password, String algorithm) {
-        byte[] key = password.getBytes(StandardCharsets.UTF_8);
-        return new SecretKeySpec(key, algorithm);
-    }
-
     public static SecretKeySpec getKey(String password, String algorithm) {
         return new SecretKeySpec(Arrays.copyOf(password.getBytes(StandardCharsets.UTF_8), 16), algorithm);
     }

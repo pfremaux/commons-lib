@@ -9,12 +9,22 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
 }
 
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+}
+
+task customFatJarServer(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'commons-lib.jar commons.lib.server.http.Http'
+    }
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 
 test {
@@ -41,4 +51,17 @@ dependencies {
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }

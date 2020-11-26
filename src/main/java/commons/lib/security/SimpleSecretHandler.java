@@ -25,16 +25,16 @@ public class SimpleSecretHandler {
     private final PublicKey publicKey;
     private final PrivateKey privateKey;
     private final PrivateKeyHandler privateKeyHandler;
-    private PublicKeyHandler publicKeyHandler;
+    private final PublicKeyHandler publicKeyHandler;
 
 
-    public enum Type {SYMETRIC, ASYMETRIC}
+    public enum Type {SYMMETRIC, ASYMMETRIC}
 
     public SimpleSecretHandler(String password) {
         this.privateKeyHandler = null;
         this.publicKeyHandler = null;
-        this.type = Type.SYMETRIC;
-        this.secretKey = SymmetricHandler.getSecretKey(password, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO);
+        this.type = Type.SYMMETRIC;
+        this.secretKey = SymmetricHandler.getKey(password, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO);
         this.publicKey = null;
         this.privateKey = null;
     }
@@ -44,18 +44,18 @@ public class SimpleSecretHandler {
         this.privateKey = this.privateKeyHandler.load(privateKeyPath, AsymmetricKeyHandler.ASYMMETRIC_ALGORITHM);
         this.publicKeyHandler = new PublicKeyHandler();
         this.publicKey = this.publicKeyHandler.load(publicKeyPath, AsymmetricKeyHandler.ASYMMETRIC_ALGORITHM);
-        this.type = Type.ASYMETRIC;
+        this.type = Type.ASYMMETRIC;
         this.secretKey = null;
     }
 
     public byte[] encrypt(String text) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, IOException {
         switch (type) {
-            case SYMETRIC:
+            case SYMMETRIC:
                 return SymmetricHandler.encrypt(secretKey, text.getBytes(getCharset()), SymmetricHandler.DEFAULT_SYMMETRIC_ALGO);
-            case ASYMETRIC:
+            case ASYMMETRIC:
                 final LinkedList<PublicKey> keys = new LinkedList<>();
                 keys.add(publicKey);
-                final BufferedInputStream inputStream = AsymmetricKeyHandler.toBufferedInputStream(text.getBytes(Charset.forName("UTF-8")));
+                final BufferedInputStream inputStream = AsymmetricKeyHandler.toBufferedInputStream(text.getBytes(StandardCharsets.UTF_8));
                 final BufferedInputStream bufferedInputStream = publicKeyHandler.recursiveProcessor(keys, inputStream);
                 return bufferedInputStream.readAllBytes();
             default:
@@ -69,10 +69,10 @@ public class SimpleSecretHandler {
 
     public String decrypt(byte[] data) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, IOException {
         switch (type) {
-            case SYMETRIC:
+            case SYMMETRIC:
                 final byte[] decrypt = SymmetricHandler.decrypt(secretKey, data, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO);
                 return new String(decrypt, getCharset());
-            case ASYMETRIC:
+            case ASYMMETRIC:
                 final LinkedList<PrivateKey> keys = new LinkedList<>();
                 keys.add(privateKey);
                 final BufferedInputStream inputStream = AsymmetricKeyHandler.toBufferedInputStream(data);
@@ -105,7 +105,7 @@ public class SimpleSecretHandler {
         s.add("f");
         s.add(">");
         s.newLine();
-        String text = new String(s.toByteArray(), Charset.forName("UTF-8"));
+        String text = new String(s.toByteArray(), StandardCharsets.UTF_8);
         System.out.println("Encrypting : " + text);
         byte[] encrypt1 = simpleSecretHandler2.encrypt(text);
         System.out.println(" =>" + simpleSecretHandler2.decrypt(encrypt1));

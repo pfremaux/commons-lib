@@ -27,8 +27,12 @@ public class AnnotationUtils {
     }
 
     public static boolean isInIde() {
+        final String hintIsInIde = System.getProperty("hintIsInIde");
+        if (hintIsInIde != null) {
+            return Boolean.parseBoolean(hintIsInIde);
+        }
         final String path = AnnotationUtils.class.getResource("AnnotationUtils.class").getPath();
-        logger.debug("Testing if in an IDE with path {}", path);
+        logger.debug("Testing if the current process is being executed in an IDE with path {}", path);
         return path.startsWith("/");
     }
 
