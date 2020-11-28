@@ -24,8 +24,7 @@ public class TestSecured {
     public void test() {
         try (InputStream input = TestSecured.class.getClassLoader().getResourceAsStream("test.properties")) {
             assertNotNull("Properties file not found.", input);
-            Properties properties
-                     = new Properties();
+            Properties properties = new Properties();
             properties.load(input);
             System.out.println(properties.get("test.input"));
         } catch (IOException e) {

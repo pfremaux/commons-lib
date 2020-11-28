@@ -1,6 +1,7 @@
-package commons.lib.documentation;
+package commons.lib.generator.markdown;
 
 import commons.lib.FileUtils;
+import commons.lib.documentation.Documentation;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

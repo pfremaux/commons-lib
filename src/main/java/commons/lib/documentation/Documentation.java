@@ -65,11 +65,11 @@ public class Documentation {
         return fragment;
     }
 
-    public Fragment pinPoint(String text) {
+    public Fragment pinPoint(String text, boolean newLine) {
         final Fragment fragment = new Fragment();
         fragment.setPinPoint(true);
         fragment.setContent(text);
-        fragment.setNewLine(true);
+        fragment.setNewLine(newLine);
         fragments.add(fragment);
         return fragment;
     }
@@ -95,6 +95,7 @@ public class Documentation {
     public Fragment linkDoc(String docName) {
         final Fragment fragment = new Fragment();
         fragment.setMdRelativePath(docName);
+        fragment.setNewLine(true); // TODO in parameter
         fragments.add(fragment);
         return fragment;
     }

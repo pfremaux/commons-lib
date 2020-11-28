@@ -1,7 +1,9 @@
-package commons.lib.documentation;
+package commons.lib.generator.markdown;
 
 import commons.lib.AnnotationUtils;
 import commons.lib.FileUtils;
+import commons.lib.documentation.Documentation;
+import commons.lib.documentation.MdDoc;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -16,6 +18,9 @@ import java.util.stream.Stream;
 public class GenerateMd {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
+        String test = System.getProperty("test");
+        System.out.println(test);
+        System.exit(0);
         GenerateMd generateMd = new GenerateMd();
         generateMd.run();
     }
@@ -53,9 +58,9 @@ public class GenerateMd {
                             MdDoc declaredAnnotation = parameter.getDeclaredAnnotation(MdDoc.class);
                             if (declaredAnnotation != null) {
                                 documentation.pinPoint(parameter.getType().getSimpleName() + " : "
-                                        + declaredAnnotation.description());
+                                        + declaredAnnotation.description(), true);
                             } else {
-                                documentation.pinPoint(parameter.getType().getSimpleName() + "(no description)");
+                                documentation.pinPoint(parameter.getType().getSimpleName() + "(no description)", true);
                             }
                         }
                     }
