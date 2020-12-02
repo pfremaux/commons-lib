@@ -1,6 +1,6 @@
 package commons.lib.functionaltests.socket;
 
-import commons.lib.server.socket.Message;
+import commons.lib.extra.server.socket.Message;
 
 public class ChatMessage extends Message {
 

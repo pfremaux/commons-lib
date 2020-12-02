@@ -1,12 +1,12 @@
 package commons.lib.socket;
 
-import commons.lib.security.symetric.SymmetricHandler;
-import commons.lib.server.socket.Wrapper;
-import commons.lib.server.socket.secured.ContactRegistry;
-import commons.lib.server.socket.secured.step1.GetServerPublicKeysMessage;
-import commons.lib.server.socket.secured.step1.GetServerPublicKeysMessageConsumer;
-import commons.lib.server.socket.secured.step2.EncryptedPublicKeysMessageConsumer;
-import commons.lib.server.socket.secured.step4.AcknowledgePublicKeysMessage;
+import commons.lib.extra.security.symetric.SymmetricHandler;
+import commons.lib.extra.server.socket.Wrapper;
+import commons.lib.extra.server.socket.secured.ContactRegistry;
+import commons.lib.extra.server.socket.secured.step1.GetServerPublicKeysMessage;
+import commons.lib.extra.server.socket.secured.step1.GetServerPublicKeysMessageConsumer;
+import commons.lib.extra.server.socket.secured.step2.EncryptedPublicKeysMessageConsumer;
+import commons.lib.extra.server.socket.secured.step4.AcknowledgePublicKeysMessage;
 import org.junit.Test;
 
 import javax.crypto.spec.SecretKeySpec;

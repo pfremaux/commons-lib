@@ -20,7 +20,7 @@ repositories {
 
 task customFatJarServer(type: Jar) {
     manifest {
-        attributes 'Main-Class': 'commons-lib.jar commons.lib.server.http.Http'
+        attributes 'Main-Class': 'commons-lib.jar commons.lib.extra.server.http.Http'
     }
 
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }

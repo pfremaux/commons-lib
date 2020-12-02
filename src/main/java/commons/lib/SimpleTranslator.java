@@ -1,6 +1,6 @@
 package commons.lib;
 
-import commons.lib.documentation.MdDoc;
+import commons.lib.project.documentation.MdDoc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
