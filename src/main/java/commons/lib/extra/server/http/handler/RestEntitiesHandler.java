@@ -10,12 +10,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.logging.Logger;
 
 public class RestEntitiesHandler implements HttpHandler {
 
     private static Logger logger = Logger.getLogger(RestEntitiesHandler.class.getName());
+    private Path DIRECTORY_DATA = Path.of(System.getProperty("in.memory.data", ".\\"));
     ///private static final Logger logger = LoggerFactory.getLogger(RestEntitiesHandler.class);
 
     private final InMemoryDb inMemoryDb = new InMemoryDb();
@@ -64,12 +66,28 @@ public class RestEntitiesHandler implements HttpHandler {
                 StringBuilder response = new StringBuilder();
                 fillWithJsonFormat(response, inMemoryDb.tables());
                 return response;
+            } else if (whatMeta.equals("file")) {
+                StringBuilder builder = new StringBuilder();
+                String action = params.get(2);
+                if ("save".equals(action)) {
+                    logger.info("Saving...");
+                    inMemoryDb.save(DIRECTORY_DATA);
+                    return builder;
+                } else if ("load".equals(action)) {
+                    logger.info("Loading...");
+                    inMemoryDb.loadAll(DIRECTORY_DATA);
+                    return builder;
+                } else if ("clear".equals(action)) {
+                    logger.info("Clearing...");
+                    inMemoryDb.clearAll();
+                    return builder;
+                }
             }
             throw new HttpServerException("meta data unknown", "where does " + whatMeta + " comes from ?");
         }
         int id = -1;
         if (params.size() > 1) {
-            id = Integer.parseInt(params.get(1));
+            id = Integer.parseInt(params.get(1)) - 1;
         }
         String requestMethod = exchange.getRequestMethod();
         logger.warning("Method : " + requestMethod);

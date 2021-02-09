@@ -1,0 +1,27 @@
+package commons.lib.main.console.v3.interaction;
+
+import commons.lib.tooling.documentation.MdDoc;
+
+@MdDoc(description = "Extend this class if you want to add an action to your menu.")
+public abstract class ConsoleAction implements ConsoleItem {
+
+    private final String label;
+
+    @MdDoc(description = "label is the text displayed to the user.")
+    public ConsoleAction(String label) {
+        this.label = label;
+    }
+
+    @Override
+    public final String label() {
+        return label;
+    }
+
+    @Override
+    public final ConsoleItem[] run() {
+        return go();
+    }
+
+    public abstract ConsoleItem[] go();
+
+}

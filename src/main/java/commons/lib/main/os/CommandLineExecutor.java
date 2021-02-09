@@ -1,5 +1,6 @@
 package commons.lib.main.os;
 
+import commons.lib.main.SystemUtils;
 import org.apache.commons.lang3.mutable.Mutable;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.slf4j.Logger;
@@ -79,7 +80,6 @@ public class CommandLineExecutor {
                     commandStatus.getLogs().append(line).append("\n");
                 }
                 //exec.waitFor();
-                //exec.waitFor();
                 commandStatus.setExitCode(exec.exitValue());
             } catch (IOException e) {
                 e.printStackTrace();
@@ -88,10 +88,11 @@ public class CommandLineExecutor {
             commandStatus.setExitCode(0);
             return "test";
         });
-        //String s = submit.get();
-        //System.out.println("=== " + s);
+        String s = submit.get();
+        //System.out.println("=== waiting " + s);
         /*while (!executorService.isTerminated()) {
             System.err.println("not termine");
+            Thread.sleep(2000);
         }*/
         executorService.awaitTermination(5, TimeUnit.SECONDS);
         System.out.println("termination passé ");
@@ -100,6 +101,14 @@ public class CommandLineExecutor {
 
     public CommandStatus getCommandStatus(String uuid) {
         return executedCommands.getValue().get(uuid);
+    }
+
+    public static void validateEndOfExecution(CommandStatus commandStatus) {
+        if (commandStatus.getExitCode() == null || commandStatus.getExitCode() != 0) {
+            System.out.println(commandStatus.getLogs().toString());
+            System.err.println("Failed to download project source.");
+            SystemUtils.failSystem();
+        }
     }
 
 }

@@ -5,6 +5,7 @@ import commons.lib.main.SystemUtils;
 import java.io.Console;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class AutomateConsole implements CustomConsole {
 
     private int counter = -1;
     private List<String> answers;
+    private final List<String> outputWhileDebugging = new ArrayList<>();
     private Console console;
 
     public AutomateConsole(Path propertyPath) {
@@ -38,6 +40,9 @@ public class AutomateConsole implements CustomConsole {
 
     @Override
     public void printf(String s) {
+        /*if (isDebugMode()) {
+            outputWhileDebugging.add(s);
+        }*/
         System.out.printf(s);
         System.out.println();
     }
@@ -61,6 +66,9 @@ public class AutomateConsole implements CustomConsole {
             answer = answers.get(counter);
             printf(answer);
         }
+        /*if (isDebugMode()) {
+            outputWhileDebugging.add(answer);
+        }*/
         return answer;
     }
 
@@ -71,11 +79,22 @@ public class AutomateConsole implements CustomConsole {
 
     @Override
     public char[] readPassword() {
-        return readLine().toCharArray();
+        char[] response = readLine().toCharArray();
+/*        if (isDebugMode()) {
+            outputWhileDebugging.add(new String(response));
+        }*/
+        return response;
     }
 
     @Override
     public void printf(String s, Object... objs) {
+        if (isDebugMode()) {
+            outputWhileDebugging.add(String.format(s, objs));
+        }
         System.out.printf(s + "\n", objs);
+    }
+
+    public List<String> getOutputWhileDebugging() {
+        return outputWhileDebugging;
     }
 }

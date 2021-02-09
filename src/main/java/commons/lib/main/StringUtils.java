@@ -73,5 +73,31 @@ public final class StringUtils {
         return result.toString();
     }
 
+    public static String extractBetween(String text, String begin, String end) {
+        final int beginIndex = text.indexOf(begin);
+        if (beginIndex < 0) {
+            return null;
+        }
+        final String goodStart = text.substring(beginIndex);
+        final int endIndex = goodStart.indexOf(end);
+        if (endIndex < 0) {
+            return null;
+        }
+        return goodStart.substring(0, endIndex);
+    }
+
+    public static String extractGreedyBetween(String text, String begin, String end) {
+        final int beginIndex = text.indexOf(begin);
+        if (beginIndex < 0) {
+            return null;
+        }
+        final String goodStart = text.substring(beginIndex);
+        final int endIndex = goodStart.lastIndexOf(end);
+        if (endIndex < 0) {
+            return null;
+        }
+        return goodStart.substring(0, endIndex);
+    }
+
 
 }

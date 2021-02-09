@@ -1,6 +1,6 @@
 package commons.lib.main.console;
 
-import commons.lib.project.documentation.MdDoc;
+import commons.lib.tooling.documentation.MdDoc;
 
 import java.nio.file.Path;
 import java.util.List;

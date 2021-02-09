@@ -7,6 +7,7 @@ import java.util.List;
 public class RealConsole implements CustomConsole {
 
     private List<String> history = new ArrayList<>();
+    private List<String> outputWhileDebugging = new ArrayList<>();
     private final Console console;
 
     public RealConsole() {
@@ -19,6 +20,9 @@ public class RealConsole implements CustomConsole {
 
     @Override
     public void printf(String s) {
+        if (isDebugMode()) {
+            outputWhileDebugging.add(s);
+        }
         console.printf(s + "\n");
     }
 
@@ -26,6 +30,9 @@ public class RealConsole implements CustomConsole {
     public String readLine() {
         String line = console.readLine();
         history.add(line);
+        if (isDebugMode()) {
+            outputWhileDebugging.add(line);
+        }
         return line;
     }
 
@@ -41,6 +48,13 @@ public class RealConsole implements CustomConsole {
 
     @Override
     public void printf(String s, Object... objs) {
+        if (isDebugMode()) {
+            outputWhileDebugging.add(String.format(s, objs));
+        }
         console.printf(s + "\n", objs);
+    }
+
+    public List<String> getOutputWhileDebugging() {
+        return outputWhileDebugging;
     }
 }

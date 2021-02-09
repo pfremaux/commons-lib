@@ -68,7 +68,11 @@ public class AnnotationUtils {
         final Enumeration<URL> resources = classLoader.getResources(path);
         while (resources.hasMoreElements()) {
             final URL resource = resources.nextElement();
-            final String pathJarFile = resource.getPath().substring("file:".length() /*"file:\\".length()*/, resource.getPath().indexOf("!"));
+            int endIndex = resource.getPath().indexOf("!");
+            if (endIndex == -1) {
+                continue;
+            }
+            final String pathJarFile = resource.getPath().substring("file:".length() /*"file:\\".length()*/, endIndex);
             final JarFile jarFile = new JarFile(pathJarFile);
             final Enumeration<JarEntry> entries = jarFile.entries();
 

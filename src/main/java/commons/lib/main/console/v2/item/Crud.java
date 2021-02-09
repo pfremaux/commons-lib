@@ -1,7 +1,7 @@
 package commons.lib.main.console.v2.item;
 
 import commons.lib.main.console.CustomConsole;
-import commons.lib.project.documentation.MdDoc;
+import commons.lib.tooling.documentation.MdDoc;
 
 import java.util.ArrayList;
 import java.util.List;
