@@ -18,9 +18,12 @@ public class AnnotationUtils {
 
     public static List<Class<?>> getClassesFromPackageName(String packageName) throws ClassNotFoundException, IOException {
         List<Class<?>> classes;
+
         if (isInIde()) {
+            logger.info("IN IDE");
             classes = getClassesFromIde(packageName);
         } else {
+            logger.info("IN JAR");
             classes = getClassesFromJar(packageName);
         }
         return classes;

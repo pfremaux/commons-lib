@@ -33,8 +33,10 @@ public class ConsoleFactory {
         if (instance == null) {
             if (inputFile != null && inputFile.toFile().exists()) {
                 instance = new AutomateConsole(inputFile);
-            } else {
+            } else if (System.console() != null){
                 instance = new RealConsole();
+            } else {
+                instance = new GuiConsole();
             }
         }
         return instance;

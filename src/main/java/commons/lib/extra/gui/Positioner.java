@@ -133,16 +133,32 @@ public final class Positioner {
         }
     }
 
+    public void endCreationDontExit(Dialog dialog, String title) {
+        endCreation(dialog, title, false);
+    }
+
     public void endCreation(Dialog dialog, String title) {
+        endCreation(dialog, title, true);
+    }
+
+    public void endCreation(Dialog dialog, String title, boolean exit) {
         dialog.setTitle(title);
         addAllToDialog(dialog);
         dialog.pack();
         dialog.setBounds(getWindowBound(100, 100));
-        dialog.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent windowEvent) {
-                System.exit(0);
-            }
-        });
+        if (exit) {
+            dialog.addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent windowEvent) {
+                    System.exit(0);
+                }
+            });
+        } else {
+            dialog.addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent windowEvent) {
+                    dialog.setVisible(false);
+                }
+            });
+        }
     }
 
     /**

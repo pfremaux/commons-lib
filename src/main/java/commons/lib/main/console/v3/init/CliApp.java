@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
         "java -jar cmd.jar -w \"hello !\"" +
         "You can save the 'hello !' and load it back thanks to System.getProperty(..)")
 public abstract class CliApp {
+    public static CliInputParametersRegistry PARAMETERS;
 
     private CliInputParametersRegistry cliInputParametersRegistry = new CliInputParametersRegistry();
     private AppInfo appInfo = new AppInfo();
@@ -49,6 +50,7 @@ public abstract class CliApp {
     }
 
     private void processParameters(String... args) {
+        PARAMETERS = cliInputParametersRegistry;
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase("-h")) {
                 showUsage(appInfo);
