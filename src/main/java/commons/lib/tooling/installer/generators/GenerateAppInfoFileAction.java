@@ -1,4 +1,4 @@
-package commons.lib.tooling.installer;
+package commons.lib.tooling.installer.generators;
 
 import commons.lib.main.SystemUtils;
 import commons.lib.main.console.v3.interaction.ConsoleAction;

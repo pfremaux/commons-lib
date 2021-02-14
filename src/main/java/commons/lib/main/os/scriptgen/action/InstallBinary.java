@@ -2,7 +2,7 @@ package commons.lib.main.os.scriptgen.action;
 
 import commons.lib.main.os.scriptgen.ScriptPattern;
 
-public class InstallSource extends ScriptPattern {
+public class InstallBinary extends ScriptPattern {
 
     @Override
     public String id() {

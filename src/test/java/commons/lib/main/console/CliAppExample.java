@@ -1,8 +1,7 @@
-package commons.lib.main.console.v3.init;
+package commons.lib.main.console;
 
 import commons.lib.main.SystemUtils;
-import commons.lib.main.console.ConsoleFactory;
-import commons.lib.main.console.CustomConsole;
+import commons.lib.main.console.v3.init.CliApp;
 
 public class CliAppExample extends CliApp {
 
@@ -18,7 +17,7 @@ public class CliAppExample extends CliApp {
         register(Q, "question", "What's your name ?", "The question you want to ask first.");
         console = ConsoleFactory.getInstance();
     }
-// TODO CUSTOM CONSOLE puis move en fonctional test
+
     public static void main(String[] args) {
         CliAppExample cliAppExample = new CliAppExample();
         cliAppExample.validateAndLoad(args);

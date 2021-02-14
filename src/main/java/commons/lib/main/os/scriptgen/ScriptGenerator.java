@@ -57,4 +57,8 @@ public class ScriptGenerator {
             e.printStackTrace();
         }
     }
+
+    public String getScriptExtension() {
+        return isUniversal()? ".sh.bat" : isUnix ? ".sh" : ".bat";
+    }
 }

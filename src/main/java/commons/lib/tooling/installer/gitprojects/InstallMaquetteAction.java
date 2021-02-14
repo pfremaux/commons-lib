@@ -1,4 +1,4 @@
-package commons.lib.tooling.installer;
+package commons.lib.tooling.installer.gitprojects;
 
 import commons.lib.main.SystemUtils;
 import commons.lib.main.console.v3.interaction.ConsoleAction;
@@ -8,8 +8,11 @@ import commons.lib.main.os.CommandLineExecutor;
 import commons.lib.main.os.CommandStatus;
 import commons.lib.main.os.scriptgen.ScriptGenerator;
 import commons.lib.main.os.scriptgen.action.DownloadGithubSource;
-import commons.lib.main.os.scriptgen.action.InstallSource;
+import commons.lib.main.os.scriptgen.action.InstallBinary;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
 
 public class InstallMaquetteAction extends ConsoleAction {
@@ -22,20 +25,25 @@ public class InstallMaquetteAction extends ConsoleAction {
 
     @Override
     public ConsoleItem[] go() {
-        ScriptGenerator scriptGenerator = new ScriptGenerator();
+        final ScriptGenerator scriptGenerator = new ScriptGenerator();
         scriptGenerator.addInstruction(new DownloadGithubSource(GIT_OWNER, "maquette"));
-        scriptGenerator.addInstruction(new InstallSource());
-        CommandLineExecutor commandLineExecutor = new CommandLineExecutor();
+        scriptGenerator.addInstruction(new InstallBinary());
+        final String sourceScript = scriptGenerator.getSourceScript();
+        String installScript = "./get-maquette" + scriptGenerator.getScriptExtension();
+        try {
+            Files.writeString(Paths.get(installScript), sourceScript);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        final CommandLineExecutor commandLineExecutor = new CommandLineExecutor();
         CommandStatus execute = null;
         try {
-            execute = commandLineExecutor.execute("git clone http://github.com/" + GIT_OWNER + "/");
+            execute = commandLineExecutor.execute(installScript);
             commandLineExecutor.waitAllCommands(1000L);
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             SystemUtils.failSystem();
         }
-
-        System.out.println(execute.getLogs().toString());
         return ConsoleContext.currentMenu;
     }
 }
