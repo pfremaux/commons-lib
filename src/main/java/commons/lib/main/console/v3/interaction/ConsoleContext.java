@@ -13,6 +13,7 @@ public class ConsoleContext {
     public static ConsoleItem[] currentMenu = new ConsoleItem[0];
     @MdDoc(description = "Use this stack to memorize the path the user took while navigating through the sub level of your menu.")
     public static Stack<ConsoleItem[]> parentMenuStack = new Stack<>();
+    public static Object workingObject;
 
     private ConsoleContext() {}
 }

@@ -1,10 +1,13 @@
 package commons.lib.main.console.v3.interaction;
 
+import commons.lib.main.os.LogUtils;
 import commons.lib.tooling.documentation.MdDoc;
+
+import java.util.logging.Logger;
 
 @MdDoc(description = "Extend this class if you want to add an action to your menu.")
 public abstract class ConsoleAction implements ConsoleItem {
-
+    protected Logger logger = LogUtils.initLogs();
     private final String label;
 
     @MdDoc(description = "label is the text displayed to the user.")

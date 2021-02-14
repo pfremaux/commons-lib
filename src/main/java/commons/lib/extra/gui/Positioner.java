@@ -8,6 +8,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,6 +131,18 @@ public final class Positioner {
         for (Component component : componentList) {
             dialog.add(component);
         }
+    }
+
+    public void endCreation(Dialog dialog, String title) {
+        dialog.setTitle(title);
+        addAllToDialog(dialog);
+        dialog.pack();
+        dialog.setBounds(getWindowBound(100, 100));
+        dialog.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent windowEvent) {
+                System.exit(0);
+            }
+        });
     }
 
     /**

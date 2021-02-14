@@ -1,4 +1,4 @@
-package commons.lib.main.console.v2.item;
+package commons.lib.main.console.item;
 
 import commons.lib.main.console.CustomConsole;
 

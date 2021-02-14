@@ -1,6 +1,6 @@
 package commons.lib.main.console;
 
-import commons.lib.main.console.v2.item.DescriptibleConsoleItem;
+import commons.lib.main.console.item.DescriptibleConsoleItem;
 
 public class MyItem extends DescriptibleConsoleItem {
     public MyItem(CustomConsole console) {

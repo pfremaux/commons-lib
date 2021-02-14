@@ -1,7 +1,7 @@
 package commons.lib.main.console;
 
 
-import commons.lib.main.console.v2.item.Crud;
+import commons.lib.main.console.item.Crud;
 import org.junit.Assert;
 import org.junit.Test;
 

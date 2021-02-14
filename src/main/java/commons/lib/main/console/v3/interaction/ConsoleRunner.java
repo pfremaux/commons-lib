@@ -31,7 +31,7 @@ public class ConsoleRunner {
                 i++;
             }
             if (!ConsoleContext.parentMenuStack.empty()) {
-                ConsoleFactory.getInstance().printf("%d. %s", i, "Go back");
+                //ConsoleFactory.getInstance().printf("%d. %s", i, "Go back");
             } else {
                 ConsoleFactory.getInstance().printf("%d. %s", i, "Exit");
             }
@@ -39,7 +39,7 @@ public class ConsoleRunner {
             try {
                 response = Integer.parseInt(strResponse);
             } catch (NumberFormatException e) {
-
+                System.out.println("fail");
             }
             validChoice = response  > 0 && response <= items.length + 1; // '<=' because we added an item at the end
         } while (!validChoice);
