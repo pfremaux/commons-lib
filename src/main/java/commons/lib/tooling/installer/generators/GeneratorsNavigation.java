@@ -8,7 +8,8 @@ public class GeneratorsNavigation extends ConsoleNavigation {
     public static final ConsoleItem[] CONSOLE_ITEMS = {
             new GenerateJavaFromSqlAction(),
             new GenerateAppInfoFileAction(),
-            new GenerateMdDocumentationAction()
+            new GenerateMdDocumentationAction(),
+            new GenerateTableOfContentMdAction()
     };
 
     public GeneratorsNavigation() {

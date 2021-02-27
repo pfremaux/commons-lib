@@ -37,7 +37,7 @@ public class TocGenerator {
         markdownGenerator.generate(toc, "toc.md");
     }
 
-    private Documentation run() throws IOException {
+    public Documentation run() throws IOException {
         final Documentation toc = new Documentation();
         final List<File> files = Files.find(baseDocumentationDir,
                 Integer.MAX_VALUE,

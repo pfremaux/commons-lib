@@ -15,21 +15,21 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
 
-public class InstallMaquetteAction extends ConsoleAction {
+public class InstallBaseProjectAction extends ConsoleAction {
 
     private final String GIT_OWNER = "pfremaux";
 
-    public InstallMaquetteAction() {
-        super("Install Maquette");
+    public InstallBaseProjectAction() {
+        super("Install base project");
     }
 
     @Override
     public ConsoleItem[] go() {
         final ScriptGenerator scriptGenerator = new ScriptGenerator();
-        scriptGenerator.addInstruction(new DownloadGithubSource(GIT_OWNER, "maketist"));
+        scriptGenerator.addInstruction(new DownloadGithubSource(GIT_OWNER, "base-project"));
         scriptGenerator.addInstruction(new InstallBinary());
         final String sourceScript = scriptGenerator.getSourceScript();
-        String installScript = "./get-maquette" + scriptGenerator.getScriptExtension();
+        String installScript = "./get-base-project" + scriptGenerator.getScriptExtension();
         try {
             Files.writeString(Paths.get(installScript), sourceScript);
         } catch (IOException e) {

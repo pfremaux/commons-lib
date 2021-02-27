@@ -17,16 +17,18 @@ import java.util.stream.Stream;
 
 public class GenerateMd {
 
+    private final String basePackageName;
+
+    public GenerateMd(String basePackageName) {
+        this.basePackageName = basePackageName;
+    }
+
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        String test = System.getProperty("test");
-        System.out.println(test);
-        //System.exit(0);
-        GenerateMd generateMd = new GenerateMd();
+        final GenerateMd generateMd = new GenerateMd("commons.lib");
         generateMd.run();
     }
 
     public void run() throws IOException, ClassNotFoundException {
-        final String basePackageName = "commons.lib";
         final Map<String, Documentation> docs = new HashMap<>();
         final List<Class<?>> classesFromPackageName = AnnotationUtils.getClassesFromPackageName(basePackageName);
         for (Class<?> aClass : classesFromPackageName) {
