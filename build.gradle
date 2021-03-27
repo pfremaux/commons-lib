@@ -27,6 +27,15 @@ task customFatJarServer(type: Jar) {
     with jar
 }
 
+task buildCli(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'commons.lib.tooling.installer.Launcher'
+    }
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 test {
     beforeTest { descriptor ->
         logger.lifecycle("Running test: " + descriptor)
