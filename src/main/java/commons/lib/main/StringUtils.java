@@ -1,7 +1,5 @@
 package commons.lib.main;
 
-import org.jetbrains.annotations.NotNull;
-
 public final class StringUtils {
 
     private static class HtmlEscape {
