@@ -58,7 +58,6 @@ public final class StringUtils {
         return capitalize(firstCharToo, s);
     }
 
-    @NotNull
     public static String capitalize(boolean firstCharToo, String... s) {
         StringBuilder result = new StringBuilder();
         int i = 0;

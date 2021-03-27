@@ -57,7 +57,6 @@ public class RestEntitiesHandler implements HttpHandler {
         //exchange.getResponseBody().close();
     }
 
-    @NotNull
     private StringBuilder processAndGetResponseBody(HttpExchange exchange, List<String> params) throws IOException, HttpServerException {
         String table = params.get(0);
         if (table.equals("meta")) {

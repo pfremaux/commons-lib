@@ -58,7 +58,6 @@ public class ServerConfiguration {
         return httpContexts;
     }
 
-    @NotNull
     private static Properties loadHandlersDefinition(Map<String, Class<HttpHandler>> externalHandlers) throws IOException, ClassNotFoundException {
         Properties properties = new Properties();
         logger.info("Loading {}", SERVER_TOOLBOX_PROPERTIES);
@@ -79,7 +78,6 @@ public class ServerConfiguration {
     }
 
 
-    @NotNull
     @SuppressWarnings(value = "unchecked")
     private static Class<HttpHandler> getHttpHandler(String pack) throws ClassNotFoundException {
         return (Class<HttpHandler>) Class.forName(pack);
