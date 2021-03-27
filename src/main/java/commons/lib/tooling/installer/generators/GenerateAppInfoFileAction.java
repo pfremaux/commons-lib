@@ -21,7 +21,7 @@ public class GenerateAppInfoFileAction extends ConsoleAction {
     final String CMD_GET_CURRENT_GIT_URL = "git config --get remote.origin.url";
 
     public GenerateAppInfoFileAction() {
-        super(String.format("Clean .git files recursively from here (%s)", Path.of(".").toFile().getAbsolutePath()));
+        super(String.format("Generate App info file  from here (%s)", Path.of(".").toFile().getAbsolutePath()));
     }
 
     @Override
