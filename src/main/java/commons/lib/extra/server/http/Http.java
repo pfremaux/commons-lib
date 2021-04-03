@@ -19,6 +19,8 @@ public class Http {
     public static final String PRIVATE_SELF_DESCRIBE_PATH = "/private/selfDescribe/";
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        System.setProperty("console.encoding", "UTF-8");
+        System.setProperty("file.encoding", "UTF-8");
         startServer();
     }
 
