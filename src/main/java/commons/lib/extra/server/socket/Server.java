@@ -1,11 +1,11 @@
 package commons.lib.extra.server.socket;
 
-import commons.lib.main.SystemUtils;
 import commons.lib.extra.security.asymetric.AsymmetricKeyHandler;
 import commons.lib.extra.security.asymetric.PrivateKeyHandler;
 import commons.lib.extra.security.asymetric.PublicKeyHandler;
 import commons.lib.extra.server.socket.secured.ContactRegistry;
 import commons.lib.extra.server.socket.secured.SecuredSocketInitializer;
+import commons.lib.main.SystemUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

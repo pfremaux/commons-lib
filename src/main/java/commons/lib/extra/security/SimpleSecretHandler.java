@@ -1,10 +1,10 @@
 package commons.lib.extra.security;
 
-import commons.lib.main.filestructure.StructuredFile;
 import commons.lib.extra.security.asymetric.AsymmetricKeyHandler;
 import commons.lib.extra.security.asymetric.PrivateKeyHandler;
 import commons.lib.extra.security.asymetric.PublicKeyHandler;
 import commons.lib.extra.security.symetric.SymmetricHandler;
+import commons.lib.main.filestructure.StructuredFile;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;

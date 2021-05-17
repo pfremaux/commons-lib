@@ -1,7 +1,6 @@
 package commons.lib.functionaltests.settings;
 
 import commons.lib.functionaltests.entrypoint.FT_ConsoleV3;
-import commons.lib.functionaltests.entrypoint.FT_PropertiesMapper;
 
 public class FunctionalTestsSettings {
     public static final String MAIN_INPUT_DIR_PROP = "functional.tests.input.dir";

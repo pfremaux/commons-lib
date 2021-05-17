@@ -1,13 +1,13 @@
 package commons.lib.functionaltests.socket.secured;
 
-import commons.lib.main.SystemUtils;
-import commons.lib.main.console.ConsoleFactory;
-import commons.lib.main.console.CustomConsole;
+import commons.lib.extra.server.socket.*;
+import commons.lib.extra.server.socket.secured.SecuredSocketInitializer;
 import commons.lib.functionaltests.settings.FunctionalTestsSettings;
 import commons.lib.functionaltests.socket.ChatMessage;
 import commons.lib.functionaltests.socket.ChatMessageConsumer;
-import commons.lib.extra.server.socket.*;
-import commons.lib.extra.server.socket.secured.SecuredSocketInitializer;
+import commons.lib.main.SystemUtils;
+import commons.lib.main.console.ConsoleFactory;
+import commons.lib.main.console.CustomConsole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

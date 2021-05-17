@@ -2,8 +2,8 @@ package commons.lib.tooling.installer.generators;
 
 import commons.lib.main.SystemUtils;
 import commons.lib.main.console.v3.interaction.ConsoleAction;
-import commons.lib.main.console.v3.interaction.ConsoleContext;
 import commons.lib.main.console.v3.interaction.ConsoleItem;
+import commons.lib.main.console.v3.interaction.context.AllConsoleContexts;
 import commons.lib.main.os.CommandLineExecutor;
 import commons.lib.main.os.CommandStatus;
 import commons.lib.main.os.scriptgen.ScriptGenerator;
@@ -60,6 +60,6 @@ public class GenerateAppInfoFileAction extends ConsoleAction {
             e.printStackTrace(); // TODO LOG
         }
 
-        return ConsoleContext.currentMenu;
+        return AllConsoleContexts.allContexts.get("default").currentMenu;
     }
 }

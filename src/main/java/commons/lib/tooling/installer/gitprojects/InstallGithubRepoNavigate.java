@@ -9,7 +9,7 @@ public class InstallGithubRepoNavigate extends ConsoleNavigation {
             new InstallPasswordManagerAction()
     };
     public InstallGithubRepoNavigate() {
-        super("Install a github project.");
+        super("default", "Install a github project.");
     }
 
     @Override

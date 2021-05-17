@@ -2,8 +2,8 @@ package commons.lib.tooling.installer.generators;
 
 import commons.lib.main.console.ConsoleFactory;
 import commons.lib.main.console.v3.interaction.ConsoleAction;
-import commons.lib.main.console.v3.interaction.ConsoleContext;
 import commons.lib.main.console.v3.interaction.ConsoleItem;
+import commons.lib.main.console.v3.interaction.context.AllConsoleContexts;
 import commons.lib.main.os.LogUtils;
 import commons.lib.tooling.markdown.GenerateMd;
 
@@ -28,6 +28,6 @@ public class GenerateMdDocumentationAction extends ConsoleAction {
         } catch (IOException | ClassNotFoundException e) {
             logger.throwing(this.getClass().getSimpleName(), "go()", e);
         }
-        return ConsoleContext.currentMenu;
+        return AllConsoleContexts.allContexts.get("default").currentMenu;
     }
 }

@@ -1,9 +1,9 @@
 package commons.lib.functionaltests.entrypoint;
 
-import commons.lib.main.console.ConsoleFactory;
-import commons.lib.main.console.CustomConsole;
 import commons.lib.functionaltests.settings.FunctionalTestsSettings;
 import commons.lib.functionaltests.socket.secured.SecuredChat;
+import commons.lib.main.console.ConsoleFactory;
+import commons.lib.main.console.CustomConsole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

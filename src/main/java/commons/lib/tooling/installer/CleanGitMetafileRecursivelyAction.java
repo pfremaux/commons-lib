@@ -2,12 +2,12 @@ package commons.lib.tooling.installer;
 
 import commons.lib.main.SystemUtils;
 import commons.lib.main.console.v3.interaction.ConsoleAction;
-import commons.lib.main.console.v3.interaction.ConsoleContext;
 import commons.lib.main.console.v3.interaction.ConsoleItem;
+import commons.lib.main.console.v3.interaction.context.AllConsoleContexts;
 import commons.lib.main.os.CommandLineExecutor;
 import commons.lib.main.os.CommandStatus;
-import commons.lib.main.os.scriptgen.action.DeleteGitMetafile;
 import commons.lib.main.os.scriptgen.ScriptGenerator;
+import commons.lib.main.os.scriptgen.action.DeleteGitMetafile;
 
 import java.nio.file.Path;
 import java.util.concurrent.ExecutionException;
@@ -33,6 +33,6 @@ public class CleanGitMetafileRecursivelyAction extends ConsoleAction {
         }
 
         System.out.println(execute.getLogs().toString());
-        return ConsoleContext.currentMenu;
+        return AllConsoleContexts.allContexts.get("default").currentMenu;
     }
 }

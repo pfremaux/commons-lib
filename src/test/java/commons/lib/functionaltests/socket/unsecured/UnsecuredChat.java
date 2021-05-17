@@ -1,11 +1,11 @@
 package commons.lib.functionaltests.socket.unsecured;
 
+import commons.lib.extra.server.socket.*;
+import commons.lib.functionaltests.socket.ChatMessage;
+import commons.lib.functionaltests.socket.ChatMessageConsumer;
 import commons.lib.main.SystemUtils;
 import commons.lib.main.console.ConsoleFactory;
 import commons.lib.main.console.CustomConsole;
-import commons.lib.functionaltests.socket.ChatMessage;
-import commons.lib.functionaltests.socket.ChatMessageConsumer;
-import commons.lib.extra.server.socket.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

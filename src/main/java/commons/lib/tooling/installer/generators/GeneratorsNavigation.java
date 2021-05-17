@@ -13,7 +13,7 @@ public class GeneratorsNavigation extends ConsoleNavigation {
     };
 
     public GeneratorsNavigation() {
-        super("Generators...");
+        super("default", "Generators...");
     }
 
     @Override
