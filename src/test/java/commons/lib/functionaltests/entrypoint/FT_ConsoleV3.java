@@ -13,7 +13,7 @@ import java.nio.file.Path;
 public class FT_ConsoleV3 {
 
     public static void main(String[] args) {
-        ConsoleRunner consoleRunner = new ConsoleRunner(new ConsoleItem[]{
+        ConsoleRunner consoleRunner = new ConsoleRunner("default", new ConsoleItem[]{
                 new AskName(),
                 new DisplayName(),
                 new FakeSubSection()

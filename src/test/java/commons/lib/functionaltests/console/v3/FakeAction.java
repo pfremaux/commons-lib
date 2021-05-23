@@ -2,8 +2,8 @@ package commons.lib.functionaltests.console.v3;
 
 import commons.lib.main.console.ConsoleFactory;
 import commons.lib.main.console.v3.interaction.ConsoleAction;
-import commons.lib.main.console.v3.interaction.ConsoleContext;
 import commons.lib.main.console.v3.interaction.ConsoleItem;
+import commons.lib.main.console.v3.interaction.context.AllConsoleContexts;
 
 public class FakeAction extends ConsoleAction {
 
@@ -14,6 +14,6 @@ public class FakeAction extends ConsoleAction {
     @Override
     public ConsoleItem[] go() {
         ConsoleFactory.getInstance().printf("Fake action %s done !", label());
-        return ConsoleContext.currentMenu;
+        return AllConsoleContexts.allContexts.get("default").currentMenu;
     }
 }

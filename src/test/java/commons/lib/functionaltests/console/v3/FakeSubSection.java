@@ -13,7 +13,7 @@ public class FakeSubSection extends ConsoleNavigation {
     };
 
     public FakeSubSection() {
-        super("Fake sub section");
+        super("default", "Fake sub section");
     }
 
     @Override

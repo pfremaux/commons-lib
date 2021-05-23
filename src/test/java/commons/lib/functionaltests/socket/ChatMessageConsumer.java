@@ -1,10 +1,10 @@
 package commons.lib.functionaltests.socket;
 
-import commons.lib.main.console.ConsoleFactory;
-import commons.lib.main.console.CustomConsole;
-import commons.lib.functionaltests.socket.unsecured.UnsecuredChat;
 import commons.lib.extra.server.socket.MessageConsumer;
 import commons.lib.extra.server.socket.Wrapper;
+import commons.lib.functionaltests.socket.unsecured.UnsecuredChat;
+import commons.lib.main.console.ConsoleFactory;
+import commons.lib.main.console.CustomConsole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

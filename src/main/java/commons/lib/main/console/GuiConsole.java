@@ -1,17 +1,10 @@
 package commons.lib.main.console;
 
 import commons.lib.extra.gui.Positioner;
-import commons.lib.main.SystemUtils;
 
 import java.awt.*;
-import java.io.Console;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class GuiConsole implements CustomConsole {
 

@@ -15,7 +15,8 @@ public class Launcher {
     public static void main(String[] args) {
         logger = LogUtils.initLogs();
         ConsoleFactory.getInstance();
-        ConsoleRunner consoleRunner = new ConsoleRunner(new ConsoleItem[]{
+        // TODO put in constant in the right place
+        ConsoleRunner consoleRunner = new ConsoleRunner("default", new ConsoleItem[]{
                 new InstallGithubRepoNavigate(),
                 new GeneratorsNavigation()
         });

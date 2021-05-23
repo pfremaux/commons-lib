@@ -25,6 +25,10 @@ public abstract class ConsoleAction implements ConsoleItem {
         return go();
     }
 
+    /**
+     *
+     * @return All allowed actions once the action hsa been done.
+     */
     public abstract ConsoleItem[] go();
 
 }
