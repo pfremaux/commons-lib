@@ -1,10 +1,19 @@
 package commons.lib.main;
 
+import java.util.regex.Pattern;
+
 public final class StringUtils {
+    private static final Pattern REGEX_IS_NUMBER = Pattern.compile("[0-9]+([.]?[0-9]*)?");
+
+    public static boolean isNumber(String s) {
+        return REGEX_IS_NUMBER.matcher(s).matches();
+    }
+
 
     private static class HtmlEscape {
         private final String html;
         private final String text;
+
 
         private HtmlEscape(String html, String text) {
             this.html = html;

@@ -2,6 +2,7 @@ package commons.lib.extra.math.formula;
 
 import commons.lib.extra.math.formula.interfaces.Operation;
 import commons.lib.extra.math.formula.interfaces.OperationElement;
+import commons.lib.main.console.As;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -62,7 +63,13 @@ public class Formula implements Operation {
                 int priority = operator.getPriority();
                 if (priority <= level) {
                     final Operation operationBefore = (Operation) operationElements.get(i - 1);
-                    final Operation simplifiedBefore = operationBefore.simplify(level, knowledge);
+                    final Operation simplifiedBefore;
+                    if (!result.isEmpty() && Operand.hasValue(result.get(result.size() - 1))) {
+                        simplifiedBefore = As.any(result.get(result.size() - 1));
+                    } else {
+                        simplifiedBefore = operationBefore.simplify(level, knowledge);
+                    }
+
                     final Operation operationAfter = (Operation) operationElements.get(i + 1);
                     final Operation simplifiedAfter = operationAfter.simplify(level, knowledge);
                     if (simplifiedBefore instanceof Operand && simplifiedAfter instanceof Operand) {
@@ -76,8 +83,9 @@ public class Formula implements Operation {
                         } else {
                             result.add(operator);
                         }
+                    } else {
+                        result.add(operator);
                     }
-                    // result.add(operator);
                     if (operator.getC() == '*') {
                         int newI = simplifyBasicMultiply(i, simplifiedBefore, simplifiedAfter, result);
                         if (newI == i) {
@@ -89,7 +97,7 @@ public class Formula implements Operation {
                         final Operand nextOperandElement = (Operand) simplifiedAfter;
                         if (BigDecimal.ONE.equals(nextOperandElement.getValue())) {
                             i++;
-                            result.remove(result.size()-1);
+                            result.remove(result.size() - 1);
                         }
                     }
                 } else {
@@ -190,7 +198,7 @@ public class Formula implements Operation {
                     formula.addOperationElement(subExpressionBetweenParenthesis);
                     byPass++;
                 }
-            }/* TODO PFR a tester*/ else if (chars[i] == '(' && byPass > 0) {
+            } else if (chars[i] == '(' && byPass > 0) {
                 byPass++;
             } else if (chars[i] == ')') {
                 if (byPass > 0) {
@@ -205,7 +213,7 @@ public class Formula implements Operation {
                 continue;
             } else if (Character.isAlphabetic(chars[i])) {
                 letters.append(chars[i]);
-            } else if (Character.isDigit(chars[i])) {
+            } else if (Character.isDigit(chars[i]) || chars[i] == '.') {
                 if (i == 0) {
                     letters.append(chars[i]);
                 } else {
