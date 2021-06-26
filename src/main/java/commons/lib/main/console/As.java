@@ -7,7 +7,8 @@ import java.util.Objects;
 @MdDoc(description = "Utility class you can use to cast an object to a specific type. It won't trigger warnings in your source files.")
 public class As {
 
-    private As() {}
+    private As() {
+    }
 
     @MdDoc(description = "Cast an object to a string.")
     public static String string(Object o) {
@@ -20,5 +21,9 @@ public class As {
             return (Integer) o;
         }
         return Integer.valueOf(string(o));
+    }
+
+    public static <T> T any(Object o) {
+        return (T) o;
     }
 }

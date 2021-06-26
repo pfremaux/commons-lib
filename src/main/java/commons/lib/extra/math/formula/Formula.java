@@ -22,11 +22,12 @@ public class Formula implements Operation {
         final ExpressionBetweenParenthesis expressionBetweenParenthesis = analyzeGroup("c*(a+b)+sin(c)".toCharArray(), 0);
         System.out.println(expressionBetweenParenthesis);
         final Map<String, BigDecimal> knowledge = Map.of("a", BigDecimal.ONE, "b", BigDecimal.ONE, "c", BigDecimal.ONE);
-        BigDecimal resolve = expressionBetweenParenthesis.resolve(knowledge);
-        //final Operation resolve = expressionBetweenParenthesis.simplify(0, knowledge);
+        //BigDecimal resolve = expressionBetweenParenthesis.resolve(knowledge);
+        final Operation resolve = expressionBetweenParenthesis.simplify(0, knowledge);
         System.out.println(resolve);
     }
 
+   /* @Deprecated
     @Override
     public BigDecimal resolve(Map<String, BigDecimal> knowledge) {
         BigDecimal result = BigDecimal.ZERO;
@@ -37,6 +38,9 @@ public class Formula implements Operation {
             } else if (operationElement instanceof Operation) {
                 final Operation operation = (Operation) operationElement;
                 final BigDecimal resolve = operation.resolve(knowledge);
+                *//*if (currentOperator == null) {
+                    continue;// TODO PFR tempo
+                }*//*
                 result = currentOperator.calculate(result, resolve);
                 currentOperator = null;
             } else {
@@ -44,7 +48,7 @@ public class Formula implements Operation {
             }
         }
         return result;
-    }
+    }*/
 
     @Override
     public Operation simplify(int level, Map<String, BigDecimal> knowledge) {
@@ -72,15 +76,21 @@ public class Formula implements Operation {
                         } else {
                             result.add(operator);
                         }
-                    } else if (operator.getC() == '*') {
-                        i = simplifyBasicMultiply(i, simplifiedBefore, simplifiedAfter, result);
+                    }
+                    // result.add(operator);
+                    if (operator.getC() == '*') {
+                        int newI = simplifyBasicMultiply(i, simplifiedBefore, simplifiedAfter, result);
+                        if (newI == i) {
+                            // nothing has been simplified
+                        } else {
+                            i = newI;
+                        }
                     } else if (simplifiedAfter instanceof Operand && operator.getC() == '/') {
                         final Operand nextOperandElement = (Operand) simplifiedAfter;
                         if (BigDecimal.ONE.equals(nextOperandElement.getValue())) {
                             i++;
+                            result.remove(result.size()-1);
                         }
-                    } else {
-                        result.add(operator);
                     }
                 } else {
                     result.add(operationElement);
@@ -99,7 +109,14 @@ public class Formula implements Operation {
                 throw new RuntimeException("Unexpected element : " + operationElement);
             }
         }
-
+        if (result.size() == 1) {
+            if (result.get(0) instanceof Operand) {
+                final Operand operand = (Operand) result.get(0);
+                if (operand.getValue() != null) {
+                    return operand;
+                }
+            }
+        }
         return new Formula(result);
     }
 
@@ -173,6 +190,8 @@ public class Formula implements Operation {
                     formula.addOperationElement(subExpressionBetweenParenthesis);
                     byPass++;
                 }
+            }/* TODO PFR a tester*/ else if (chars[i] == '(' && byPass > 0) {
+                byPass++;
             } else if (chars[i] == ')') {
                 if (byPass > 0) {
                     byPass--;

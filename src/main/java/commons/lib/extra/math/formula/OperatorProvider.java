@@ -11,8 +11,8 @@ public class OperatorProvider {
     static {
         operators.put('+', new Operator('+', 2, BigDecimal::add, false, true));
         operators.put('-', new Operator('-', 2, BigDecimal::subtract, false, true));
-        operators.put('*', new Operator('*', 0, BigDecimal::multiply, true, true));
-        operators.put('/', new Operator('/', 0, (a, b) -> a.divide(b, RoundingMode.HALF_EVEN), true, true));
+        operators.put('*', new Operator('*', 1, BigDecimal::multiply, true, true));
+        operators.put('/', new Operator('/', 1, (a, b) -> a.divide(b, 3, RoundingMode.CEILING), true, true));
     }
 
     public static Operator get(Character c) {

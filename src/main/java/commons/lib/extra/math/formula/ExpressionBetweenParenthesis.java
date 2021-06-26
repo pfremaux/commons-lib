@@ -14,11 +14,6 @@ public final class ExpressionBetweenParenthesis  implements Operation, Operation
     }
 
     @Override
-    public BigDecimal resolve(Map<String, BigDecimal> knowledge) {
-        return formula.resolve(knowledge);
-    }
-
-    @Override
     public Operation simplify(int level, Map<String, BigDecimal> knowledge) {
         final Operation simplify = formula.simplify(level, knowledge);
         if (simplify instanceof Formula) {
@@ -36,7 +31,7 @@ public final class ExpressionBetweenParenthesis  implements Operation, Operation
 
     @Override
     public int getPriority() {
-        return 1;
+        return 0;
     }
 
     @Override

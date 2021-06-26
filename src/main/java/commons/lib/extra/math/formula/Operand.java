@@ -20,22 +20,17 @@ public class Operand implements OperationElement, Operation {
 
 
     public Operand(BigDecimal value) {
-        this.name = value.toEngineeringString();
+        this.name = value.toString();
         this.value = value;
     }
 
 
     @Override
-    public BigDecimal resolve(Map<String, BigDecimal> knowledge) {
-        if (value == null && knowledge.containsKey(name)) {
-            return knowledge.get(name);
-        }
-        return value;
-    }
-
-    @Override
     public Operation simplify(int level, Map<String, BigDecimal> knowledge) {
-        final BigDecimal resolvedNullable = resolve(knowledge);
+        BigDecimal resolvedNullable = getValue();
+        if (resolvedNullable == null) {
+            resolvedNullable = knowledge.get(name);
+        }
         return resolvedNullable == null ? this : new Operand(resolvedNullable);
     }
 

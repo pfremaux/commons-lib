@@ -2,6 +2,7 @@ package commons.lib.extra.math.formula;
 
 import commons.lib.extra.math.formula.interfaces.Operation;
 import commons.lib.extra.math.formula.interfaces.OperationElement;
+import commons.lib.main.console.As;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,15 +26,15 @@ public class MathematicFunction  implements OperationElement, Operation {
     }
 
     @Override
-    public BigDecimal resolve(Map<String, BigDecimal> knowledge) {
-        BigDecimal resolve = subExpressionBetweenParenthesis.resolve(knowledge);
-        return function.apply(resolve, null);
-    }
-
-    @Override
     public Operation simplify(int level, Map<String, BigDecimal> knowledge) {
-        if (level <= getPriority()) {
-            return new Operand(resolve(knowledge));
+        if (getPriority() <= level) {
+            Operation simplify = subExpressionBetweenParenthesis.simplify(3, knowledge);
+            if (simplify instanceof Operand) {
+                Operand operand = (Operand) simplify;
+                if (operand.getValue() != null) {
+                    return new Operand(function.apply(operand.getValue(), BigDecimal.ONE));
+                }
+            }
         }
         return new MathematicFunction(
                 name,
@@ -43,7 +44,7 @@ public class MathematicFunction  implements OperationElement, Operation {
 
     @Override
     public int getPriority() {
-        return 0;
+        return 2;
     }
 
     @Override
