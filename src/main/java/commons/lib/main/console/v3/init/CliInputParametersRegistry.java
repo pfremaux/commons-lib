@@ -1,5 +1,7 @@
 package commons.lib.main.console.v3.init;
 
+import commons.lib.tooling.documentation.MdDoc;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -7,29 +9,31 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@MdDoc(description = "This class is responsible to store all the parameters a command line app would accept.")
 public class CliInputParametersRegistry {
     public static final Parameter DEFAULT_PARAMETER = new Parameter("", "", "", "");
 
     private final Map<String, Parameter> parametersPerShortName = new HashMap<>();
     private final Map<String, Parameter> parametersPerProperty = new HashMap<>();
 
-
+    @MdDoc(description = "Register a command line parameter.")
     public void register(String commandLineKey, String propertyKey, String defaultValue, String description) {
         // TODO app-info_en actually contains localized descriptions
         parametersPerShortName.put(commandLineKey, new Parameter(commandLineKey, propertyKey, defaultValue, description));
         parametersPerProperty.put(propertyKey, new Parameter(commandLineKey, propertyKey, defaultValue, description));
     }
 
-
-
+    @MdDoc(description = "lookup for a parameter by its property key. For example : log.verbosity")
     public Optional<Parameter> fromProperty(String property) {
         return Optional.ofNullable(parametersPerProperty.get(property));
     }
 
+    @MdDoc(description = "lookup for a parameter by its command line key. For example : --verbose")
     public Optional<Parameter> fromCommandLineKey(String cmdLine) {
         return Optional.ofNullable(parametersPerShortName.get(cmdLine));
     }
 
+    @MdDoc(description = "Returns a properties file data with the values currently stored in this instance.")
     public String toPropertiesFileFormat() {
         final StringBuilder buffer = new StringBuilder();
         for (Parameter inputParameter : parametersPerShortName.values()) {
@@ -43,6 +47,7 @@ public class CliInputParametersRegistry {
         return buffer.toString();
     }
 
+    @MdDoc(description = "Provide a string with all possible parameters, ready to be shown to the user.")
     public String toCommandLineFormat() {
         final StringBuilder buffer = new StringBuilder();
         for (Parameter inputParameter : parametersPerShortName.values()) {
@@ -63,7 +68,7 @@ public class CliInputParametersRegistry {
         return this.parametersPerShortName.values();
     }
 
-
+    @MdDoc(description = "Describe a parameter (name, property key, description)")
     public static class Parameter {
         private final String commandLineKey;
         private final String key;

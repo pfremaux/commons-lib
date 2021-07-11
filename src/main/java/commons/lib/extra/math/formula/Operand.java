@@ -7,8 +7,6 @@ import commons.lib.main.console.As;
 
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Operand implements OperationElement, Operation {
     private final String name;

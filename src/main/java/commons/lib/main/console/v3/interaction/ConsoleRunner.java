@@ -3,30 +3,36 @@ package commons.lib.main.console.v3.interaction;
 import commons.lib.main.console.ConsoleFactory;
 import commons.lib.main.console.v3.interaction.context.AllConsoleContexts;
 import commons.lib.main.console.v3.interaction.context.ConsoleContext;
+import commons.lib.tooling.documentation.MdDoc;
 
+@MdDoc(description = "This class initiates the interaction between the app and the user.")
 public class ConsoleRunner {
 
     private final String contextName;
-    private final ConsoleItem[] mainMenu;
+    private final ConsoleItem[] choices;
 
-    public ConsoleRunner(String contextName, ConsoleItem[] mainMenu) {
+    @MdDoc(description = "Construct the console runner.")
+    public ConsoleRunner(
+            @MdDoc(description = "Context name. It's used to store data at the right place in AllConsoleContexts.java.") String contextName,
+            @MdDoc(description = "All items the user can select.") ConsoleItem[] choices) {
         this.contextName = contextName;
-        this.mainMenu = mainMenu;
+        this.choices = choices;
     }
 
+    @MdDoc(description = "Start the interaction with the user.")
     public void run() {
-        ConsoleItem[] options = mainMenu;
+        ConsoleItem[] options = choices;
         while (options.length > 0) {
-            AllConsoleContexts.allContexts.get(contextName).currentMenu =options;
+            AllConsoleContexts.allContexts.get(contextName).currentMenu = options;
             options = interact(options);
         }
         System.out.println("Exiting");
     }
 
     private ConsoleItem[] interact(ConsoleItem[] items) {
+        final ConsoleContext consoleContext = AllConsoleContexts.allContexts.get(contextName);
         int response = 0;
         boolean validChoice;
-        ConsoleContext consoleContext = AllConsoleContexts.allContexts.get(contextName);
         do {
             int extraChoiceQuantity = 0;
             int i = 1;
@@ -44,9 +50,9 @@ public class ConsoleRunner {
             try {
                 response = Integer.parseInt(strResponse);
             } catch (NumberFormatException e) {
-                System.out.println("fail");
+                System.out.println("The input provided was not a number.");
             }
-            validChoice = response  > 0 && response <= items.length + extraChoiceQuantity;
+            validChoice = response > 0 && response <= items.length + extraChoiceQuantity;
         } while (!validChoice);
         if (response - 1 == items.length) {
             if (!consoleContext.parentMenuStack.empty()) {
@@ -55,7 +61,7 @@ public class ConsoleRunner {
                 return new ConsoleItem[0];
             }
         }
-        return items[response-1].run();
+        return items[response - 1].run();
     }
 
 }

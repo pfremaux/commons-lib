@@ -32,6 +32,7 @@ public abstract class CliApp {
         cliInputParametersRegistry.register(commandLineKey, propertyKey, defaultValue, description);
     }
 
+    @MdDoc(description = "Validate the arguments passed provided by the user.")
     public void validateAndLoad(String... args) {
         init();
         processParameters(args);
@@ -45,6 +46,8 @@ public abstract class CliApp {
         }
     }
 
+    @MdDoc(description = "Return the value associated to the provided command line parameter.",
+     examples = {"app.getValueWithCommandLine(\"--version\"); // will return for example 1.2"})
     public String getValueWithCommandLine(String cmd) {
         return cliInputParametersRegistry.fromCommandLineKey(cmd).orElse(CliInputParametersRegistry.DEFAULT_PARAMETER).getPropertyString();
     }

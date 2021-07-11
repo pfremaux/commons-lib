@@ -28,29 +28,6 @@ public class Formula implements Operation {
         System.out.println(resolve);
     }
 
-   /* @Deprecated
-    @Override
-    public BigDecimal resolve(Map<String, BigDecimal> knowledge) {
-        BigDecimal result = BigDecimal.ZERO;
-        Operator currentOperator = OperatorProvider.get('+');
-        for (OperationElement operationElement : operationElements) {
-            if (operationElement instanceof Operator) {
-                currentOperator = (Operator) operationElement;
-            } else if (operationElement instanceof Operation) {
-                final Operation operation = (Operation) operationElement;
-                final BigDecimal resolve = operation.resolve(knowledge);
-                *//*if (currentOperator == null) {
-                    continue;// TODO PFR tempo
-                }*//*
-                result = currentOperator.calculate(result, resolve);
-                currentOperator = null;
-            } else {
-                System.out.println("Un processed element : " + operationElement);
-            }
-        }
-        return result;
-    }*/
-
     @Override
     public Operation simplify(int level, Map<String, BigDecimal> knowledge) {
         final List<OperationElement> result = new ArrayList<>();
