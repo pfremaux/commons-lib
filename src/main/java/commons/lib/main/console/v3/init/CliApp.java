@@ -47,46 +47,41 @@ public abstract class CliApp {
     }
 
     @MdDoc(description = "Return the value associated to the provided command line parameter.",
-     examples = {"app.getValueWithCommandLine(\"--version\"); // will return for example 1.2"})
+            examples = {"app.getValueWithCommandLine(\"--version\"); // will return for example 1.2"})
     public String getValueWithCommandLine(String cmd) {
         return cliInputParametersRegistry.fromCommandLineKey(cmd).orElse(CliInputParametersRegistry.DEFAULT_PARAMETER).getPropertyString();
     }
 
     private void processParameters(String... args) {
         PARAMETERS = cliInputParametersRegistry;
-        if (args.length > 0) {
-            if (args[0].equalsIgnoreCase("-h")) {
-                showUsage(appInfo);
-                SystemUtils.endOfApp();
-            } else if (args[0].equalsIgnoreCase("glv")) {
-                CommandLineExecutor commandLineExecutor = new CommandLineExecutor();
-                try {
-                    CommandStatus execution = commandLineExecutor.execute("git clone " + appInfo.getGithubUrl());
-                    commandLineExecutor.waitAllCommands(10000L);
-                    CommandLineExecutor.validateEndOfExecution(execution);
-                    execution = commandLineExecutor.execute("./" + appInfo.getProjectName() + "/install.sh");
-                    commandLineExecutor.waitAllCommands(10000L);
-                    CommandLineExecutor.validateEndOfExecution(execution);
+        if (args.length > 0 && args[0].equalsIgnoreCase("-h")) {
+            showUsage(appInfo);
+            SystemUtils.endOfApp();
+        } else if (args.length > 0 && args[0].equalsIgnoreCase("glv")) {
+            CommandLineExecutor commandLineExecutor = new CommandLineExecutor();
+            try {
+                CommandStatus execution = commandLineExecutor.execute("git clone " + appInfo.getGithubUrl());
+                commandLineExecutor.waitAllCommands(10000L);
+                CommandLineExecutor.validateEndOfExecution(execution);
+                execution = commandLineExecutor.execute("./" + appInfo.getProjectName() + "/install.sh");
+                commandLineExecutor.waitAllCommands(10000L);
+                CommandLineExecutor.validateEndOfExecution(execution);
 
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            } else{
-                for (int i = 0; i < args.length; i = i + 2) {
-                    final Optional<CliInputParametersRegistry.Parameter> inputParameter = cliInputParametersRegistry.fromCommandLineKey(args[i]);
-                    if (inputParameter.isPresent()) {
-                        System.setProperty(inputParameter.get().getKey(), args[i + 1]);
-                    } else {
-                        if (!args[i].startsWith("-D")) {
-                            System.err.println("Unexpected parameter : " + args[i]);
-                            SystemUtils.failUser();
-                        }
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        } else {
+            for (int i = 0; i < args.length; i = i + 2) {
+                final Optional<CliInputParametersRegistry.Parameter> inputParameter = cliInputParametersRegistry.fromCommandLineKey(args[i]);
+                if (inputParameter.isPresent()) {
+                    System.setProperty(inputParameter.get().getKey(), args[i + 1]);
+                } else {
+                    if (!args[i].startsWith("-D")) {
+                        System.err.println("Unexpected parameter : " + args[i]);
+                        SystemUtils.failUser();
                     }
                 }
             }
-        } else {
-            showUsage(appInfo);
-            SystemUtils.endOfApp();
         }
     }
 
