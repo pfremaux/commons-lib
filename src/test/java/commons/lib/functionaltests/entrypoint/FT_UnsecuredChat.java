@@ -16,10 +16,10 @@ public class FT_UnsecuredChat {
     private static final ExecutorService executorService = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
-        logger.info("Starting functional test");
+        logger.debug("Starting functional test");
         run();
         // TODO assert files
-        logger.info("Ending functional test");
+        logger.debug("Ending functional test");
     }
 
     private static void run() {

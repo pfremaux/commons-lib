@@ -76,7 +76,7 @@ public class SecuredChat {
         SecuredSocketInitializer.registerEventsBinding(messageConsumerManager);
         final Map<Integer, Function<List<byte[]>, Wrapper>> wrappers = new HashMap<>();
         wrappers.put(5111, strings -> {
-            logger.info("strings = {}", strings);
+            logger.debug("strings = {}", strings);
             return new Wrapper(
                     Message.bytesToInt(strings.get(0)),
                     new ChatMessage(
@@ -115,11 +115,11 @@ public class SecuredChat {
         try {
 
             if (begin) {
-                logger.info("I'm client 1. Waiting before attempting a connection");
+                logger.debug("I'm client 1. Waiting before attempting a connection");
                 Thread.sleep(4000L);
-                logger.info("Waited enough.");
+                logger.debug("Waited enough.");
                 final Client client = new Client(distantHostname, distantPort);
-                logger.info("Asking for a secured connection.");
+                logger.debug("Asking for a secured connection.");
                 client.secured(myHostname, myPort);
                 final String msg = console.readLine();
                 final ChatMessage chatMessage = new ChatMessage(msg, myHostname, myPort, true);

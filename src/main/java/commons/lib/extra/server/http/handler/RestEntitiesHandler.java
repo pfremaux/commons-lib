@@ -68,15 +68,15 @@ public class RestEntitiesHandler implements HttpHandler {
                 StringBuilder builder = new StringBuilder();
                 String action = params.get(2);
                 if ("save".equals(action)) {
-                    logger.info("Saving...");
+                    logger.debug("Saving...");
                     inMemoryDb.save(DIRECTORY_DATA);
                     return builder;
                 } else if ("load".equals(action)) {
-                    logger.info("Loading...");
+                    logger.debug("Loading...");
                     inMemoryDb.loadAll(DIRECTORY_DATA);
                     return builder;
                 } else if ("clear".equals(action)) {
-                    logger.info("Clearing...");
+                    logger.debug("Clearing...");
                     inMemoryDb.clearAll();
                     return builder;
                 }

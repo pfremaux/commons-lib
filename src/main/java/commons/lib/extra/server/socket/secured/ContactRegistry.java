@@ -32,43 +32,43 @@ public class ContactRegistry {
 
 
     public static void storeSymmetricKey(String hostname, SecretKeySpec key) {
-        logger.info("Storing {} for {}.", "SymmetricKey", hostname);
+        logger.debug("Storing {} for {}.", "SymmetricKey", hostname);
         SYMMETRIC_KEYS.put(hostname, key);
     }
 
     public static void storePublicKeys(String hostname, List<PublicKey> keys) {
-        logger.info("Storing {} for {}.", "PublicKeys", hostname);
+        logger.debug("Storing {} for {}.", "PublicKeys", hostname);
         PUBLIC_KEYS.put(hostname, keys);
     }
 
     public static void storePrivateKeys(String hostname, List<PrivateKey> keys) {
-        logger.info("Storing {} for {}.", "PrivateKeys", hostname);
+        logger.debug("Storing {} for {}.", "PrivateKeys", hostname);
         PRIVATE_KEYS.put(hostname, keys);
     }
 
     public static SecretKeySpec getSymmetricKey(String hostname) {
-        logger.info("Getting {} for {}.", "SymmetricKey", hostname);
+        logger.debug("Getting {} for {}.", "SymmetricKey", hostname);
         return SYMMETRIC_KEYS.get(hostname);
     }
 
     public static List<PublicKey> getPublicKeys(String hostname) {
-        logger.info("Getting {} for {}.", "PublicKeys", hostname);
+        logger.debug("Getting {} for {}.", "PublicKeys", hostname);
         return PUBLIC_KEYS.get(hostname);
     }
 
     public static List<PrivateKey> getPrivateKeys(String hostname) {
-        logger.info("Getting {} for {}.", "PrivateKeys", hostname);
+        logger.debug("Getting {} for {}.", "PrivateKeys", hostname);
         return PRIVATE_KEYS.get(hostname);
     }
 
     public static List<PublicKey> getPublicKeysOrDefault(String hostname, List<PublicKey> generateKeyPairsAndGetPublicKeys) {
-        logger.info("Getting {} or default for {}.", "PublicKeys", hostname);
+        logger.debug("Getting {} or default for {}.", "PublicKeys", hostname);
         return PUBLIC_KEYS.getOrDefault(hostname, generateKeyPairsAndGetPublicKeys);
     }
 
     private static void validateKeys(String host, List<PrivateKey> pvKeys, List<PublicKey> pubKeys) {
         if (pvKeys == null || pubKeys == null) {
-            logger.info("Missing keys for testing key pair for {} : {}, {}", host, pvKeys, pubKeys);
+            logger.debug("Missing keys for testing key pair for {} : {}, {}", host, pvKeys, pubKeys);
             return;
         }
         final PublicKeyHandler publicKeyHandler = new PublicKeyHandler();
@@ -82,7 +82,7 @@ public class ContactRegistry {
             final byte[] deciphered = bufferedInputStream1.readAllBytes();
             final String decipheredString = new String(deciphered, StandardCharsets.UTF_8);
             if (decipheredString.equals(monText)) {
-                logger.info("Key pairs are working for {}", host);
+                logger.debug("Key pairs are working for {}", host);
             }
             assert decipheredString.equals(monText);
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeyException | IOException e) {

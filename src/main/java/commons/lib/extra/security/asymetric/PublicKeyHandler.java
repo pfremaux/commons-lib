@@ -17,7 +17,7 @@ public class PublicKeyHandler extends AsymmetricKeyHandler<PublicKey> {
     private static final Logger logger = LoggerFactory.getLogger(PublicKeyHandler.class);
 
     public void save(String path, PublicKey publicKey) throws IOException {
-        logger.info("Saving public key in {}", path);
+        logger.debug("Saving public key in {}", path);
         X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(
                 publicKey.getEncoded());
         try (FileOutputStream fos = new FileOutputStream(path)) {
@@ -26,7 +26,7 @@ public class PublicKeyHandler extends AsymmetricKeyHandler<PublicKey> {
     }
 
     public PublicKey load(String path, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-        logger.info("Loading public key in {}", path);
+        logger.debug("Loading public key in {}", path);
         final File filePublicKey = new File(path);
         byte[] encodedPublicKey = new byte[(int) filePublicKey.length()];
         try (FileInputStream fis = new FileInputStream(path)) {

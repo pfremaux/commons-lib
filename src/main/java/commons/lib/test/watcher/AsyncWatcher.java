@@ -79,7 +79,7 @@ public class AsyncWatcher implements Runnable {
                     continue;
                 }
 
-                logger.info("doing something with {}", filename);
+                logger.debug("doing something with {}", filename);
                 //Details left to reader....
             }
 
@@ -95,9 +95,9 @@ public class AsyncWatcher implements Runnable {
 
     public static BiFunction<Path, Path, Boolean> defaultFileWatcher() {
         return (dir, filename) -> {
-            logger.info("custom event queue starting... {}", filename);
+            logger.debug("custom event queue starting... {}", filename);
             if (!Files.isDirectory(filename)) {
-                logger.info("{} is not a directory ", filename);
+                logger.debug("{} is not a directory ", filename);
                 try {
                     Files.copy(dir.resolve(filename), Paths.get(filename.toFile().getAbsolutePath() + ".bak"));
                 } catch (IOException e) {
@@ -105,7 +105,7 @@ public class AsyncWatcher implements Runnable {
                     return false;
                 }
             } else {
-                logger.info("{} is a directory. Doing nothing.", filename);
+                logger.debug("{} is a directory. Doing nothing.", filename);
             }
             return false;
         };

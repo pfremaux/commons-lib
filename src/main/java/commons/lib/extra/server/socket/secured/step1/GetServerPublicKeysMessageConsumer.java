@@ -51,7 +51,7 @@ public class GetServerPublicKeysMessageConsumer implements MessageConsumer {
             try {
                 final byte[] encrypt = SymmetricHandler.encrypt(secretKey, encoded, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO);
                 encryptedPublicKeys.add(encrypt);
-                logger.info("Size of the encrypted key : {}", encrypt.length);
+                logger.debug("Size of the encrypted key : {}", encrypt.length);
                 sizedEncryptedPublicKeys.add(encrypt.length);
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
                 e.printStackTrace();// TODO ERROr

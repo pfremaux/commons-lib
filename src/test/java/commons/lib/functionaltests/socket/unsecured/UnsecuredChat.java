@@ -74,7 +74,7 @@ public class UnsecuredChat {
         final Map<Integer, Function<List<byte[]>, Wrapper>> wrappers = new HashMap<>();
         wrappers.put(CHAT_MESSAGE_CODE, strings -> {
             for (byte[] string : strings) {
-                logger.info("strings = {}", Message.bytesToString(string));
+                logger.debug("strings = {}", Message.bytesToString(string));
             }
             return new Wrapper(
                     Message.bytesToInt(strings.get(0)),

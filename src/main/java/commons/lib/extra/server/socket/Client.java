@@ -44,9 +44,9 @@ public class Client {
     }
 
     public void secured(String clientHostname, int clientPort) {
-        logger.info("Starting handshake from me {}:{} to distant entity {}:{}", clientHostname, clientPort, hostnameServer, portServer);
+        logger.debug("Starting handshake from me {}:{} to distant entity {}:{}", clientHostname, clientPort, hostnameServer, portServer);
         if (ContactRegistry.TRUSTED.contains(hostnameServer)) {
-            logger.info("{} already trusted, not trying to handshake again.", hostnameServer);
+            logger.debug("{} already trusted, not trying to handshake again.", hostnameServer);
             return;
         }
         final CompletableFuture<String> future = new CompletableFuture<>();
@@ -55,22 +55,22 @@ public class Client {
         final MessageConsumerManager messageConsumer = new MessageConsumerManager(SecuredSocketInitializer.initEventsBinding());
         final Server clientAsServerForHandshake = new Server(clientHostname, clientPort, 2, messageConsumer, wrapperFactory);
         final String pwd = "changeme"; // TODO change
-        logger.info("Building message...");
+        logger.debug("Building message...");
         final GetServerPublicKeysMessage getServerPublicKeysMessage = new GetServerPublicKeysMessage(pwd, 1, clientHostname, clientPort, true);
         ContactRegistry.storeSymmetricKey(hostnameServer, SymmetricHandler.getKey(pwd, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO));
         final Function<List<byte[]>, Wrapper> listWrapperFunction = wrapperFactory.getFunctionMap().get(GetServerPublicKeysMessage.CODE);
-        logger.info("Serializing data...");
+        logger.debug("Serializing data...");
         final List<byte[]> serializedDataAsStrings = Stream.concat(Stream.of(Message.intToBytes(GetServerPublicKeysMessage.CODE)), Stream.of(getServerPublicKeysMessage.serializeBytes())).collect(Collectors.toList());
         final Wrapper apply = listWrapperFunction.apply(serializedDataAsStrings);
         byte[] serialize = apply.serialize();
         try {
-            logger.info("Sending serialized data...");
+            logger.debug("Sending serialized data...");
             connect();
             justSend(serialize);
             disconnect();
-            logger.info("Listening for handshake.");
+            logger.debug("Listening for handshake.");
             clientAsServerForHandshake.listen();
-            logger.info("Listening ended");
+            logger.debug("Listening ended");
             publicKeyHandler = new PublicKeyHandler();
         } catch (IOException e) {
             e.printStackTrace();
@@ -96,9 +96,9 @@ public class Client {
         } else {
             dataToSend = data;
         }
-        logger.info("sending {}", new String(dataToSend, StandardCharsets.UTF_8));
+        logger.debug("sending {}", new String(dataToSend, StandardCharsets.UTF_8));
         connectionToServer.write(ByteBuffer.wrap(dataToSend));
-        logger.info("Data Sent");
+        logger.debug("Data Sent");
         connectionToServer.close();
     }
 
@@ -109,7 +109,7 @@ public class Client {
     }
 
     public void justSend(byte[] data) throws IOException {
-        logger.info("Client : sending {}", new String(data, StandardCharsets.UTF_8));
+        logger.debug("Client : sending {}", new String(data, StandardCharsets.UTF_8));
         server.write(ByteBuffer.wrap(data));
     }
 

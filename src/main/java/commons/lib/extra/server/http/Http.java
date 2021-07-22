@@ -35,7 +35,7 @@ public class Http {
     public static void startServer(int port, HttpContext... contexts) throws IOException {
         final HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         if (contexts.length == 0) {
-            logger.info("No handler set. Loading the default handler...");
+            logger.debug("No handler set. Loading the default handler...");
             server.createContext("/", new DefaultRootHandler());
         } else {
             for (HttpContext context : contexts) {
@@ -44,8 +44,8 @@ public class Http {
         }
         server.setExecutor(null);
         server.createContext(PRIVATE_SELF_DESCRIBE_PATH, new SelfDescribeHandler(contexts));
-        logger.info("Self description available here : http://127.0.0.1:{}{}", port, PRIVATE_SELF_DESCRIBE_PATH);
-        logger.info("server listening port {}", port);
+        logger.debug("Self description available here : http://127.0.0.1:{}{}", port, PRIVATE_SELF_DESCRIBE_PATH);
+        logger.debug("server listening port {}", port);
         server.start();
     }
 

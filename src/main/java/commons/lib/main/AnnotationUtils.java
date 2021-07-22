@@ -20,10 +20,10 @@ public class AnnotationUtils {
         List<Class<?>> classes;
 
         if (isInIde()) {
-            logger.info("IN IDE");
+            logger.debug("IN IDE");
             classes = getClassesFromIde(packageName);
         } else {
-            logger.info("IN JAR");
+            logger.debug("IN JAR");
             classes = getClassesFromJar(packageName);
         }
         return classes;
@@ -62,7 +62,7 @@ public class AnnotationUtils {
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         assert classLoader != null;
         final String path = packageName.replace('.', '/');
-        logger.info("Searching in Resource {}", path);
+        logger.debug("Searching in Resource {}", path);
         return listClassesPerJarFile(classLoader, path);
     }
 

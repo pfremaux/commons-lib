@@ -40,7 +40,6 @@ public final class StructuredFile {
     }
 
     public void add(String column) {
-        logger.trace("Adding column {}", column);
         if (column.contains(separator)) {
             throw new IllegalArgumentException("Separator character detected in a column. Change the separator or change the column data. Separator = " + separator);
         }
@@ -58,16 +57,14 @@ public final class StructuredFile {
      */
     public static StructuredFile load(byte[] data, String separator, int nbrFields) {
         String fileStr = new String(data, StandardCharsets.UTF_8);
-        logger.info("data to load has {} bytes", data.length);
-        logger.info("data = {}", fileStr);
+        logger.debug("data to load has {} bytes", data.length);
         String[] split = fileStr.split("\n");
-        logger.info("data to load has {} lines", split.length);
+        logger.debug("data to load has {} lines", split.length);
         List<List<String>> structuredData = new ArrayList<>();
         for (String s : split) {
-            logger.info("processing : -{}-", s);
             final String cleanLine = s.trim();
             if (cleanLine.length() == 0) {
-                logger.info("empty line, next !");
+                logger.debug("empty line, next !");
                 continue;
             }
             List<String> strings = cutLine(cleanLine, separator, nbrFields);
@@ -86,9 +83,8 @@ public final class StructuredFile {
      * @return The cut line.
      */
     private static List<String> cutLine(String strLine, String separator, int maxNbrFields) {
-        logger.info("Cutting line {} with separator {}", strLine, separator);
         String[] split = strLine.split(separator);
-        logger.info("Number of token for the current line : ", split.length);
+        logger.debug("Number of token for the current line : ", split.length);
         final List<String> lines = new ArrayList<>(Arrays.asList(split));
         for (int i = lines.size(); i < maxNbrFields; i++) {
             lines.add("");
@@ -110,7 +106,6 @@ public final class StructuredFile {
         StringBuilder stringBuilder = new StringBuilder();
         for (List<String> fileDatum : getFileData()) {
             String stringifyLine = stringifyLine(fileDatum, separator);
-            logger.info("new stringified line : {}", stringifyLine);
             stringBuilder.append(stringifyLine);
             stringBuilder.append("\n");
         }
@@ -119,7 +114,6 @@ public final class StructuredFile {
 
     public byte[] toByteArray() {
         final String wholeFile = stringifyAll();
-        logger.info("Whole file : \n{}", wholeFile);
         return wholeFile.getBytes(StandardCharsets.UTF_8);
     }
 

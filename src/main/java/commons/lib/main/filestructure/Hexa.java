@@ -29,12 +29,12 @@ public class Hexa {
             builder.append(String.format("%02X", aByte));
             builder.append(" ");
             if (builder.length() >= lineLength) {
-                logger.info(builder.toString());
+                logger.debug(builder.toString());
                 builder = new StringBuilder();
             }
         }
         if (builder.length() > 0) {
-            logger.info(builder.toString());
+            logger.debug(builder.toString());
         }
     }
 

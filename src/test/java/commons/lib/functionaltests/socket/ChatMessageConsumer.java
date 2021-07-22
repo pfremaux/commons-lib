@@ -15,11 +15,11 @@ public class ChatMessageConsumer implements MessageConsumer {
 
     @Override
     public Optional<Wrapper> process(Wrapper input, String consumerHostname, int consumerPort) {
-        logger.info("Starting chat message consumer");
+        logger.debug("Starting chat message consumer");
         final ChatMessage chatMessage = (ChatMessage) input.getDatum();
         final CustomConsole instance = ConsoleFactory.getInstance();
         String message = chatMessage.getMessage();
-        logger.info("message received was : {}", message);
+        logger.debug("message received was : {}", message);
         instance.printf("Received and consuming : %s", message);
         String responseMessage;
         instance.printf("Message received : %s", message);
