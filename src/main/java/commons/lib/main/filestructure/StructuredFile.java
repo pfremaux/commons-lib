@@ -1,20 +1,21 @@
 package commons.lib.main.filestructure;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import commons.lib.main.os.LogUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * This class represent a CSV like file structure.
  */
 public final class StructuredFile {
 
-    private static final Logger logger = LoggerFactory.getLogger(StructuredFile.class);
+    private static final Logger logger = LogUtils.initLogs();
 
     private final String separator;
     private List<String> currentLine;
@@ -35,7 +36,7 @@ public final class StructuredFile {
 
     public void newLine() {
         fileData.add(currentLine);
-        logger.debug("Going to a new line (number {})", fileData.size());
+        LogUtils.debug("Going to a new line (number {})", fileData.size());
         currentLine = new ArrayList<>();
     }
 
@@ -57,14 +58,14 @@ public final class StructuredFile {
      */
     public static StructuredFile load(byte[] data, String separator, int nbrFields) {
         String fileStr = new String(data, StandardCharsets.UTF_8);
-        logger.debug("data to load has {} bytes", data.length);
+        LogUtils.debug("data to load has {} bytes", data.length);
         String[] split = fileStr.split("\n");
-        logger.debug("data to load has {} lines", split.length);
+        LogUtils.debug("data to load has {} lines", split.length);
         List<List<String>> structuredData = new ArrayList<>();
         for (String s : split) {
             final String cleanLine = s.trim();
             if (cleanLine.length() == 0) {
-                logger.debug("empty line, next !");
+                LogUtils.debug("empty line, next !");
                 continue;
             }
             List<String> strings = cutLine(cleanLine, separator, nbrFields);
@@ -84,7 +85,7 @@ public final class StructuredFile {
      */
     private static List<String> cutLine(String strLine, String separator, int maxNbrFields) {
         String[] split = strLine.split(separator);
-        logger.debug("Number of token for the current line : ", split.length);
+        LogUtils.debug("Number of token for the current line : ", split.length);
         final List<String> lines = new ArrayList<>(Arrays.asList(split));
         for (int i = lines.size(); i < maxNbrFields; i++) {
             lines.add("");

@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpServer;
 import commons.lib.extra.server.http.config.ServerConfiguration;
 import commons.lib.extra.server.http.handler.DefaultRootHandler;
 import commons.lib.extra.server.http.handler.SelfDescribeHandler;
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,7 @@ public class Http {
     public static void startServer(int port, HttpContext... contexts) throws IOException {
         final HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
         if (contexts.length == 0) {
-            logger.debug("No handler set. Loading the default handler...");
+            LogUtils.debug("No handler set. Loading the default handler...");
             server.createContext("/", new DefaultRootHandler());
         } else {
             for (HttpContext context : contexts) {
@@ -44,8 +45,8 @@ public class Http {
         }
         server.setExecutor(null);
         server.createContext(PRIVATE_SELF_DESCRIBE_PATH, new SelfDescribeHandler(contexts));
-        logger.debug("Self description available here : http://127.0.0.1:{}{}", port, PRIVATE_SELF_DESCRIBE_PATH);
-        logger.debug("server listening port {}", port);
+        LogUtils.debug("Self description available here : http://127.0.0.1:{}{}", port, PRIVATE_SELF_DESCRIBE_PATH);
+        LogUtils.debug("server listening port {}", port);
         server.start();
     }
 

@@ -4,6 +4,7 @@ import commons.lib.functionaltests.settings.FunctionalTestsSettings;
 import commons.lib.functionaltests.socket.unsecured.UnsecuredChat;
 import commons.lib.main.console.ConsoleFactory;
 import commons.lib.main.console.CustomConsole;
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,10 +17,10 @@ public class FT_UnsecuredChat {
     private static final ExecutorService executorService = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
-        logger.debug("Starting functional test");
+        LogUtils.debug("Starting functional test");
         run();
         // TODO assert files
-        logger.debug("Ending functional test");
+        LogUtils.debug("Ending functional test");
     }
 
     private static void run() {

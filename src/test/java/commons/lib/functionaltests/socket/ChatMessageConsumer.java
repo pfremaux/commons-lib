@@ -5,6 +5,7 @@ import commons.lib.extra.server.socket.Wrapper;
 import commons.lib.functionaltests.socket.unsecured.UnsecuredChat;
 import commons.lib.main.console.ConsoleFactory;
 import commons.lib.main.console.CustomConsole;
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,11 +16,11 @@ public class ChatMessageConsumer implements MessageConsumer {
 
     @Override
     public Optional<Wrapper> process(Wrapper input, String consumerHostname, int consumerPort) {
-        logger.debug("Starting chat message consumer");
+        LogUtils.debug("Starting chat message consumer");
         final ChatMessage chatMessage = (ChatMessage) input.getDatum();
         final CustomConsole instance = ConsoleFactory.getInstance();
         String message = chatMessage.getMessage();
-        logger.debug("message received was : {}", message);
+        LogUtils.debug("message received was : {}", message);
         instance.printf("Received and consuming : %s", message);
         String responseMessage;
         instance.printf("Message received : %s", message);

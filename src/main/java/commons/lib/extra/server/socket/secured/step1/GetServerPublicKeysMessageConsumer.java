@@ -7,6 +7,7 @@ import commons.lib.extra.server.socket.Wrapper;
 import commons.lib.extra.server.socket.message.ErrorMessage;
 import commons.lib.extra.server.socket.secured.ContactRegistry;
 import commons.lib.extra.server.socket.secured.step2.EncryptedPublicKeysMessage;
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +52,7 @@ public class GetServerPublicKeysMessageConsumer implements MessageConsumer {
             try {
                 final byte[] encrypt = SymmetricHandler.encrypt(secretKey, encoded, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO);
                 encryptedPublicKeys.add(encrypt);
-                logger.debug("Size of the encrypted key : {}", encrypt.length);
+                LogUtils.debug("Size of the encrypted key : {}", encrypt.length);
                 sizedEncryptedPublicKeys.add(encrypt.length);
             } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
                 e.printStackTrace();// TODO ERROr

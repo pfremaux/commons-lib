@@ -9,6 +9,7 @@ import commons.lib.extra.server.socket.Wrapper;
 import commons.lib.extra.server.socket.message.ErrorMessage;
 import commons.lib.extra.server.socket.secured.ContactRegistry;
 import commons.lib.extra.server.socket.secured.step4.AcknowledgePublicKeysMessage;
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ public class EncryptedPublicKeysMessageConsumer implements MessageConsumer {
         final String callerHostName = datum.getResponseHostname();
         final List<PublicKey> publicKeysOfCaller = new ArrayList<>();
         if (datum.isSymmetric()) {
-            logger.debug("Message encryption is symmetric.");
+            LogUtils.debug("Message encryption is symmetric.");
             // The data we received are encrypted with a symmetric key. We're taking the symmetric linked to the caller
             final SecretKeySpec secretKeySpec = ContactRegistry.getSymmetricKey(callerHostName);
             for (byte[] encryptedPublicKey : encryptedPublicKeys) {
@@ -76,7 +77,7 @@ public class EncryptedPublicKeysMessageConsumer implements MessageConsumer {
             Wrapper responseWrapper = new Wrapper(EncryptedPublicKeysMessage.CODE, new EncryptedPublicKeysMessage(sizedEncryptedPublicKeys, encryptedPublicKeysOfConsumer, false, true, consumerHostname, consumerPort, true));
             return Optional.of(responseWrapper);
         } else {
-            logger.debug("Message encryption is asymmetric.");
+            LogUtils.debug("Message encryption is asymmetric.");
             if (!ContactRegistry.TRUSTED.contains(callerHostName)) {
                 // The caller doesn't know the public keys of this server. We're getting his public keys and we're encrypting and sending OUR public keys.
                 final List<PrivateKey> consumerPrivateKeys = ContactRegistry.getPrivateKeys(consumerHostname);

@@ -1,5 +1,6 @@
 package commons.lib.extra.security.asymetric;
 
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +18,7 @@ public class PublicKeyHandler extends AsymmetricKeyHandler<PublicKey> {
     private static final Logger logger = LoggerFactory.getLogger(PublicKeyHandler.class);
 
     public void save(String path, PublicKey publicKey) throws IOException {
-        logger.debug("Saving public key in {}", path);
+        LogUtils.debug("Saving public key in {}", path);
         X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(
                 publicKey.getEncoded());
         try (FileOutputStream fos = new FileOutputStream(path)) {
@@ -26,7 +27,7 @@ public class PublicKeyHandler extends AsymmetricKeyHandler<PublicKey> {
     }
 
     public PublicKey load(String path, String algorithm) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-        logger.debug("Loading public key in {}", path);
+        LogUtils.debug("Loading public key in {}", path);
         final File filePublicKey = new File(path);
         byte[] encodedPublicKey = new byte[(int) filePublicKey.length()];
         try (FileInputStream fis = new FileInputStream(path)) {
@@ -53,7 +54,7 @@ public class PublicKeyHandler extends AsymmetricKeyHandler<PublicKey> {
 
     @Override
     public BufferedInputStream recursiveProcessor(LinkedList<PublicKey> keys, BufferedInputStream inputStream) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IOException {
-        logger.debug("Doing recursive encryption, {} encryption(s) remaining.", keys.size());
+        LogUtils.debug("Doing recursive encryption, {} encryption(s) remaining.", keys.size());
         if (keys.isEmpty()) {
             return inputStream;
         }

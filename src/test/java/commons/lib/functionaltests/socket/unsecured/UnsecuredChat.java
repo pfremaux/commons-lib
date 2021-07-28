@@ -6,6 +6,7 @@ import commons.lib.functionaltests.socket.ChatMessageConsumer;
 import commons.lib.main.SystemUtils;
 import commons.lib.main.console.ConsoleFactory;
 import commons.lib.main.console.CustomConsole;
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +75,7 @@ public class UnsecuredChat {
         final Map<Integer, Function<List<byte[]>, Wrapper>> wrappers = new HashMap<>();
         wrappers.put(CHAT_MESSAGE_CODE, strings -> {
             for (byte[] string : strings) {
-                logger.debug("strings = {}", Message.bytesToString(string));
+                LogUtils.debug("strings = {}", Message.bytesToString(string));
             }
             return new Wrapper(
                     Message.bytesToInt(strings.get(0)),

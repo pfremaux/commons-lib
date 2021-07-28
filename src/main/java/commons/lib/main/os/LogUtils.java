@@ -8,10 +8,22 @@ import java.util.logging.*;
 
 public class LogUtils {
     private static final String DEFAULT_FORMAT = "[%1$tF %1$tT] [%2$-7s] %3$s %n";
-    private static Logger logger;
+    private static Logger logger = initLogs();
 
     private LogUtils() {
 
+    }
+
+    public static void debug(String msg, Object... params) {
+        logger.log(Level.FINE, msg, params);
+    }
+
+    public static void info(String msg, Object... params) {
+        logger.log(Level.INFO, msg, params);
+    }
+
+    public static void error(String msg, Throwable t) {
+        logger.log(Level.SEVERE, msg, t);
     }
 
     public static Logger initLogs() {

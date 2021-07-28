@@ -1,5 +1,6 @@
 package commons.lib.main.filestructure;
 
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 
 public class Hexa {
@@ -29,12 +30,12 @@ public class Hexa {
             builder.append(String.format("%02X", aByte));
             builder.append(" ");
             if (builder.length() >= lineLength) {
-                logger.debug(builder.toString());
+                LogUtils.debug(builder.toString());
                 builder = new StringBuilder();
             }
         }
         if (builder.length() > 0) {
-            logger.debug(builder.toString());
+            LogUtils.debug(builder.toString());
         }
     }
 

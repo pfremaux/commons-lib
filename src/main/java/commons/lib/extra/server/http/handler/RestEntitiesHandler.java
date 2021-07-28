@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import commons.lib.extra.server.InMemoryDb;
 import commons.lib.extra.server.http.HttpServerException;
+import commons.lib.main.os.LogUtils;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -68,15 +69,15 @@ public class RestEntitiesHandler implements HttpHandler {
                 StringBuilder builder = new StringBuilder();
                 String action = params.get(2);
                 if ("save".equals(action)) {
-                    logger.debug("Saving...");
+                    LogUtils.debug("Saving...");
                     inMemoryDb.save(DIRECTORY_DATA);
                     return builder;
                 } else if ("load".equals(action)) {
-                    logger.debug("Loading...");
+                    LogUtils.debug("Loading...");
                     inMemoryDb.loadAll(DIRECTORY_DATA);
                     return builder;
                 } else if ("clear".equals(action)) {
-                    logger.debug("Clearing...");
+                    LogUtils.debug("Clearing...");
                     inMemoryDb.clearAll();
                     return builder;
                 }

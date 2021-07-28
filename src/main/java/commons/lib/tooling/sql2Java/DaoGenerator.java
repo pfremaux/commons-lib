@@ -3,20 +3,20 @@ package commons.lib.tooling.sql2Java;
 
 import commons.lib.main.FileUtils;
 import commons.lib.main.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import commons.lib.main.os.LogUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Generates the DAO (Data Access Objects) depending on the provided script.
  */
 final class DaoGenerator {
-    private static final Logger logger = LoggerFactory.getLogger(DaoGenerator.class);
+    private static final Logger logger = LogUtils.initLogs();
 
     /**
      * @param basePath                    The full path where you want to generate the Java files.
@@ -37,7 +37,7 @@ final class DaoGenerator {
                 .replaceAll("\t", " ")
                 .replaceAll("  ", " ")
                 .replaceAll(",", " ,");
-        logger.debug("Parsing... " + cleanedRequest);
+        LogUtils.debug("Parsing... " + cleanedRequest);
         final StringTokenizer tokenizer = new StringTokenizer(cleanedRequest, " ");
         String expect = null;
         String tableName = "";
@@ -47,7 +47,7 @@ final class DaoGenerator {
         final Map<String, List<Column>> tablesDefinition = new HashMap<>();
         while (tokenizer.hasMoreElements()) {
             String s = tokenizer.nextToken();
-            logger.debug("Current word : " + s);
+            LogUtils.debug("Current word : " + s);
             if (Arrays.asList("create", "table").contains(s.toLowerCase())) {
                 expect = "TABLE_NAME";
             } else if ("TABLE_NAME".equals(expect)) {
@@ -71,24 +71,24 @@ final class DaoGenerator {
                 if (",".equals(s)) {
                     expect = "COLUMN_NAME";
                 } else {
-                    logger.debug("Saving in memory table " + tableName);
+                    LogUtils.debug("Saving in memory table " + tableName);
                     tablesDefinition.put(tableName, columns);
                     tableName = "";
                     columns = new ArrayList<>();
                     expect = "CREATE TABLE";
                 }
             } else {
-                logger.debug(String.format("Found '%s'", s));
+                LogUtils.debug(String.format("Found '%s'", s));
             }
-            logger.debug("Next word expected : " + expect);
+            LogUtils.debug("Next word expected : " + expect);
         }
-        logger.debug("Generating Java files...");
+        LogUtils.debug("Generating Java files...");
         for (Map.Entry<String, List<Column>> entry : tablesDefinition.entrySet()) {
-            logger.debug("Processing table : " + entry.getKey());
+            LogUtils.debug("Processing table : " + entry.getKey());
             createPojo(basePath, basePack, entry.getKey(), entry.getValue());
             createDao(basePath, basePack, entry.getKey(), entry.getValue(), destinationScriptForJdbcUri);
         }
-        logger.debug("Java file generation finished.");
+        LogUtils.debug("Java file generation finished.");
     }
 
     private static void createDao(String basePath, String basePack, String tableName, List<Column> columns, String jdbcUri) throws IOException {
@@ -122,7 +122,7 @@ final class DaoGenerator {
         lines.add(getConnectMethod().toString());
 
         lines.add("}");
-        logger.debug("Generating file... " + javaFile);
+        LogUtils.debug("Generating file... " + javaFile);
         Files.write(javaFile, lines);
     }
 
@@ -304,7 +304,7 @@ final class DaoGenerator {
             lines.add("");
         }
         lines.add("}");
-        logger.debug("Generating file... " + javaFile);
+        LogUtils.debug("Generating file... " + javaFile);
         Files.write(javaFile, lines);
     }
 

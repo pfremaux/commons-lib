@@ -2,6 +2,7 @@ package commons.lib.extra.server.http.handler;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ public class ServeFileHandler implements HttpHandler {
         logger.warn("Looking for matching pattern : '{}'...", relativePath);
         int i = requestURI.getPath().indexOf(relativePath);
         if (i >= 0) {
-            logger.debug("Pattern found !");
+            LogUtils.debug("Pattern found !");
             final String substring = requestURI.getPath().substring(i);
             final Path filePath = baseDir.resolve(substring);
             final File file = filePath.toFile();

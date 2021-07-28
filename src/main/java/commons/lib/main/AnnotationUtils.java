@@ -1,5 +1,6 @@
 package commons.lib.main;
 
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +21,10 @@ public class AnnotationUtils {
         List<Class<?>> classes;
 
         if (isInIde()) {
-            logger.debug("IN IDE");
+            LogUtils.debug("IN IDE");
             classes = getClassesFromIde(packageName);
         } else {
-            logger.debug("IN JAR");
+            LogUtils.debug("IN JAR");
             classes = getClassesFromJar(packageName);
         }
         return classes;
@@ -35,7 +36,7 @@ public class AnnotationUtils {
             return Boolean.parseBoolean(hintIsInIde);
         }
         final String path = AnnotationUtils.class.getResource("AnnotationUtils.class").getPath();
-        logger.debug("Testing if the current process is being executed in an IDE with path {}", path);
+        LogUtils.debug("Testing if the current process is being executed in an IDE with path {}", path);
         return path.startsWith("/");
     }
 
@@ -62,7 +63,7 @@ public class AnnotationUtils {
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         assert classLoader != null;
         final String path = packageName.replace('.', '/');
-        logger.debug("Searching in Resource {}", path);
+        LogUtils.debug("Searching in Resource {}", path);
         return listClassesPerJarFile(classLoader, path);
     }
 

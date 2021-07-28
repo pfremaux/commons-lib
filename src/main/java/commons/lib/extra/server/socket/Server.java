@@ -6,6 +6,7 @@ import commons.lib.extra.security.asymetric.PublicKeyHandler;
 import commons.lib.extra.server.socket.secured.ContactRegistry;
 import commons.lib.extra.server.socket.secured.SecuredSocketInitializer;
 import commons.lib.main.SystemUtils;
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +65,7 @@ public class Server {
     public void listen() throws IOException {
         SocketChannel inputClient;
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
-        logger.debug("Listening on port {}", port);
+        LogUtils.debug("Listening on port {}", port);
         ServerSocket socket = serverSocket.socket();
         socket.bind(new InetSocketAddress(hostname, port));
         int listenCount = 0;
@@ -73,29 +74,29 @@ public class Server {
             final SocketAddress remoteAddress = inputClient.getRemoteAddress();
             InetSocketAddress inetSocketAddress = (InetSocketAddress) remoteAddress;
             final String callerHostname = inetSocketAddress.getHostName();
-            logger.debug("Connection Set:  {}", remoteAddress);
+            LogUtils.debug("Connection Set:  {}", remoteAddress);
             ByteBuffer buffer = ByteBuffer.allocate(1024);
             final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            logger.debug("Entering loop");
+            LogUtils.debug("Entering loop");
             while (inputClient.read(buffer) > 0) {
-                logger.debug("loop");
+                LogUtils.debug("loop");
                 buffer.flip();
                 byteArrayOutputStream.write(buffer.array());
                 buffer.clear();
             }
-            logger.debug("Size of the bytes received = {}", byteArrayOutputStream.size());
+            LogUtils.debug("Size of the bytes received = {}", byteArrayOutputStream.size());
             final byte[] allDatum = byteArrayOutputStream.toByteArray();
             Wrapper inputWrapper = getWrapper(callerHostname, allDatum);
             byteArrayOutputStream.close();
             Message message = inputWrapper.getDatum();
             final int action = inputWrapper.getAction();
-            logger.debug("Key action {}", action);
+            LogUtils.debug("Key action {}", action);
             MessageConsumer messageConsumer = messageConsumerManager.getEventsLogic().get(action);
-            logger.debug("Class {}", messageConsumer.getClass());
+            LogUtils.debug("Class {}", messageConsumer.getClass());
             Optional<Wrapper> outputWrapper = messageConsumer.process(inputWrapper, hostname, port);
             if (outputWrapper.isPresent() && message.isRequireResponse()) {
                 byte[] response = outputWrapper.get().serialize();
-                logger.debug("Responding {} with action {}", new String(response, StandardCharsets.UTF_8), outputWrapper.get().getAction());
+                LogUtils.debug("Responding {} with action {}", new String(response, StandardCharsets.UTF_8), outputWrapper.get().getAction());
                 final String responseHostname = message.getResponseHostname();
                 final int responsePort = message.getResponsePort();
                 SocketChannel outputClient = Client.connect(responseHostname, responsePort);
@@ -103,10 +104,10 @@ public class Server {
                 Client.send(outputClient, encryptedMaybeData);
                 Client.disconnect(outputClient);
             } else {
-                logger.debug("Response not required");
+                LogUtils.debug("Response not required");
             }
             listenCount++;
-            logger.debug("Listen count = {}. Ending when {}", listenCount, listenLimit);
+            LogUtils.debug("Listen count = {}. Ending when {}", listenCount, listenLimit);
             inputClient.close();
         } while (listenCount < listenLimit);
         socket.close();
@@ -146,7 +147,7 @@ public class Server {
             deciphered = allDatum;
         }
 
-        logger.debug("deciphered received : {}", Message.bytesToString(deciphered));
+        LogUtils.debug("deciphered received : {}", Message.bytesToString(deciphered));
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         List<byte[]> result = new ArrayList<>();
         for (byte b : deciphered) {
@@ -160,17 +161,17 @@ public class Server {
         result.add(outputStream.toByteArray());
 
         for (byte[] bytes : result) {
-            logger.debug("once stored : {}", Message.bytesToString(bytes));
+            LogUtils.debug("once stored : {}", Message.bytesToString(bytes));
         }
         final int action = Message.bytesToInt(result.get(0));
         final Map<Integer, Function<List<byte[]>, Wrapper>> functionMap = wrapperFactory.getFunctionMap();
-        logger.debug("Current wrapper factory size = {}, with {}", functionMap.size(), functionMap.keySet());
+        LogUtils.debug("Current wrapper factory size = {}, with {}", functionMap.size(), functionMap.keySet());
         for (Map.Entry<Integer, Function<List<byte[]>, Wrapper>> entry : functionMap.entrySet()) {
-            logger.debug("{} -> {}", entry.getKey(), entry.getValue());
+            LogUtils.debug("{} -> {}", entry.getKey(), entry.getValue());
         }
-        logger.debug("Searching action {}", action);
+        LogUtils.debug("Searching action {}", action);
         final Function<List<byte[]>, Wrapper> listWrapperFunction = functionMap.get(action);
-        logger.debug("Wrapper consumer found ? = {}", listWrapperFunction);
+        LogUtils.debug("Wrapper consumer found ? = {}", listWrapperFunction);
 
         return listWrapperFunction.apply(result);
     }

@@ -8,6 +8,7 @@ import commons.lib.functionaltests.socket.ChatMessageConsumer;
 import commons.lib.main.SystemUtils;
 import commons.lib.main.console.ConsoleFactory;
 import commons.lib.main.console.CustomConsole;
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +77,7 @@ public class SecuredChat {
         SecuredSocketInitializer.registerEventsBinding(messageConsumerManager);
         final Map<Integer, Function<List<byte[]>, Wrapper>> wrappers = new HashMap<>();
         wrappers.put(5111, strings -> {
-            logger.debug("strings = {}", strings);
+            LogUtils.debug("strings = {}", strings);
             return new Wrapper(
                     Message.bytesToInt(strings.get(0)),
                     new ChatMessage(
@@ -115,11 +116,11 @@ public class SecuredChat {
         try {
 
             if (begin) {
-                logger.debug("I'm client 1. Waiting before attempting a connection");
+                LogUtils.debug("I'm client 1. Waiting before attempting a connection");
                 Thread.sleep(4000L);
-                logger.debug("Waited enough.");
+                LogUtils.debug("Waited enough.");
                 final Client client = new Client(distantHostname, distantPort);
-                logger.debug("Asking for a secured connection.");
+                LogUtils.debug("Asking for a secured connection.");
                 client.secured(myHostname, myPort);
                 final String msg = console.readLine();
                 final ChatMessage chatMessage = new ChatMessage(msg, myHostname, myPort, true);

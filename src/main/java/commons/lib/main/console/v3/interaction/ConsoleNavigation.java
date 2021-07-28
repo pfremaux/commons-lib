@@ -37,11 +37,11 @@ public abstract class ConsoleNavigation implements ConsoleItem {
     @Override
     public final ConsoleItem[] run() {
         if (GO_BACK != this) {
-            logger.debug("Navigate : push to the stack");
+            LogUtils.debug("Navigate : push to the stack");
             final ConsoleContext consoleContext = AllConsoleContexts.allContexts.get(contextName);
             consoleContext.parentMenuStack.push(consoleContext.currentMenu);
         } else {
-            logger.debug("Going back, don't push to the stack");
+            LogUtils.debug("Going back, don't push to the stack");
         }
         ConsoleItem[] newMenu = navigate();
         return newMenu;

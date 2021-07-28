@@ -2,6 +2,7 @@ package commons.lib.extra.server.http.config;
 
 import com.sun.net.httpserver.HttpHandler;
 import commons.lib.extra.server.http.HttpContext;
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +24,7 @@ public class ServerConfiguration {
         final Properties properties = loadHandlersDefinition(externalHandlers);
 
         final List<HttpContext> httpContexts = new ArrayList<>();
-        logger.debug("Loading {}", SERVER_PROPERTIES);
+        LogUtils.debug("Loading {}", SERVER_PROPERTIES);
         try (FileInputStream in = new FileInputStream(SERVER_PROPERTIES)) {
             properties.load(in);
             boolean loop = true;
@@ -59,7 +60,7 @@ public class ServerConfiguration {
 
     private static Properties loadHandlersDefinition(Map<String, Class<HttpHandler>> externalHandlers) throws IOException, ClassNotFoundException {
         Properties properties = new Properties();
-        logger.debug("Loading {}", SERVER_TOOLBOX_PROPERTIES);
+        LogUtils.debug("Loading {}", SERVER_TOOLBOX_PROPERTIES);
         try (FileInputStream in = new FileInputStream(SERVER_TOOLBOX_PROPERTIES)) {
             properties.load(in);
             boolean loop = true;

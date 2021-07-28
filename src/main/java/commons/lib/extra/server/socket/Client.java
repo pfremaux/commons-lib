@@ -6,6 +6,7 @@ import commons.lib.extra.security.symetric.SymmetricHandler;
 import commons.lib.extra.server.socket.secured.ContactRegistry;
 import commons.lib.extra.server.socket.secured.SecuredSocketInitializer;
 import commons.lib.extra.server.socket.secured.step1.GetServerPublicKeysMessage;
+import commons.lib.main.os.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,9 +45,9 @@ public class Client {
     }
 
     public void secured(String clientHostname, int clientPort) {
-        logger.debug("Starting handshake from me {}:{} to distant entity {}:{}", clientHostname, clientPort, hostnameServer, portServer);
+        LogUtils.debug("Starting handshake from me {}:{} to distant entity {}:{}", clientHostname, clientPort, hostnameServer, portServer);
         if (ContactRegistry.TRUSTED.contains(hostnameServer)) {
-            logger.debug("{} already trusted, not trying to handshake again.", hostnameServer);
+            LogUtils.debug("{} already trusted, not trying to handshake again.", hostnameServer);
             return;
         }
         final CompletableFuture<String> future = new CompletableFuture<>();
@@ -55,22 +56,22 @@ public class Client {
         final MessageConsumerManager messageConsumer = new MessageConsumerManager(SecuredSocketInitializer.initEventsBinding());
         final Server clientAsServerForHandshake = new Server(clientHostname, clientPort, 2, messageConsumer, wrapperFactory);
         final String pwd = "changeme"; // TODO change
-        logger.debug("Building message...");
+        LogUtils.debug("Building message...");
         final GetServerPublicKeysMessage getServerPublicKeysMessage = new GetServerPublicKeysMessage(pwd, 1, clientHostname, clientPort, true);
         ContactRegistry.storeSymmetricKey(hostnameServer, SymmetricHandler.getKey(pwd, SymmetricHandler.DEFAULT_SYMMETRIC_ALGO));
         final Function<List<byte[]>, Wrapper> listWrapperFunction = wrapperFactory.getFunctionMap().get(GetServerPublicKeysMessage.CODE);
-        logger.debug("Serializing data...");
+        LogUtils.debug("Serializing data...");
         final List<byte[]> serializedDataAsStrings = Stream.concat(Stream.of(Message.intToBytes(GetServerPublicKeysMessage.CODE)), Stream.of(getServerPublicKeysMessage.serializeBytes())).collect(Collectors.toList());
         final Wrapper apply = listWrapperFunction.apply(serializedDataAsStrings);
         byte[] serialize = apply.serialize();
         try {
-            logger.debug("Sending serialized data...");
+            LogUtils.debug("Sending serialized data...");
             connect();
             justSend(serialize);
             disconnect();
-            logger.debug("Listening for handshake.");
+            LogUtils.debug("Listening for handshake.");
             clientAsServerForHandshake.listen();
-            logger.debug("Listening ended");
+            LogUtils.debug("Listening ended");
             publicKeyHandler = new PublicKeyHandler();
         } catch (IOException e) {
             e.printStackTrace();
@@ -96,9 +97,9 @@ public class Client {
         } else {
             dataToSend = data;
         }
-        logger.debug("sending {}", new String(dataToSend, StandardCharsets.UTF_8));
+        LogUtils.debug("sending {}", new String(dataToSend, StandardCharsets.UTF_8));
         connectionToServer.write(ByteBuffer.wrap(dataToSend));
-        logger.debug("Data Sent");
+        LogUtils.debug("Data Sent");
         connectionToServer.close();
     }
 
@@ -109,7 +110,7 @@ public class Client {
     }
 
     public void justSend(byte[] data) throws IOException {
-        logger.debug("Client : sending {}", new String(data, StandardCharsets.UTF_8));
+        LogUtils.debug("Client : sending {}", new String(data, StandardCharsets.UTF_8));
         server.write(ByteBuffer.wrap(data));
     }
 

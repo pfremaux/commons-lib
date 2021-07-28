@@ -1,16 +1,17 @@
 package commons.lib.test.watcher;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import commons.lib.main.os.LogUtils;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AsyncWatcher implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(AsyncWatcher.class);
+    private static final Logger logger = LogUtils.initLogs();
 
     private final WatchService watcher;
     private final List<Path> dirWatched;
@@ -75,11 +76,11 @@ public class AsyncWatcher implements Runnable {
                     }
 
                 } catch (IOException x) {
-                    logger.error("Error while processing a watch event.", x);
+                    LogUtils.error("Error while processing a watch event.", x);
                     continue;
                 }
 
-                logger.debug("doing something with {}", filename);
+                LogUtils.debug("doing something with {}", filename);
                 //Details left to reader....
             }
 
@@ -95,17 +96,17 @@ public class AsyncWatcher implements Runnable {
 
     public static BiFunction<Path, Path, Boolean> defaultFileWatcher() {
         return (dir, filename) -> {
-            logger.debug("custom event queue starting... {}", filename);
+            LogUtils.debug("custom event queue starting... " + filename);
             if (!Files.isDirectory(filename)) {
-                logger.debug("{} is not a directory ", filename);
+                LogUtils.debug(filename + " is not a directory ");
                 try {
                     Files.copy(dir.resolve(filename), Paths.get(filename.toFile().getAbsolutePath() + ".bak"));
                 } catch (IOException e) {
-                    logger.error("Error while copying the file", e);
+                    LogUtils.error( "Error while copying the file", e);
                     return false;
                 }
             } else {
-                logger.debug("{} is a directory. Doing nothing.", filename);
+                LogUtils.debug("{0} is a directory. Doing nothing.", filename);
             }
             return false;
         };
