@@ -22,8 +22,20 @@ public class LogUtils {
         logger.log(Level.INFO, msg, params);
     }
 
+    public static void warning(String msg) {
+        logger.log(Level.WARNING, msg);
+    }
+
+    public static void warning(String msg, Throwable t) {
+        logger.log(Level.WARNING, msg, t);
+    }
+
     public static void error(String msg, Throwable t) {
         logger.log(Level.SEVERE, msg, t);
+    }
+
+    public static void error(String msg) {
+        logger.log(Level.SEVERE, msg);
     }
 
     public static Logger initLogs() {
