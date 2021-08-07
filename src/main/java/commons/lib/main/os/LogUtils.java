@@ -79,6 +79,7 @@ public class LogUtils {
                 fh = new FileHandler(appInfo.getAppName() + "-logs.log", 100, 10);
                 fh.setFormatter(new SimpleFormatter());
                 fh.setLevel(Level.FINE);
+                logger.setUseParentHandlers(false);
                 logger.addHandler(fh);
             } catch (IOException e) {
                 e.printStackTrace();
