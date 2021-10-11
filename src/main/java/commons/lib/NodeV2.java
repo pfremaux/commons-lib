@@ -7,7 +7,7 @@ public class NodeV2<T> {
 
     public static final String EMPTY = ".";
     private final NodeV2<T> parent;
-    private final String nodeName;
+    private String nodeName;
     private T value; // MUTABLE
     private final List<NodeV2<T>> children;
 
@@ -118,6 +118,10 @@ public class NodeV2<T> {
             throw new UnsupportedOperationException("A directory has not value to replace.");
         }
         value = credentialDatum;
+    }
+
+    public void setNodeName(String nodeName) {
+        this.nodeName = nodeName;
     }
 
     @Override

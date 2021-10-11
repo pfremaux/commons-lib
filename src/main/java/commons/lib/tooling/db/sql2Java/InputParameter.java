@@ -1,4 +1,4 @@
-package commons.lib.tooling.sql2Java;
+package commons.lib.tooling.db.sql2Java;
 
 
 import java.nio.file.Path;

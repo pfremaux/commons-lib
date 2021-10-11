@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import commons.lib.extra.server.InMemoryDb;
 import commons.lib.extra.server.http.HttpServerException;
+import commons.lib.extra.server.http.Mapping;
 import commons.lib.main.os.LogUtils;
 
 import java.io.IOException;
@@ -53,6 +54,7 @@ public class RestEntitiesHandler implements HttpHandler {
         exchange.sendResponseHeaders(200, responseBody.length());
         final OutputStream os = exchange.getResponseBody();
         os.write(responseBody.getBytes());
+        os.flush();
         os.close();
         //exchange.getResponseBody().close();
     }
@@ -63,7 +65,7 @@ public class RestEntitiesHandler implements HttpHandler {
             String whatMeta = params.get(1);
             if (whatMeta.equals("table")) {
                 StringBuilder response = new StringBuilder();
-                fillWithJsonFormat(response, inMemoryDb.tables());
+                Mapping.fillWithJsonFormat(response, inMemoryDb.tables());
                 return response;
             } else if (whatMeta.equals("file")) {
                 StringBuilder builder = new StringBuilder();
@@ -95,24 +97,24 @@ public class RestEntitiesHandler implements HttpHandler {
             case "GET":
                 if (params.size() == 1) {
                     List<Map<String, String>> list = inMemoryDb.list(table, 1, 100);
-                    fillWithJsonFormat(builder, list);
+                    Mapping.fillWithJsonFormat(builder, list);
                 } else {
                     Map<String, String> stringStringMap = inMemoryDb.get(table, id);
-                    fillWithJsonFormat(builder, stringStringMap);
+                    Mapping.fillWithJsonFormat(builder, stringStringMap);
                 }
                 break;
             case "PUT":
                 final byte[] bytes = exchange.getRequestBody().readAllBytes();
                 String data = new String(bytes, StandardCharsets.UTF_8);
-                Map<String, String> map = trivialJsonMapping(data);
+                Map<String, String> map = Mapping.trivialJsonMapping(data);
                 inMemoryDb.update(table, id, map);
                 break;
             case "POST":
                 final byte[] bytes2 = exchange.getRequestBody().readAllBytes();
                 String data2 = new String(bytes2, StandardCharsets.UTF_8);
-                Map<String, String> map2 = trivialJsonMapping(data2);
+                Map<String, String> map2 = Mapping.trivialJsonMapping(data2);
                 int newId = inMemoryDb.add(table, map2);
-                fillWithJsonFormat(builder, Collections.singletonMap("id", Integer.toString(newId)));
+                Mapping.fillWithJsonFormat(builder, Collections.singletonMap("id", Integer.toString(newId)));
                 break;
             default:
                 exchange.sendResponseHeaders(429, 0);
@@ -121,61 +123,5 @@ public class RestEntitiesHandler implements HttpHandler {
         return builder;
     }
 
-    private Map<String, String> trivialJsonMapping(String data) {
-        Map<String, String> map = new HashMap<>();
-        // Yes this is trivial
-        String cleanedJson = data
-                .replaceAll("\\{", "")
-                .replaceAll("\\}", "")
-                .replaceAll("\"", "");
-        StringTokenizer tokenizer1 = new StringTokenizer(cleanedJson, ",");
-        while (tokenizer1.hasMoreTokens()) {
-            String element = tokenizer1.nextToken();
-            String[] split = element.split(":");
-            map.put(split[0], split[1]);
-        }
-        return map;
-    }
 
-    private void fillWithJsonFormat(StringBuilder builder, Collection<String> list) {
-        builder.append("[");
-        for (String string : list) {
-            builder.append("\"");
-            builder.append(string);
-            builder.append("\"");
-            builder.append(",");
-        }
-        if (list.size() > 0) {
-            builder.deleteCharAt(builder.length() - 1);
-        }
-        builder.append("]");
-    }
-
-    private void fillWithJsonFormat(StringBuilder builder, List<Map<String, String>> list) {
-        builder.append("[");
-        for (Map<String, String> stringStringMap : list) {
-            fillWithJsonFormat(builder, stringStringMap);
-            builder.append(",");
-        }
-        if (list.size() > 0) {
-            builder.deleteCharAt(builder.length() - 1);
-        }
-        builder.append("]");
-    }
-
-    private void fillWithJsonFormat(StringBuilder builder, Map<String, String> stringStringMap) {
-        builder.append("{");
-        for (Map.Entry<String, String> entry : stringStringMap.entrySet()) {
-            builder.append("\"");
-            builder.append(entry.getKey());
-            builder.append("\":\"");
-            builder.append(entry.getValue());
-            builder.append("\"");
-            builder.append(",");
-        }
-        if (!stringStringMap.isEmpty()) {
-            builder.deleteCharAt(builder.length() - 1);
-        }
-        builder.append("}");
-    }
 }

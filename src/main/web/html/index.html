@@ -1,0 +1,36 @@
+
+<html>
+    <head>
+		<meta charset="utf-8"/>
+        <!--<link rel="stylesheet" href="css/main.css">-->
+        <script src="../js/forms.js"></script>
+
+    </head>
+    
+    <body>
+	<button onclick="javascript:go()">go</button>
+        <script>
+
+			function loginResult(eventData) {
+			    console.log(eventData);
+				async("POST", "http://127.0.0.1:8080/auth",  data => {
+					console.log(data);
+				},
+				'',
+				{sec:eventData.token, id:1}); // TODO PFR id
+			}
+
+			function go() {
+				async("POST", "http://127.0.0.1:8080/test",  data => {
+					let eventData = JSON.parse(data);
+					loginResult(eventData);
+				},
+				'{"login":"admin", "pwd":"admin"}');
+			}
+
+            
+
+
+        </script>
+    </body>
+</html>

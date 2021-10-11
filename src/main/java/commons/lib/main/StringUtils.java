@@ -49,13 +49,13 @@ public final class StringUtils {
 
     public static String snakeCase(String s) {
         final StringBuilder sb = new StringBuilder();
+        int i = 0;
         for (char c : s.toCharArray()) {
-            if (c >= 'A' && c <= 'Z') {
+            if (c >= 'A' && c <= 'Z' && i > 0) {
                 sb.append("_");
-                sb.append(Character.toLowerCase(c));
-            } else {
-                sb.append(c);
             }
+            sb.append(Character.toLowerCase(c));
+            i++;
         }
         return sb.toString();
     }

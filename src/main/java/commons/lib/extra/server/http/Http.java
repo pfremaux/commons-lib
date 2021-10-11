@@ -24,7 +24,7 @@ public class Http {
         System.setProperty("file.encoding", "UTF-8");
         startServer();
     }
-
+// TODO PFR HTTPS :  https://www.codeproject.com/Tips/1043003/Create-a-Simple-Web-Server-in-Java-HTTPS-Server
     public static void startServer() throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         final List<HttpContext> httpContexts = ServerConfiguration.loadConfig();
         final String listeningPort = System.getProperty("server.listening");

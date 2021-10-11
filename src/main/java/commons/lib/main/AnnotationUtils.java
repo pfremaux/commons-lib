@@ -37,7 +37,7 @@ public class AnnotationUtils {
         }
         final String path = AnnotationUtils.class.getResource("AnnotationUtils.class").getPath();
         LogUtils.debug("Testing if the current process is being executed in an IDE with path {}", path);
-        return path.startsWith("/");
+        return path.startsWith("/") || path.startsWith("file:/");
     }
 
     private static List<Class<?>> getClassesFromIde(String packageName)

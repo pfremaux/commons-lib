@@ -38,11 +38,11 @@ public class FT_PropertiesMapper {
     }
 
     private static String getPackage() {
-        return System.getProperty(FunctionalTestsSettings.PROPERTIES_MAPPER_ROOT_JAVA_PACKAGE);
+        return System.getProperty(FunctionalTestsSettings.PROPERTIES_MAPPER_ROOT_JAVA_PACKAGE, "commons.lib.properties.mapper");
     }
 
     private static String getExpectedExample() {
-        return System.getProperty(FunctionalTestsSettings.MAIN_INPUT_DIR_PROP) + System.getProperty(FunctionalTestsSettings.PROPERTIES_MAPPER_EXPECTED_OUTPUT_PROPERTIES);
+        return System.getProperty(FunctionalTestsSettings.MAIN_INPUT_DIR_PROP, "./commons-lib/src/test") + System.getProperty(FunctionalTestsSettings.PROPERTIES_MAPPER_EXPECTED_OUTPUT_PROPERTIES, "/resources/propertiesMapper/expected_example.properties");
     }
 
 }
