@@ -32,12 +32,12 @@ public class ScriptGenerator {
     public String getSourceScript() {
         StringBuilder buffer = new StringBuilder();
         if (isUniversal()) {
+            buffer.append("#!/bin/bash");
             for (ScriptPattern scriptPattern : scriptPatternList) {
-                buffer.append("!#/bin/bash");
                 buffer.append(scriptPattern.getCommand());
             }
         } else if (isUnix) {
-            buffer.append("!#/bin/bash");
+            buffer.append("#!/bin/bash");
             for (ScriptPattern scriptPattern : scriptPatternList) {
                 buffer.append(scriptPattern.getLinuxCommand());
             }

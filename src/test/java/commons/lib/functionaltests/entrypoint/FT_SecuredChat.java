@@ -5,15 +5,15 @@ import commons.lib.functionaltests.socket.secured.SecuredChat;
 import commons.lib.main.console.ConsoleFactory;
 import commons.lib.main.console.CustomConsole;
 import commons.lib.main.os.LogUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
+
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class FT_SecuredChat {
-    private static final Logger logger = LoggerFactory.getLogger(FT_SecuredChat.class);
+    private static final Logger logger = LogUtils.initLogs();
     private static final ExecutorService executorService = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {

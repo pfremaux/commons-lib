@@ -17,7 +17,7 @@ public class GenerateTableOfContentMdAction extends ConsoleAction {
     private static final Logger logger = LogUtils.initLogs();
 
     public GenerateTableOfContentMdAction() {
-        super("Generate generate MarkDown documentation");
+        super("Generate table of content for MarkDown documentation");
     }
 
     @Override

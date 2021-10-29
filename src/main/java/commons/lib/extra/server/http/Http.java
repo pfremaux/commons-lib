@@ -5,17 +5,16 @@ import commons.lib.extra.server.http.config.ServerConfiguration;
 import commons.lib.extra.server.http.handler.DefaultRootHandler;
 import commons.lib.extra.server.http.handler.SelfDescribeHandler;
 import commons.lib.main.os.LogUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Http {
 
-    private static final Logger logger = LoggerFactory.getLogger(Http.class);
+    private static final Logger logger = LogUtils.initLogs();
 
     public static final String PRIVATE_SELF_DESCRIBE_PATH = "/private/selfDescribe/";
 

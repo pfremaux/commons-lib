@@ -2,6 +2,7 @@ package commons.lib.extra.math.formula;
 
 import commons.lib.extra.math.formula.interfaces.Operation;
 import commons.lib.extra.math.formula.interfaces.OperationElement;
+import commons.lib.main.console.As;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -23,6 +24,19 @@ public final class ExpressionBetweenParenthesis  implements Operation, Operation
             }
         }
         return simplify;
+    }
+    public BigDecimal resolve() {
+        final Operation simplify = this
+                .simplify(0, Map.of())
+                .simplify(1, Map.of())
+                .simplify(2, Map.of())
+                ;
+        if (simplify instanceof Operand) {
+            final Operand operand = As.any(simplify);
+            // Might be null if the library is buggy but we're expecting the operation to be resolved.
+            return operand.getValue();
+        }
+        return null;
     }
 
     public Formula getFormula() {

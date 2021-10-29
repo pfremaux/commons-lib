@@ -10,8 +10,8 @@ import commons.lib.extra.server.socket.message.ErrorMessage;
 import commons.lib.extra.server.socket.secured.ContactRegistry;
 import commons.lib.extra.server.socket.secured.step4.AcknowledgePublicKeysMessage;
 import commons.lib.main.os.LogUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
+
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -30,7 +30,7 @@ import java.util.Optional;
 
 public class EncryptedPublicKeysMessageConsumer implements MessageConsumer {
 
-    private static final Logger logger = LoggerFactory.getLogger(EncryptedPublicKeysMessageConsumer.class);
+    private static final Logger logger = LogUtils.initLogs();
 
     @Override
     public Optional<Wrapper> process(Wrapper input, String consumerHostname, int consumerPort) {
@@ -50,7 +50,7 @@ public class EncryptedPublicKeysMessageConsumer implements MessageConsumer {
                             KeyFactory.getInstance(AsymmetricKeyHandler.ASYMMETRIC_ALGORITHM).generatePublic(new X509EncodedKeySpec(decryptedPublicKey));
                     publicKeysOfCaller.add(publicKey);
                 } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException | InvalidKeySpecException e) {
-                    logger.error(String.format("Failed to decipher data from %s:%d with a symmetric key.", callerHostName, datum.getResponsePort()), e);
+                    logger.throwing(this.getClass().toString(), String.format("Failed to decipher data from %s:%d with a symmetric key.", callerHostName, datum.getResponsePort()), e);
                     return Optional.of(new Wrapper(ErrorMessage.CODE, new ErrorMessage("", e.getMessage(), consumerHostname, consumerPort, false)));
                 }
             }

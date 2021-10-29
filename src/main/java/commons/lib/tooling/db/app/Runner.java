@@ -26,7 +26,7 @@ public class Runner extends AbstractCliApp {
                 new ParameterProjectRoot(),
                 new ParameterResourcesRelativePath()
         ));
-        final Map<String, String> trustedParameters = runner.validateInput(new String[]{"-p", "E:\\dev\\intellij\\passwords", "-r", "./src/resources", "-d", "commons.lib.tooling.db.java2sql.test.v1"});
+        final Map<String, String> trustedParameters = runner.validateInput(new String[]{"-p", "/home/shinichi/IdeaProjects/commons-lib", "-r", "./src/resources", "-d", "commons.lib.tooling.db.java2sql.test.v2"});
         for (Map.Entry<String, String> entry : trustedParameters.entrySet()) {
             System.out.println(entry.getValue());
         }
@@ -53,12 +53,10 @@ public class Runner extends AbstractCliApp {
                     // lines.add("\tprivate static final String URI = \"" + jdbcUri + "\";");
                     .withAttribute(false, true, ReferenceClass.fromExistingClass("java.lang.String"), "uri")
                     .withMethod(Scope.PUBLIC, "connect", List.of())
-
                     //.call()//return DriverManager.getConnection(URI);
                     .endMethod()
                     .withMethod(Scope.PUBLIC, "select", List.of(new CodeObject(ReferenceClass.fromExistingClass("java.lang.Integer"), "id")))
                     .endMethod()
-
             //.returnObject(new CodeObject())
             ;
             System.out.println(entry.getValue());
@@ -110,7 +108,6 @@ public class Runner extends AbstractCliApp {
             System.out.println(b.toString());
             // System.out.println(entry.getValue());
         }
-
     }
 
 }

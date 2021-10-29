@@ -3,8 +3,8 @@ package commons.lib.extra.server.http.config;
 import com.sun.net.httpserver.HttpHandler;
 import commons.lib.extra.server.http.HttpContext;
 import commons.lib.main.os.LogUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
+
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.*;
 
 public class ServerConfiguration {
 
-    private static final Logger logger = LoggerFactory.getLogger(ServerConfiguration.class);
+    private static final Logger logger = LogUtils.initLogs();
 
     public static final String SERVER_TOOLBOX_PROPERTIES = "server-toolbox.properties";
     public static final String SERVER_PROPERTIES = "server.properties";

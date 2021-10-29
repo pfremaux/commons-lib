@@ -1,7 +1,7 @@
 package commons.lib.main.filestructure;
 
 import commons.lib.main.os.LogUtils;
-import org.slf4j.Logger;
+import java.util.logging.Logger;
 
 public class Hexa {
     public static void display(byte b) {

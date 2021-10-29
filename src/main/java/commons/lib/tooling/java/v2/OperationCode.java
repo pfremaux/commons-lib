@@ -9,7 +9,6 @@ public class OperationCode extends CodeElement {
     private final List<CodeElement> operands;
     public OperationCode(CodeElement parent, List<String> operators, List<CodeElement> operands) {
         super(parent);
-
         this.operators = operators;
         this.operands = operands;
     }

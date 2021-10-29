@@ -1,8 +1,8 @@
 package commons.lib.main;
 
 import commons.lib.main.os.LogUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class AnnotationUtils {
-    private static final Logger logger = LoggerFactory.getLogger(AnnotationUtils.class);
+    private static final Logger logger = LogUtils.initLogs();
 
     public static List<Class<?>> getClassesFromPackageName(String packageName) throws ClassNotFoundException, IOException {
         List<Class<?>> classes;

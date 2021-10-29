@@ -8,8 +8,8 @@ import commons.lib.extra.server.socket.message.ErrorMessage;
 import commons.lib.extra.server.socket.secured.ContactRegistry;
 import commons.lib.extra.server.socket.secured.step2.EncryptedPublicKeysMessage;
 import commons.lib.main.os.LogUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
+
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -22,7 +22,7 @@ import java.util.Optional;
 
 public class GetServerPublicKeysMessageConsumer implements MessageConsumer {
 
-    private static final Logger logger = LoggerFactory.getLogger(GetServerPublicKeysMessageConsumer.class);
+    private static final Logger logger = LogUtils.initLogs();
 
     @Override
     public Optional<Wrapper> process(Wrapper input, String consumerHostname, int consumerPort) {

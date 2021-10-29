@@ -7,8 +7,8 @@ import commons.lib.main.SystemUtils;
 import commons.lib.main.console.ConsoleFactory;
 import commons.lib.main.console.CustomConsole;
 import commons.lib.main.os.LogUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
+
 
 import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class UnsecuredChat {
-    private static final Logger logger = LoggerFactory.getLogger(UnsecuredChat.class);
+    private static final Logger logger = LogUtils.initLogs();
     public static final String CONSOLE_INPUT_PROPERTY = "console.input";
     public static final int CHAT_MESSAGE_CODE = 5111;
     public static final Map<String, String> CLIENT_1_TO_CLIENT_2 = Map.of(

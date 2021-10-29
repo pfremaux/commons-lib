@@ -3,6 +3,7 @@ package commons.lib.extra.math.formula;
 import commons.lib.extra.math.formula.interfaces.Operation;
 import commons.lib.extra.math.formula.interfaces.OperationElement;
 import commons.lib.main.console.As;
+import commons.lib.tooling.documentation.MdDoc;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@MdDoc(description = "Allows you to reduce/resolve a formula expressed textually. See Formula.getInstance(\"1+1\");")
 public class Formula implements Operation {
 
     private final List<OperationElement> operationElements;
@@ -153,6 +155,11 @@ public class Formula implements Operation {
     }
 
 
+    @MdDoc(description = "Instantiate a mathematical expression",
+    examples = {
+            "ExpressionBetweenParenthesis expression = Formula.getInstance(\"(1+(9*sin(0.7)))\");",
+            "BigDecimal result = expression.resolve();"
+    })
     public static ExpressionBetweenParenthesis getInstance(String strFormula) {
         return analyzeGroup(strFormula.toCharArray(), 0);
     }

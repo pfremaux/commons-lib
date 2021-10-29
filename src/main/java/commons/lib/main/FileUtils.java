@@ -1,8 +1,9 @@
 package commons.lib.main;
 
+import commons.lib.main.os.LogUtils;
 import commons.lib.tooling.documentation.MdDoc;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
+
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,7 +13,7 @@ import java.util.Stack;
 
 @MdDoc(description = "Utility tools for file management.")
 public final class FileUtils {
-    private static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
+    private static final Logger logger = LogUtils.initLogs();
 
     private FileUtils() {
 
@@ -80,7 +81,7 @@ public final class FileUtils {
             Files.createDirectory(path);
         } catch (IOException e) {
             e.printStackTrace();
-            logger.warn(e.getMessage(), e);
+            logger.throwing(FileUtils.class.toString(), e.getMessage(), e);
             return false;
         }
         return true;

@@ -1,10 +1,6 @@
 package commons.lib.main.os;
 
 import commons.lib.main.SystemUtils;
-import org.apache.commons.lang3.mutable.Mutable;
-import org.apache.commons.lang3.mutable.MutableObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,10 +9,11 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
+import java.util.logging.Logger;
 
 public class CommandLineExecutor {
-    private static final Logger logger = LoggerFactory.getLogger(CommandLineExecutor.class);
-    private Mutable<Map<String, CommandStatus>> executedCommands = new MutableObject<>(new HashMap<>());
+    private static final Logger logger = LogUtils.initLogs();
+    private Map<String, CommandStatus> executedCommands = new HashMap<>();
     private ExecutorService executorService = Executors.newCachedThreadPool();
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
@@ -33,20 +30,20 @@ public class CommandLineExecutor {
         boolean allFinished = false;
         while (!allFinished) {
             allFinished = true;
-            for (Map.Entry<String, CommandStatus> entry : executedCommands.getValue().entrySet()) {
+            for (Map.Entry<String, CommandStatus> entry : executedCommands.entrySet()) {
                 allFinished &= entry.getValue().getExitCode() != null;
             }
             try {
                 Thread.sleep(sleepInMs);
             } catch (InterruptedException e) {
-                logger.error(e.getMessage(), e);
+                logger.throwing(this.getClass().toString(), e.getMessage(), e);
             }
         }
     }
 
     public CommandStatus waitFastestCommand(long sleepInMs) {
         while (true) {
-            for (Map.Entry<String, CommandStatus> entry : executedCommands.getValue().entrySet()) {
+            for (Map.Entry<String, CommandStatus> entry : executedCommands.entrySet()) {
                 if (entry.getValue().getExitCode() != null) {
                     return entry.getValue();
                 }
@@ -54,7 +51,7 @@ public class CommandLineExecutor {
             try {
                 Thread.sleep(sleepInMs);
             } catch (InterruptedException e) {
-                logger.error(e.getMessage(), e);
+                logger.throwing(this.getClass().toString(), e.getMessage(), e);
             }
         }
     }
@@ -68,7 +65,7 @@ public class CommandLineExecutor {
     public CommandStatus execute(String command) throws InterruptedException, ExecutionException {
         final Runtime runtime = Runtime.getRuntime();
         final CommandStatus commandStatus = new CommandStatus();
-        executedCommands.getValue().put(commandStatus.getCommandId(), commandStatus);
+        executedCommands.put(commandStatus.getCommandId(), commandStatus);
         Future<String> submit = executorService.submit(() -> {
             try {
                 final Process exec = runtime.exec(command);
@@ -100,7 +97,7 @@ public class CommandLineExecutor {
     }
 
     public CommandStatus getCommandStatus(String uuid) {
-        return executedCommands.getValue().get(uuid);
+        return executedCommands.get(uuid);
     }
 
     public static void validateEndOfExecution(CommandStatus commandStatus) {

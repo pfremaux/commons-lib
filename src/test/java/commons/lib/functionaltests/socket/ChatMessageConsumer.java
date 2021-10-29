@@ -6,13 +6,13 @@ import commons.lib.functionaltests.socket.unsecured.UnsecuredChat;
 import commons.lib.main.console.ConsoleFactory;
 import commons.lib.main.console.CustomConsole;
 import commons.lib.main.os.LogUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
+
 
 import java.util.Optional;
 
 public class ChatMessageConsumer implements MessageConsumer {
-    private static final Logger logger = LoggerFactory.getLogger(ChatMessageConsumer.class);
+    private static final Logger logger = LogUtils.initLogs();
 
     @Override
     public Optional<Wrapper> process(Wrapper input, String consumerHostname, int consumerPort) {

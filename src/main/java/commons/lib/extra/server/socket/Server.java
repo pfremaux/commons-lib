@@ -7,8 +7,8 @@ import commons.lib.extra.server.socket.secured.ContactRegistry;
 import commons.lib.extra.server.socket.secured.SecuredSocketInitializer;
 import commons.lib.main.SystemUtils;
 import commons.lib.main.os.LogUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
+
 
 import javax.crypto.NoSuchPaddingException;
 import java.io.ByteArrayOutputStream;
@@ -31,7 +31,7 @@ import java.util.function.Function;
  * This is a first version with only one command for the input and output. But later I'll need a list of these actions
  */
 public class Server {
-    private static final Logger logger = LoggerFactory.getLogger(Server.class);
+    private static final Logger logger = LogUtils.initLogs();
     protected final String hostname;
     protected final int port;
     protected int listenLimit;

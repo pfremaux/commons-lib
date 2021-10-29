@@ -173,10 +173,6 @@ public abstract class AbstractCliApp {
         parameters.forEach(cliParameter -> cliParameter.parameterKeys().forEach(parameterKey -> expectedCliParameters.put(parameterKey, cliParameter)));
     }
 
-    public static void main(String[] args) {
-
-    }
-
     public CliParameter noUserInteractionSystemKey() {
         return DEFAULT_NO_USER_INTERACTION_PARAMETER;
     }

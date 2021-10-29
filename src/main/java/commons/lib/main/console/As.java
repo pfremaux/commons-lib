@@ -23,6 +23,7 @@ public class As {
         return Integer.valueOf(string(o));
     }
 
+    @SuppressWarnings(value = "unchecked")
     public static <T> T any(Object o) {
         return (T) o;
     }

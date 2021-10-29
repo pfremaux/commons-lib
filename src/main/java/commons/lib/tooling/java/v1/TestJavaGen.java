@@ -11,7 +11,6 @@ import java.util.Map;
 
 public class TestJavaGen {
 
-
     public static void main(String[] args) {
         final ProjectGenerator projectGenerator = new ProjectGenerator();
         final JavaFile javaFile1 = projectGenerator.newClassFile("toto.titi", "MaClass");

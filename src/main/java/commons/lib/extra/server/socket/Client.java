@@ -7,8 +7,8 @@ import commons.lib.extra.server.socket.secured.ContactRegistry;
 import commons.lib.extra.server.socket.secured.SecuredSocketInitializer;
 import commons.lib.extra.server.socket.secured.step1.GetServerPublicKeysMessage;
 import commons.lib.main.os.LogUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Logger;
+
 
 import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import java.util.stream.Stream;
  * Basic client for sending bytes.
  */
 public class Client {
-    private static final Logger logger = LoggerFactory.getLogger(Client.class);
+    private static final Logger logger = LogUtils.initLogs();
 
     private final String hostnameServer;
     private final int portServer;

@@ -3,6 +3,7 @@ package commons.lib.tooling.installer;
 import commons.lib.main.console.ConsoleFactory;
 import commons.lib.main.console.v3.interaction.ConsoleItem;
 import commons.lib.main.console.v3.interaction.ConsoleRunner;
+import commons.lib.main.console.v3.interaction.context.AllConsoleContexts;
 import commons.lib.main.os.LogUtils;
 import commons.lib.tooling.installer.generators.GeneratorsNavigation;
 import commons.lib.tooling.installer.gitprojects.InstallGithubRepoNavigate;
@@ -16,6 +17,7 @@ public class Launcher {
         logger = LogUtils.initLogs();
         ConsoleFactory.getInstance();
         // TODO put in constant in the right place
+        AllConsoleContexts.initContext("default");
         ConsoleRunner consoleRunner = new ConsoleRunner("default", new ConsoleItem[]{
                 new InstallGithubRepoNavigate(),
                 new GeneratorsNavigation()

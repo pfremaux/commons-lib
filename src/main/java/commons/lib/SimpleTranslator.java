@@ -1,17 +1,17 @@
 package commons.lib;
 
+import commons.lib.main.os.LogUtils;
 import commons.lib.tooling.documentation.MdDoc;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 @MdDoc(description = "Replace strings by others")
 public final class SimpleTranslator {
 
-    private static final Logger logger = LoggerFactory.getLogger(SimpleTranslator.class);
+    private static final Logger logger = LogUtils.initLogs();
     private final static Map<Pattern, String> rules = new HashMap<>();
 
     private SimpleTranslator() {
@@ -32,7 +32,7 @@ public final class SimpleTranslator {
             final String value = System.getProperty(property + "." + i);
             final String erasedValue = rules.put(key, value);
             if (erasedValue != null) {
-                logger.warn("Duplicate key {}.", key);
+                logger.info(String.format("Duplicate key %s.", key));
             }
             i++;
         }

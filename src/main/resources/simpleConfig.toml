@@ -1,0 +1,8 @@
+title = "TOML Example"
+ports = [ 8000, 8001, 8002 ]
+data = ["delta", "phi"]
+data2 = ["alpha",
+"omega"]
+[owner]
+name = "Tom Preston-Werner"
+dob = 1979-05-27T07:32:00-08:00

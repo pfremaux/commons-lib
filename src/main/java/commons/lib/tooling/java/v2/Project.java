@@ -11,7 +11,6 @@ import static commons.lib.tooling.java.v2.CodeHelper.*;
 public class Project {
     protected TreeMap<String, ClassDefinition> knownClasses;
 
-
     public Project(TreeMap<String, ClassDefinition> knownClasses) {
         this.knownClasses = knownClasses;
         CodeHelper.setProject(this);
@@ -66,7 +65,6 @@ public class Project {
                     .bulkLine("//TODO catch\n")
                     .declare(c("I"), "toot")
                     .end()
-
         ;
 
         ClassDefinition p = project.getKnownClasses().get("p");
