@@ -2,79 +2,33 @@ package commons.lib.main.console.v4;
 
 import commons.lib.main.SystemUtils;
 import commons.lib.main.console.ConsoleFactory;
+import commons.lib.main.filestructure.SubConfiguration;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public abstract class AbstractCliApp {
 
-    public static final CliParameter DEFAULT_GENERATE_SCRIPTS_PARAMETER = new CliParameter() {
-        @Override
-        public String propertyKey() {
-            return "GENERATE_SCRIPTS";
-        }
 
-        @Override
-        public List<String> parameterKeys() {
-            return List.of("--gen-scripts");
-        }
-
-        @Override
-        public String defaultValue() {
-            return "false";
-        }
-
-        @Override
-        public boolean validate(String value) {
-            return Boolean.parseBoolean(value);
-        }
-
-        @Override
-        public String description() {
-            return null;
-        }
-    };
-
-    public static final CliParameter DEFAULT_NO_USER_INTERACTION_PARAMETER = new CliParameter() {
-        @Override
-        public String propertyKey() {
-            return "no.user.interaction";
-        }
-
-        @Override
-        public List<String> parameterKeys() {
-            return List.of("--no-user-interaction");
-        }
-
-        @Override
-        public String defaultValue() {
-            return "true";
-        }
-
-        @Override
-        public boolean validate(String value) {
-            return Boolean.parseBoolean(value);
-        }
-
-        @Override
-        public String description() {
-            return null;
-        }
-    };
     private final Map<String, CliParameter> expectedCliParameters = new HashMap<>();
 
     public Map<String, String> validateInput(String[] userCliParameters) {
         boolean noUserInteraction = false;
         boolean generateScripts = false;
+        boolean generateToml = false;
         // Look for global parameters (i.e. parameters that would impact the logic for all other parameters)
         for (String userCliParameter : userCliParameters) {
-            if (noUserInteractionSystemKey().parameterKeys().contains(userCliParameter)) {
+            if (DefaultParameters.DEFAULT_NO_USER_INTERACTION_PARAMETER.parameterKeys().contains(userCliParameter)) {
                 noUserInteraction = true;
                 break;
-            } else if (generateScriptsSystemKey().parameterKeys().contains(userCliParameter)) {
+            } else if (DefaultParameters.DEFAULT_GENERATE_SCRIPTS_PARAMETER.parameterKeys().contains(userCliParameter)) {
                 generateScripts = true;
+                break;
+            } else if (DefaultParameters.DEFAULT_GENERATE_TOML_PARAMETER.parameterKeys().contains(userCliParameter)) {
+                generateToml = true;
                 break;
             }
         }
@@ -137,27 +91,55 @@ public abstract class AbstractCliApp {
             SystemUtils.endOfApp();
         }
 
+        if (generateToml) {
+            SubConfiguration subConfiguration = new SubConfiguration(null, new HashMap<>());
+            SubConfiguration currentAppConfig = new SubConfiguration(subConfiguration, new HashMap<>());
+            subConfiguration.getConfigData().put("todoAppName", currentAppConfig);
+            for (Map.Entry<String, CliParameter> entry : expectedCliParameters.entrySet()) {
+                final String parameterName = entry.getKey();
+                SubConfiguration configValue = new SubConfiguration(
+                        currentAppConfig,
+                        Objects.requireNonNullElse(userInputs.get(parameterName),
+                                Objects.requireNonNullElse(entry.getValue().defaultValue(), "TODO_" + parameterName)));
+                currentAppConfig.getConfigData().put(parameterName, configValue);
+            }
+            for (Map.Entry<String, SubConfiguration> entry : subConfiguration.getConfigData().entrySet()) {
+                if (entry.getValue().getConfigData().isEmpty() && entry.getValue().hasValue()) {
+                    System.out.println(entry.getKey() + " = " + entry.getValue().smartGet());
+                } else if (!entry.getValue().getConfigData().isEmpty()) {
+                    System.out.println("[" + entry.getKey() + "]");
+                    for (Map.Entry<String, SubConfiguration> entry2 : entry.getValue().getConfigData().entrySet()) {
+                        System.out.println(entry2.getKey() + " = " + entry2.getValue().smartGet());
+                    }
+                }
+                System.out.println();
+            }
+            SystemUtils.endOfApp();
+        }
+
         // Validate user's parameters
         for (Map.Entry<String, CliParameter> expectedCliParameterEntry : expectedCliParameters.entrySet()) {
             final String userParameterKey = expectedCliParameterEntry.getValue().propertyKey();
             final String userParameter = userInputs.get(userParameterKey);
-            /*if (userParameter.isEmpty()) {
+            if (userParameter == null || userParameter.isEmpty()) {
                 String defaultValue = expectedCliParameterEntry.getValue().defaultValue();
                 if (defaultValue == null) {
                     System.err.println("The following parameter is mandatory : " + expectedCliParameterEntry.getKey());
                     showUsage();
                     SystemUtils.failUser();
                 }
-                // expectedCliParameterEntry.getValue().validate(defaultValue)*/
-            // } else {
-            final boolean isValid = expectedCliParameterEntry.getValue().validate(userParameter);
-            if (!isValid) {
-                System.err.println("Invalid parameter " + expectedCliParameterEntry.getKey() + " " + userParameter);
-                showUsage();
-                SystemUtils.failUser();
+                if (!expectedCliParameterEntry.getValue().validate(defaultValue)) {
+                    System.err.println("The following parameter is mandatory : " + expectedCliParameterEntry.getKey());
+                    showUsage();
+                    SystemUtils.failUser();
+                }
+                final boolean isValid = expectedCliParameterEntry.getValue().validate(userParameter);
+                if (!isValid) {
+                    System.err.println("Invalid parameter " + expectedCliParameterEntry.getKey() + " " + userParameter);
+                    showUsage();
+                    SystemUtils.failUser();
+                }
             }
-
-            //}
         }
         return userInputs;
     }
@@ -171,14 +153,6 @@ public abstract class AbstractCliApp {
 
     public void register(List<CliParameter> parameters) {
         parameters.forEach(cliParameter -> cliParameter.parameterKeys().forEach(parameterKey -> expectedCliParameters.put(parameterKey, cliParameter)));
-    }
-
-    public CliParameter noUserInteractionSystemKey() {
-        return DEFAULT_NO_USER_INTERACTION_PARAMETER;
-    }
-
-    public CliParameter generateScriptsSystemKey() {
-        return DEFAULT_GENERATE_SCRIPTS_PARAMETER;
     }
 
 }
