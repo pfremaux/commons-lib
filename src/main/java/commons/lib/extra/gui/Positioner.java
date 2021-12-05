@@ -6,12 +6,10 @@ import javax.swing.*;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * The goal of this class is to help you to put swing components.
@@ -159,6 +157,45 @@ public final class Positioner {
                 }
             });
         }
+
+
+    }
+
+    public static void setMinimizable(JFrame frame) {
+        if (!SystemTray.isSupported()) {
+            // TODO error
+        }
+
+        KeyStroke keyStroke = KeyStroke.getKeyStroke('c');
+        //frame.getParent().
+        TrayIcon trayIcon;
+        SystemTray tray;
+        tray = SystemTray.getSystemTray();
+        Image image = Toolkit.getDefaultToolkit().getImage("src/web/swan.png"); // https://www.flaticon.com/packs/origami-24
+        PopupMenu popup = new PopupMenu();
+        popup.add(menuItem("Action1", e-> System.out.println(e.toString())));
+        trayIcon = new TrayIcon(image, "SystemTray Demo", popup);
+        frame.setExtendedState(JFrame.ICONIFIED);
+        frame.addWindowStateListener(new WindowStateListener() {
+            @Override
+            public void windowStateChanged(WindowEvent e) {
+                if (e.getNewState() == Frame.ICONIFIED) {
+                    try {
+                        tray.add(trayIcon);
+                        frame.setVisible(false);
+                        System.out.println("added to SystemTray");
+                    } catch (AWTException ex) {
+                        System.out.println("unable to add to tray");
+                    }
+                }
+            }
+        });
+    }
+
+    private static MenuItem menuItem(String label, Consumer<ActionEvent> actionWhenTriggered) {
+        final MenuItem menuItem = new MenuItem(label);
+        menuItem.addActionListener(actionWhenTriggered::accept);
+        return menuItem;
     }
 
     /**

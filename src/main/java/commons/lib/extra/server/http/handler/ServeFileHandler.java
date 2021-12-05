@@ -22,7 +22,7 @@ public class ServeFileHandler implements HttpHandler {
     private final String relativePath;
 
     public ServeFileHandler(List<String> parameters) {
-        final String baseDir = parameters.get(0);
+        final String baseDir = "./server/src/web" ;//parameters.get(0);
         final String relativePath = parameters.get(1);
         this.baseDir = Path.of(baseDir);
         if (relativePath.startsWith("./")) {

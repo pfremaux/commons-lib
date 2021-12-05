@@ -29,23 +29,24 @@ public class ServerConfiguration {
             properties.load(in);
             boolean loop = true;
             for (int i = 0; loop; i++) {
-                final String relativeUrlPath = properties.getProperty(String.format("context.%d.path.web", i));
+
+                final String relativeUrlPath = getSetting(String.format("context.%d.path.web", i), properties);
                 if (relativeUrlPath == null) {
                     loop = false;
                     continue;
                 }
-                final String description = properties.getProperty(String.format("context.%d.description", i));
+                final String description = getSetting(String.format("context.%d.description", i), properties);
                 boolean readNextParameter = true;
                 List<String> parameters = new ArrayList<>();
                 for (int j = 0; readNextParameter; j++) {
-                    final String parameter = properties.getProperty(String.format("context.%d.path.parameter.%d", i, j));
+                    final String parameter = getSetting(String.format("context.%d.path.parameter.%d", i, j), properties);
                     if (parameter == null) {
                         readNextParameter = false;
                         continue;
                     }
                     parameters.add(parameter);
                 }
-                final String handler = properties.getProperty(String.format("context.%d.handler", i));
+                final String handler = getSetting(String.format("context.%d.handler", i), properties);
                 Class<HttpHandler> httpHandlerClass = externalHandlers.get(handler);
                 Constructor<HttpHandler> constructor = httpHandlerClass.getConstructor(List.class);
                 HttpHandler httpHandler = constructor.newInstance(parameters);
@@ -56,6 +57,13 @@ public class ServerConfiguration {
             System.setProperty(entry.getKey().toString(), entry.getValue().toString());
         }
         return httpContexts;
+    }
+
+    private static String getSetting(String key, Properties properties) {
+        String prop = properties.getProperty(key);
+        logger.warn("key from properties {} : {}", key, prop);
+        logger.warn("key from System {} : {}", key, System.getProperty(key));
+        return System.getProperty(key, prop);
     }
 
     private static Properties loadHandlersDefinition(Map<String, Class<HttpHandler>> externalHandlers) throws IOException, ClassNotFoundException {
@@ -80,6 +88,7 @@ public class ServerConfiguration {
 
     @SuppressWarnings(value = "unchecked")
     private static Class<HttpHandler> getHttpHandler(String pack) throws ClassNotFoundException {
+        //return (Class<HttpHandler>) ClassLoader.getPlatformClassLoader().loadClass(pack);
         return (Class<HttpHandler>) Class.forName(pack);
     }
 

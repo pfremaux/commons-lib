@@ -78,6 +78,7 @@ public class CommandLineExecutor {
                 }
                 //exec.waitFor();
                 commandStatus.setExitCode(exec.exitValue());
+                bufferedReader.close();
             } catch (IOException e) {
                 e.printStackTrace();
                 System.exit(-3);
