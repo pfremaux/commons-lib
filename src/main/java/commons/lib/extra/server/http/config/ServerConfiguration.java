@@ -3,14 +3,13 @@ package commons.lib.extra.server.http.config;
 import com.sun.net.httpserver.HttpHandler;
 import commons.lib.extra.server.http.HttpContext;
 import commons.lib.main.os.LogUtils;
-import java.util.logging.Logger;
-
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.logging.Logger;
 
 public class ServerConfiguration {
 
@@ -61,8 +60,8 @@ public class ServerConfiguration {
 
     private static String getSetting(String key, Properties properties) {
         String prop = properties.getProperty(key);
-        logger.warn("key from properties {} : {}", key, prop);
-        logger.warn("key from System {} : {}", key, System.getProperty(key));
+        logger.warning("key from properties " + key + " : " + prop);
+        logger.warning("key from System " + key + " : " + System.getProperty(key));
         return System.getProperty(key, prop);
     }
 

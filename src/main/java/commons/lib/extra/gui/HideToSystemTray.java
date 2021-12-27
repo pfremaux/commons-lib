@@ -1,6 +1,5 @@
 package commons.lib.extra.gui;
 
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +34,6 @@ public class HideToSystemTray extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    @NotNull
     private PopupMenu setupTrayPopupMenu() {
         final PopupMenu popup = new PopupMenu();
         MenuItem defaultItem = new MenuItem("Exit");

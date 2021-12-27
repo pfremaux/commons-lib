@@ -8,8 +8,6 @@ import commons.lib.extra.server.http.config.ServerConfiguration;
 import commons.lib.extra.server.http.handler.DefaultRootHandler;
 import commons.lib.extra.server.http.handler.SelfDescribeHandler;
 import commons.lib.main.os.LogUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.*;
 import java.io.FileInputStream;
@@ -20,10 +18,11 @@ import java.net.InetSocketAddress;
 import java.security.KeyStore;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 public class Http {
 
-    private static final Logger logger = LoggerFactory.getLogger(Http.class);
+    private static final Logger logger = LogUtils.initLogs();
 
     public static final String PRIVATE_SELF_DESCRIBE_PATH = "/private/selfDescribe/";
 
@@ -62,7 +61,7 @@ public class Http {
 
     private static HttpsServer initSSL(int port) {
         try {
-            logger.warn("init ssl");
+            logger.warning("init ssl");
             // Set up the socket address
             InetSocketAddress address = new InetSocketAddress(InetAddress.getLocalHost(), port);
 
@@ -100,13 +99,15 @@ public class Http {
                         SSLParameters defaultSSLParameters = c.getDefaultSSLParameters();
                         params.setSSLParameters(defaultSSLParameters);
                     } catch (Exception ex) {
-                        logger.error("Failed to create HTTPS port", ex);
+                        logger.warning("Failed to create HTTPS port");
+                        logger.throwing(Http.class.getSimpleName(), "initSSL", ex);
                     }
                 }
             });
             return httpsServer;
         } catch (Exception exception) {
-            logger.error("Failed to create HTTPS server on port " + port + " of localhost", exception);
+            logger.warning("Failed to create HTTPS server on port " + port + " of localhost");
+            logger.throwing(Http.class.getSimpleName(), "initSSL", exception);
         }
         return null;
     }

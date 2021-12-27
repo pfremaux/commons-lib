@@ -3,15 +3,14 @@ package commons.lib.extra.server.http.handler;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import commons.lib.extra.server.http.HttpContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import commons.lib.main.os.LogUtils;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Logger;
 
 public class SelfDescribeHandler implements HttpHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(SelfDescribeHandler.class);
+    private static final Logger logger = LogUtils.initLogs();
     private String strContexts;
 
     public SelfDescribeHandler(HttpContext[] contexts) {
@@ -34,7 +33,7 @@ public class SelfDescribeHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        logger.warn("Self describe");
+        logger.warning("Self describe");
         exchange.sendResponseHeaders(200, strContexts.length());
         final OutputStream os = exchange.getResponseBody();
         os.write(strContexts.getBytes());
