@@ -26,13 +26,15 @@ public class Formula implements Operation {
         System.out.println(expressionBetweenParenthesis);
         final Map<String, BigDecimal> knowledge = Map.of("a", BigDecimal.ONE, "b", BigDecimal.ONE, "c", BigDecimal.ONE);
         //BigDecimal resolve = expressionBetweenParenthesis.resolve(knowledge);
-        final Operation resolve = expressionBetweenParenthesis.simplify(0, knowledge);
-        System.out.println(resolve);
+        //final Operation resolve = expressionBetweenParenthesis.simplify(0, knowledge);
+        //System.out.println(resolve);
+        System.out.println(expressionBetweenParenthesis.resolve(knowledge));
     }
 
     @Override
     public Operation simplify(int level, Map<String, BigDecimal> knowledge) {
         final List<OperationElement> result = new ArrayList<>();
+        // Iterate over all elements : operators, operands, functions, formulas, ExpressionBetweenParenthesis (i.e. group of operators+operands between parenthesis)
         for (int i = 0; i < operationElements.size(); i++) {
             final OperationElement operationElement = operationElements.get(i);
             if (operationElement instanceof Operand) {
@@ -83,7 +85,7 @@ public class Formula implements Operation {
                     result.add(operationElement);
                 }
             } else if (operationElement instanceof MathematicFunction) {
-                MathematicFunction mathematicFunction = (MathematicFunction) operationElement;
+                final MathematicFunction mathematicFunction = (MathematicFunction) operationElement;
                 result.add(mathematicFunction.simplify(level, knowledge));
             } else if (operationElement instanceof Formula) {
                 result.add(((Formula) operationElement).simplify(level, knowledge));

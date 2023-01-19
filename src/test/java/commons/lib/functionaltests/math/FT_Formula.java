@@ -5,29 +5,31 @@ import commons.lib.extra.math.formula.Formula;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 public class FT_Formula {
 
     public static void main(String[] args) {
         BigDecimal result ;
         ExpressionBetweenParenthesis instance;
-        result = Formula.getInstance("1+1").resolve();
+        Map<String, BigDecimal> knowledge = Map.of();
+        result = Formula.getInstance("1+1").resolve(knowledge);
         Assert.assertEquals(2, result.intValue());
 
         instance = Formula.getInstance("4+3*2");
-        result = instance.resolve();
+        result = instance.resolve(knowledge);
         Assert.assertEquals(10, result.intValue());
 
         instance = Formula.getInstance("(4*(3-1)*2)");
-        result = instance.resolve();
+        result = instance.resolve(knowledge);
         Assert.assertEquals(16, result.intValue());
 
         instance = Formula.getInstance("sin(1/5)");
-        result = instance.resolve();
+        result = instance.resolve(knowledge);
         Assert.assertEquals(0.19, result.doubleValue(), 0.01);
 
         instance = Formula.getInstance("sin(0.2)");
-        result = instance.resolve();
+        result = instance.resolve(knowledge);
         Assert.assertEquals(0.19, result.doubleValue(), 0.01);
     }
 

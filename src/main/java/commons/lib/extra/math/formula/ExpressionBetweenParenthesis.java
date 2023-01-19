@@ -7,7 +7,8 @@ import commons.lib.main.console.As;
 import java.math.BigDecimal;
 import java.util.Map;
 
-public final class ExpressionBetweenParenthesis  implements Operation, OperationElement {
+public final class
+ExpressionBetweenParenthesis  implements Operation, OperationElement {
     private final Formula formula;
 
     public ExpressionBetweenParenthesis(Formula formula) {
@@ -25,11 +26,11 @@ public final class ExpressionBetweenParenthesis  implements Operation, Operation
         }
         return simplify;
     }
-    public BigDecimal resolve() {
+    public BigDecimal resolve(Map<String, BigDecimal> knowledge) {
         final Operation simplify = this
-                .simplify(0, Map.of())
-                .simplify(1, Map.of())
-                .simplify(2, Map.of())
+                .simplify(0, knowledge)
+                .simplify(1, knowledge)
+                .simplify(2, knowledge)
                 ;
         if (simplify instanceof Operand) {
             final Operand operand = As.any(simplify);
