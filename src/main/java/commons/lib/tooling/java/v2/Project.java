@@ -37,7 +37,7 @@ public class Project {
         CodeHelper.setProject(project);
         ClassDefinition classDefinition = new ClassDefinition(null, "mypack", "Coucou");
         classDefinition
-                .declarePrivateFinalAttribute(c("S"), "name")
+                .declarePrivateFinalAttribute(c("Str"), "name")
                 .declarePublicStaticAttribute(c("L"), "id")
                 .end()
                 .declarePublicMethod( "generateId", List.of())

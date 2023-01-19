@@ -2,6 +2,8 @@ package commons.lib.extra.server.http.config;
 
 import com.sun.net.httpserver.HttpHandler;
 import commons.lib.extra.server.http.HttpContext;
+import commons.lib.extra.server.http.handler.auth.AuthenticationHandler;
+import commons.lib.extra.server.http.handler.auth.TestAuthenticatedHandler;
 import commons.lib.main.os.LogUtils;
 
 import java.io.FileInputStream;
@@ -18,7 +20,7 @@ public class ServerConfiguration {
     public static final String SERVER_TOOLBOX_PROPERTIES = "server-toolbox.properties";
     public static final String SERVER_PROPERTIES = "server.properties";
 
-    public static List<HttpContext> loadConfig() throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+   /* TODO PFR clean public static List<HttpContext> loadConfig() throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         final Map<String, Class<HttpHandler>> externalHandlers = new HashMap<>();
         final Properties properties = loadHandlersDefinition(externalHandlers);
 
@@ -56,7 +58,13 @@ public class ServerConfiguration {
             System.setProperty(entry.getKey().toString(), entry.getValue().toString());
         }
         return httpContexts;
-    }
+    }*/
+   public static List<HttpContext> loadConfig(){
+       final List<HttpContext> httpContexts = new ArrayList<>();
+       httpContexts.add(new HttpContext("/auth", new AuthenticationHandler(List.of("admin")), "authenticate the caller."));
+       httpContexts.add(new HttpContext("/testAuth", new TestAuthenticatedHandler(List.of("admin", "USER_ID")), "Test endpoint to test authenticate user."));
+       return httpContexts;
+   }
 
     private static String getSetting(String key, Properties properties) {
         String prop = properties.getProperty(key);

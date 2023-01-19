@@ -19,6 +19,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 public abstract class AuthenticatedHandler implements HttpHandler {
 
@@ -91,5 +92,6 @@ public abstract class AuthenticatedHandler implements HttpHandler {
     }
 
     public abstract void handleAuthenticated(Token token, HttpExchange exchange) throws IOException;
+
 
 }

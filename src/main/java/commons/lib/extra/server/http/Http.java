@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 public class Http {
 
-    private static final Logger logger = LogUtils.initLogs();
+    private static final Logger logger =LogUtils.initLogs();
 
     public static final String PRIVATE_SELF_DESCRIBE_PATH = "/private/selfDescribe/";
 
@@ -36,7 +36,7 @@ public class Http {
 // TODO PFR HTTPS :  https://www.codeproject.com/Tips/1043003/Create-a-Simple-Web-Server-in-Java-HTTPS-Server
     public static void startServer() throws IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         final List<HttpContext> httpContexts = ServerConfiguration.loadConfig();
-        final String listeningPort = System.getProperty("server.listening");
+        final String listeningPort = System.getProperty("server.listening", "8080");
         int port = Integer.parseInt(listeningPort);
         Http.startServer(port, httpContexts.toArray(new HttpContext[0]));
     }

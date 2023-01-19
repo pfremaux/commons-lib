@@ -27,6 +27,7 @@ import java.util.Map;
 
 public class AuthenticationHandler implements HttpHandler {
 
+    public static final String MSG_FAILED_TO_LOGIN = "{\"msg\":\"failed to login\"}";
     private final SecretKeySpec secret;
     private final TokenStructure tokenStructure = new TokenStructure(DefaultTokenFields.values());
 
@@ -45,6 +46,13 @@ public class AuthenticationHandler implements HttpHandler {
         final String login = jsonData.get("login");
         final String pass = jsonData.get("pwd");
         String userId = authenticate(login, pass);
+        if (userId == null) {
+            exchange.getResponseHeaders().add("Content-Type", "text/json");
+            exchange.sendResponseHeaders(400, MSG_FAILED_TO_LOGIN.length());
+            exchange.getResponseBody().write(MSG_FAILED_TO_LOGIN.getBytes(StandardCharsets.UTF_8));
+            exchange.getResponseBody().close();
+            return;
+        }
         Token token = new Token();
         token.put(DefaultTokenFields.USER_ID, userId);
         token.put(DefaultTokenFields.VERSION, "0");

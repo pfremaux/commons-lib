@@ -48,7 +48,7 @@ public class Html5VideoStreaming implements HttpHandler {
             }
         } else {
             for (Map.Entry<String, List<String>> entry : exchange.getRequestHeaders().entrySet()) {
-                logger.warning(entry.getKey() + " -> " +  entry.getValue());
+                logger.warning(entry.getKey() +" -> "+  entry.getValue());
             }
         }
 
