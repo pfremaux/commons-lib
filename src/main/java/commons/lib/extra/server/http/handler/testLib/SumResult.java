@@ -1,6 +1,7 @@
 package commons.lib.extra.server.http.handler.testLib;
 
 public class SumResult {
+	@JsonField
     private final int result;
 
     public SumResult(int result) {

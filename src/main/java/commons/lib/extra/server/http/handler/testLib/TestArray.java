@@ -3,8 +3,11 @@ package commons.lib.extra.server.http.handler.testLib;
 import java.util.List;
 
 public class TestArray {
+	@JsonField
     private final List<String> s;
+	@JsonField
     private final List<Double> n;
+	@JsonField
     private final List<Body> o;
 
     public TestArray(List<String> s, List<Double> n, List<Body> o) {

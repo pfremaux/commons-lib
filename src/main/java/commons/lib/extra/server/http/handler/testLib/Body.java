@@ -2,6 +2,7 @@ package commons.lib.extra.server.http.handler.testLib;
 
 public class Body {
 
+	@JsonField
     private final String toto;
 
     public Body(String toto) {

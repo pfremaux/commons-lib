@@ -3,7 +3,9 @@ package commons.lib.extra.server.http.handler.testLib;
 import java.util.List;
 
 public class TestArray2 {
+	@JsonField
     private final List<String> s;
+	@JsonField
     private final List<Double> n;
 
 

@@ -1,7 +1,9 @@
 package commons.lib.extra.server.http.handler.testLib;
 
 public class Pair {
+	@JsonField
     private final int a;
+	@JsonField
     private final int b;
 
     public Pair(int a, int b) {
