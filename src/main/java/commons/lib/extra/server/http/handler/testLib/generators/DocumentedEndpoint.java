@@ -1,4 +1,4 @@
-package commons.lib.extra.server.http.handler.testLib;
+package commons.lib.extra.server.http.handler.testLib.generators;
 
 public class DocumentedEndpoint {
 	private String method;

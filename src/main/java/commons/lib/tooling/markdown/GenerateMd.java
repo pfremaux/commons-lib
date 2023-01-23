@@ -32,7 +32,7 @@ public class GenerateMd {
         final Map<String, Documentation> docs = new HashMap<>();
         final List<Class<?>> classesFromPackageName = AnnotationUtils.getClassesFromPackageName(basePackageName);
         for (Class<?> aClass : classesFromPackageName) {
-            Documentation documentation;
+            final Documentation documentation;
             final String packageName = aClass.getPackageName();
             final String title = packageName.substring(basePackageName.length());
             final MdDoc[] annotations = aClass.getAnnotationsByType(MdDoc.class);
@@ -42,7 +42,6 @@ public class GenerateMd {
                 documentation.setFileName(aClass.getSimpleName() + ".md");
                 documentation.title(2, aClass.getSimpleName());
                 documentation.text(annotations[0].description(), true);
-                // System.out.println(aClass + " : " + annotations[0].description());
                 for (Method declaredMethod : aClass.getDeclaredMethods()) {
                     final MdDoc annotation = declaredMethod.getDeclaredAnnotation(MdDoc.class);
                     if (annotation != null) {
@@ -54,7 +53,6 @@ public class GenerateMd {
                         for (String example : annotation.examples()) {
                             documentation.exampleCode(example);
                         }
-                        //System.out.println("Method : " + declaredMethod + " : " + annotation.description());
                         Parameter[] parameters = declaredMethod.getParameters();
                         for (Parameter parameter : parameters) {
                             MdDoc declaredAnnotation = parameter.getDeclaredAnnotation(MdDoc.class);

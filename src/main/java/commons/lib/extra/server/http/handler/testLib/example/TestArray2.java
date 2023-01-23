@@ -1,4 +1,6 @@
-package commons.lib.extra.server.http.handler.testLib;
+package commons.lib.extra.server.http.handler.testLib.example;
+
+import commons.lib.extra.server.http.handler.testLib.annotations.JsonField;
 
 import java.util.List;
 

@@ -1,8 +1,9 @@
-package commons.lib.extra.server.http.handler.testLib;
+package commons.lib.extra.server.http.handler.testLib.example;
 
 import java.util.List;
 import java.util.Map;
 
+import commons.lib.extra.server.http.handler.testLib.annotations.Endpoint;
 import commons.lib.tooling.documentation.MdDoc;
 
 public class MyEndpoints {

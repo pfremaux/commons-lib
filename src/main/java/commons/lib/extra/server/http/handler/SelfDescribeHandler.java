@@ -9,7 +9,7 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 import commons.lib.extra.server.http.HttpContext;
-import commons.lib.extra.server.http.handler.testLib.DocumentedEndpoint;
+import commons.lib.extra.server.http.handler.testLib.generators.DocumentedEndpoint;
 import commons.lib.main.os.LogUtils;
 
 public class SelfDescribeHandler implements HttpHandler {
