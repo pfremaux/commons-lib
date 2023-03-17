@@ -1,14 +1,21 @@
 package commons.lib.extra.server.http.handler.testLib.generators;
 
+import java.lang.reflect.Parameter;
+import java.util.HashMap;
+import java.util.Map;
+
 public class DocumentedEndpoint {
-	private String method;
+	private String javaMethodName;
+	private String httpMethod;
 	private String path;
 	private String description;
 	private String bodyExample;
 	private String responseExample;
+	private Map<String, String> parameters = new HashMap<>();
+	private Parameter returnType = null;
 
-	public String getMethod() {
-		return method;
+	public String getHttpMethod() {
+		return httpMethod;
 	}
 
 	public String getPath() {
@@ -27,8 +34,8 @@ public class DocumentedEndpoint {
 		return bodyExample;
 	}
 
-	public void setMethod(String method) {
-		this.method = method;
+	public void setHttpMethod(String method) {
+		this.httpMethod = method;
 	}
 
 	public void setPath(String path) {
@@ -47,4 +54,30 @@ public class DocumentedEndpoint {
 		this.responseExample = responseExample;
 	}
 
+	public Map<String, String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(Map<String, String> parameters) {
+		this.parameters = parameters;
+	}
+
+	public Parameter getReturnType() {
+		return returnType;
+	}
+
+	public void setReturnType(Parameter returnType) {
+		this.returnType = returnType;
+	}
+
+	public String getJavaMethodName() {
+		return javaMethodName;
+	}
+
+	public void setJavaMethodName(String javaMethodName) {
+		this.javaMethodName = javaMethodName;
+	}
+
+	
+	
 }

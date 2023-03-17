@@ -49,7 +49,8 @@ public class EndpointGenerator {
             final String path = declaredAnnotation.path();
 
             final DocumentedEndpoint documentedEndpoint = new DocumentedEndpoint();
-            documentedEndpoint.setMethod(method);
+            documentedEndpoint.setJavaMethodName(declaredMethod.getName());
+            documentedEndpoint.setHttpMethod(method);
             documentedEndpoint.setPath(path);
             try {
                 documentedEndpoint.setBodyExample(JsonMapper.objectToJsonExample(bodyParameter.getType()).toString());
@@ -75,12 +76,14 @@ public class EndpointGenerator {
                 try {
                     final String data = new String(bytes, StandardCharsets.UTF_8);
                     final Object b = JsonMapper.jsonToObject(new StringBuilder(data), bodyParameter.getType());
+                    
                     result = declaredMethod.invoke(instanceToProcess, headers, b);
                 } catch (Throwable e) {
                     handleException(exchange, e);
                     return;
                 }
 
+                
                 final String responseText = result == null ? "{}" : JsonMapper.objectToJson(result).toString();
                 exchange.sendResponseHeaders(200, responseText.length());
 
@@ -92,6 +95,9 @@ public class EndpointGenerator {
             };
             handlers.put(path, handler);
 
+            final Map<String, String> nameToTypeParamers = JsonMapper.objectToMapDescriptor(bodyParameter.getType());
+            documentedEndpoint.setParameters(nameToTypeParamers);
+            
             final MdDoc declaredDoc = declaredMethod.getDeclaredAnnotation(MdDoc.class);
             if (declaredDoc != null) {
                 documentedEndpoint.setDescription(Objects.requireNonNullElse(declaredDoc.description(), ""));

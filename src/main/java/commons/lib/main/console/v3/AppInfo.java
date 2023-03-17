@@ -49,7 +49,7 @@ public class AppInfo {
      * @return
      */
     public boolean isInIde() {
-        return Boolean.parseBoolean(System.getProperty("isInIDE"));
+        return Boolean.parseBoolean(System.getProperty("isInIDE", "true"));
     }
 
     public String getProperty(String s) {
